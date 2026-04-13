@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import app from "./app.js";
-import env from "./config/env.js";
+import env from "./config/env";
 
 const start = async () => {
   try {

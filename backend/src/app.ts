@@ -1,6 +1,8 @@
 import express from "express";
-import HttpError from "./errors/HttpError.js";
-import errorHandler from "./middlewares/error-handler.js";
+import authRoutes from "./modules/auth/auth-routes";
+import usersRoutes from "./modules/users/user-routes";
+import HttpError from "./errors/HttpError";
+import errorHandler from "./middlewares/error-handler";
 
 const app = express();
 app.use(express.json());
@@ -16,6 +18,8 @@ app.use((req, res, next) => {
   );
   next();
 });
+app.use("/api/auth", authRoutes);
+app.use("/api/users", usersRoutes);
 app.use((req, res, next) => {
   next(new HttpError("Could not find that route.", 404));
 });

@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import mapToHTTPError from "../utils/error-map.js";
+import mapToHTTPError from "../utils/error-map";
 const errorHandler = (
   error: unknown,
   req: Request,
@@ -11,6 +11,8 @@ const errorHandler = (
   }
   console.error(error);
   const mappedError = mapToHTTPError(error);
-  res.status(mappedError.statusCode).json({ message: mappedError.message });
+  res
+    .status(mappedError.statusCode)
+    .json({ message: mappedError.message, details: mappedError.details });
 };
 export default errorHandler;
