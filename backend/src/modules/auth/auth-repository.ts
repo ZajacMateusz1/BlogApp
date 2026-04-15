@@ -10,10 +10,8 @@ export const registerRepository = async (
     username,
   });
   const createdUser = await user.save();
-  return {
-    id: createdUser._id,
-    email: createdUser.email,
-    password: createdUser.password,
-    username: createdUser.username,
-  };
+  return createdUser;
+};
+export const findUserByEmail = async (email: string) => {
+  return await User.findOne({ email });
 };

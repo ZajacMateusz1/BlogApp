@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { registerService, loginService } from "./auth-service";
-import { type RegisterSchemaType } from "./auth-schema";
+import type { LoginSchemaType, RegisterSchemaType } from "./auth-schema";
 export const register = async (
   req: Request,
   res: Response,
@@ -14,4 +14,16 @@ export const register = async (
     next(error);
   }
 };
-export const login = () => {};
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email, password }: LoginSchemaType = req.body;
+    const loginResponse = await loginService(email, password);
+    res.json(loginResponse);
+  } catch (error) {
+    next(error);
+  }
+};
