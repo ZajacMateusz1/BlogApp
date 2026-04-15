@@ -1,6 +1,5 @@
 import { z } from "zod";
-console.log("CHUJJJ");
-export const RegisterSchema = z.object({
+export const LoginSchema = z.object({
   email: z.email(),
   password: z
     .string()
@@ -11,6 +10,9 @@ export const RegisterSchema = z.object({
     .regex(/\d/, {
       error: "Password must contain a number",
     }),
+});
+export const RegisterSchema = LoginSchema.extend({
   username: z.string().trim().min(3, { error: "Min username length is 3" }),
 });
+export type LoginSchemaType = z.infer<typeof LoginSchema>;
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>;
