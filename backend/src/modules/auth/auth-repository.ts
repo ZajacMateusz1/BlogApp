@@ -8,10 +8,11 @@ export const registerRepository = async (
     email,
     password,
     username,
+    posts: [],
   });
   const createdUser = await user.save();
   return createdUser;
 };
 export const findUserByEmail = async (email: string) => {
-  return await User.findOne({ email }, "-password -__v").lean();
+  return await User.findOne({ email }, "-__v -posts").lean();
 };
