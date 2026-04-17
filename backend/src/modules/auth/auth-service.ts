@@ -1,4 +1,6 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import env from "../../config/env";
 import HttpError from "../../errors/HttpError";
 import { registerRepository, findUserByEmail } from "./auth-repository";
 export const registerService = async (
@@ -12,10 +14,21 @@ export const registerService = async (
     throw new HttpError("User alredy exists", 409);
   }
   const createdUser = await registerRepository(email, password, username);
+  const token = jwt.sign(
+    {
+      userId: createdUser._id,
+      email: createdUser.email,
+    },
+    env.JWT_SECRET,
+    {
+      expiresIn: "10h",
+    },
+  );
   return {
     id: createdUser._id,
     email: createdUser.email,
     username: createdUser.username,
+    token,
   };
 };
 export const loginService = async (email: string, password: string) => {
@@ -27,8 +40,19 @@ export const loginService = async (email: string, password: string) => {
   if (!isValidPassword) {
     throw new HttpError("Invalid email or password", 401);
   }
+  const token = jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+    },
+    env.JWT_SECRET,
+    {
+      expiresIn: "10h",
+    },
+  );
   return {
     id: user._id,
     email: user.email,
+    token,
   };
 };
