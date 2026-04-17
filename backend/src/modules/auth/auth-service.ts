@@ -8,11 +8,11 @@ export const registerService = async (
   password: string,
   username: string,
 ) => {
-  password = await bcrypt.hash(password, 12);
   const userExists = await findUserByEmail(email);
   if (userExists) {
     throw new HttpError("User alredy exists", 409);
   }
+  password = await bcrypt.hash(password, 12);
   const createdUser = await registerRepository(email, password, username);
   const token = jwt.sign(
     {

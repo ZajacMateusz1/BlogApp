@@ -13,5 +13,5 @@ export const registerRepository = async (
   return createdUser;
 };
 export const findUserByEmail = async (email: string) => {
-  return await User.findOne({ email });
+  return await User.findOne({ email }, "-password -__v").lean();
 };
