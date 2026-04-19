@@ -1,5 +1,5 @@
 import AuthForm from "../components/AuthForm";
-import InputElement from "../../../shared/InputElement";
+import InputElement from "../../../shared/components/InputElement";
 export default function RegisterPage() {
   return (
     <div>

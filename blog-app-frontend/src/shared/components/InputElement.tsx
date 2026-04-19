@@ -11,9 +11,9 @@ export default function InputElement({
   ...props
 }: InputElementProps) {
   return (
-    <>
+    <div>
       <label htmlFor={name}>{children}</label>
       <input className={`${className}`} name="name" {...props} />
-    </>
+    </div>
   );
 }

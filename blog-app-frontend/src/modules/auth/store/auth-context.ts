@@ -4,9 +4,5 @@ export interface AuthContextType {
   handleLogin: (newToken: string) => void;
   handleLogout: () => void;
 }
-const AuthContext = createContext<AuthContextType>({
-  token: null,
-  handleLogin: () => {},
-  handleLogout: () => {},
-});
+const AuthContext = createContext<AuthContextType | null>(null);
 export default AuthContext;
