@@ -6,7 +6,7 @@ import InputElement from "../../shared/components/InputElement";
 export default function LoginPage() {
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
@@ -23,6 +23,7 @@ export default function LoginPage() {
     <div>
       <AuthForm
         onSubmit={handleSubmit(onSubmit)}
+        isSubmitting={isSubmitting}
         submitButtonText="Log in"
         bottomLink="/register"
         bottomLinkText="Don’t have an account? Register"

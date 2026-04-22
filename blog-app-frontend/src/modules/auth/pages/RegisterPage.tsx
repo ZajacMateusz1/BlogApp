@@ -4,12 +4,13 @@ import {
   RegisterSchema,
   type RegisterSchemaType,
 } from "../schemas/auth-schema";
+import type { APIErrorType } from "../../shared/types/api-error-types";
 import AuthForm from "../components/AuthForm";
 import InputElement from "../../shared/components/InputElement";
 export default function RegisterPage() {
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
@@ -21,13 +22,28 @@ export default function RegisterPage() {
       repeatPassword: "",
     },
   });
-  const onSubmit = (data: RegisterSchemaType) => {
-    console.log(data);
+  const onSubmit = async (data: RegisterSchemaType) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const responseData = await response.json();
+      if (!response.ok) {
+        const error = responseData as APIErrorType;
+        throw new Error(error.message);
+      }
+      console.log(responseData);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div>
       <AuthForm
         onSubmit={handleSubmit(onSubmit)}
+        isSubmitting={isSubmitting}
         submitButtonText="Register"
         bottomLink="/login"
         bottomLinkText="Already have an account? Log in"

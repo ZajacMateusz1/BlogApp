@@ -14,11 +14,16 @@ export default function InputElement({
 }: InputElementProps) {
   return (
     <>
-      <div>
+      <div className="flex flex-col items-center">
         <label htmlFor={name}>{children}</label>
-        <input className={`${className}`} name={name} id={name} {...props} />
+        <input
+          className={`${className} p-1 rounded-lg`}
+          name={name}
+          id={name}
+          {...props}
+        />
+        {errorMessage && <p className="text-error">{errorMessage}</p>}
       </div>
-      <p>{errorMessage}</p>
     </>
   );
 }

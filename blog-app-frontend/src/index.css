@@ -6,4 +6,5 @@
 
 @theme {
   --font-header: "Montserrat", Arial, sans-serif;
+  --color-error: var(--color-red-600);
 }

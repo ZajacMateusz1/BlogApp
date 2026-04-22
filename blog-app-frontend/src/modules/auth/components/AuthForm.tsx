@@ -6,18 +6,22 @@ interface AuthFormProps extends ComponentPropsWithoutRef<"form"> {
   submitButtonText: string;
   bottomLink: string;
   bottomLinkText: string;
+  isSubmitting: boolean;
 }
 export default function AuthForm({
   children,
   submitButtonText,
   bottomLink,
   bottomLinkText,
+  isSubmitting,
   ...props
 }: AuthFormProps) {
   return (
-    <form {...props}>
+    <form className="mx-auto max-w-lg shadow p-2" {...props}>
       {children}
-      <Button type="submit">{submitButtonText}</Button>
+      <Button type="submit">
+        {isSubmitting ? "Submitting..." : submitButtonText}
+      </Button>
       <Button type="reset">Reset</Button>
       <Link to={bottomLink}>{bottomLinkText}</Link>
     </form>
