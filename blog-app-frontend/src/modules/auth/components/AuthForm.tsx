@@ -1,6 +1,6 @@
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 import { Link } from "react-router-dom";
-import Button from "../../../shared/components/Button";
+import Button from "../../shared/components/Button";
 interface AuthFormProps extends ComponentPropsWithoutRef<"form"> {
   children: ReactNode;
   submitButtonText: string;

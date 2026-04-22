@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import RootLayout from "../shared/layouts/RootLayout";
-import ErrorPage from "../shared/pages/ErrorPage";
+import RootLayout from "../modules/shared/layouts/RootLayout";
+import ErrorPage from "../modules/shared/pages/ErrorPage";
 import RegisterPage from "../modules/auth/pages/RegisterPage";
 import LoginPage from "../modules/auth/pages/LoginPage";
 const router = createBrowserRouter([

@@ -1,22 +1,40 @@
-import { type SubmitEvent } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema, type LoginSchemaType } from "../schemas/auth-schema";
 import AuthForm from "../components/AuthForm";
-import InputElement from "../../../shared/components/InputElement";
+import InputElement from "../../shared/components/InputElement";
 export default function LoginPage() {
-  const handleSubmit = (e: SubmitEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(LoginSchema),
+    mode: "onBlur",
+  });
+  const onSubmit = (data: LoginSchemaType) => {
+    console.log(data);
   };
   return (
     <div>
       <AuthForm
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         submitButtonText="Log in"
         bottomLink="/register"
         bottomLinkText="Don’t have an account? Register"
       >
-        <InputElement name="email" type="email">
+        <InputElement
+          {...register("email")}
+          errorMessage={errors.email?.message}
+          type="email"
+        >
           Email
         </InputElement>
-        <InputElement name="password" type="password">
+        <InputElement
+          {...register("password")}
+          errorMessage={errors.password?.message}
+          type="password"
+        >
           Password
         </InputElement>
       </AuthForm>
