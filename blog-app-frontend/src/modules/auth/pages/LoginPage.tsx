@@ -11,6 +11,10 @@ export default function LoginPage() {
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
   const onSubmit = (data: LoginSchemaType) => {
     console.log(data);

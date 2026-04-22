@@ -14,6 +14,12 @@ export default function RegisterPage() {
   } = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
     mode: "onBlur",
+    defaultValues: {
+      email: "",
+      username: "",
+      password: "",
+      repeatPassword: "",
+    },
   });
   const onSubmit = (data: RegisterSchemaType) => {
     console.log(data);
