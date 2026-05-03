@@ -3,11 +3,12 @@ import AuthContext, { type AuthContextType } from "./auth-context";
 interface AuthContextProviderProps {
   children: ReactNode;
 }
+const initToken = localStorage.getItem("token");
 export default function AuthContextProvider({
   children,
 }: AuthContextProviderProps) {
-  const [token, setToken] = useState<string | null>(null);
-  const handleLogin = useCallback((newToken: string) => {
+  const [token, setToken] = useState<string | null>(initToken || null);
+  const handleNewToken = useCallback((newToken: string) => {
     setToken(newToken);
     localStorage.setItem("token", newToken);
   }, []);
@@ -18,10 +19,10 @@ export default function AuthContextProvider({
   const authCTX: AuthContextType = useMemo(
     () => ({
       token,
-      handleLogin,
+      handleNewToken,
       handleLogout,
     }),
-    [token, handleLogin, handleLogout],
+    [token, handleNewToken, handleLogout],
   );
   return <AuthContext value={authCTX}>{children}</AuthContext>;
 }

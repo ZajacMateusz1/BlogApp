@@ -1,17 +1,28 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
+import useAuth from "../hooks/useAuth";
+import { sendRequest } from "../../../utils/http";
+import AuthForm from "../components/AuthForm";
+import InputElement from "../../shared/components/InputElement";
+
 import {
   RegisterSchema,
   type RegisterSchemaType,
 } from "../schemas/auth-schema";
-import type { APIErrorType } from "../../shared/types/api-error-types";
-import AuthForm from "../components/AuthForm";
-import InputElement from "../../shared/components/InputElement";
+import type { AuthResponseType } from "../auth-types";
+
 export default function RegisterPage() {
+  const { handleNewToken } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
+    reset,
+    setError,
   } = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
     mode: "onBlur",
@@ -22,31 +33,38 @@ export default function RegisterPage() {
       repeatPassword: "",
     },
   });
-  const onSubmit = async (data: RegisterSchemaType) => {
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "post",
+  const { mutate, isPending } = useMutation({
+    mutationFn: (formData: RegisterSchemaType) =>
+      sendRequest<AuthResponseType>("http://localhost:5000/api/auth/register", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(formData),
+      }),
+    onSuccess: (formData) => {
+      handleNewToken(formData.token);
+      navigate("/");
+    },
+    onError(error) {
+      setError("root", {
+        type: "server",
+        message: error.message,
       });
-      const responseData = await response.json();
-      if (!response.ok) {
-        const error = responseData as APIErrorType;
-        throw new Error(error.message);
-      }
-      console.log(responseData);
-    } catch (error) {
-      console.error(error);
-    }
+    },
+  });
+  const onSubmit = (formData: RegisterSchemaType) => {
+    mutate(formData);
   };
   return (
     <div>
       <AuthForm
         onSubmit={handleSubmit(onSubmit)}
-        isSubmitting={isSubmitting}
+        isSubmitting={isSubmitting || isPending}
+        reset={reset}
+        formTitle="Create your account"
         submitButtonText="Register"
         bottomLink="/login"
         bottomLinkText="Already have an account? Log in"
+        rootError={errors.root?.message || null}
       >
         <InputElement
           {...register("email")}
@@ -60,7 +78,7 @@ export default function RegisterPage() {
           errorMessage={errors.username?.message}
           type="text"
         >
-          Username:
+          Username
         </InputElement>
         <InputElement
           {...register("password")}

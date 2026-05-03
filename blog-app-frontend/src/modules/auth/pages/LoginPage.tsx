@@ -8,6 +8,7 @@ export default function LoginPage() {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
+    reset,
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     mode: "onBlur",
@@ -24,6 +25,8 @@ export default function LoginPage() {
       <AuthForm
         onSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
+        reset={reset}
+        formTitle="Log in to your account"
         submitButtonText="Log in"
         bottomLink="/register"
         bottomLinkText="Don’t have an account? Register"
