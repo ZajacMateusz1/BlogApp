@@ -14,10 +14,10 @@ export default function InputElement({
 }: InputElementProps) {
   return (
     <>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-0.5 text-xs">
         <label htmlFor={name}>{children}</label>
         <input
-          className={`${className} p-1 rounded-lg`}
+          className={`${className} p-1 rounded-lg border text-xs`}
           name={name}
           id={name}
           {...props}

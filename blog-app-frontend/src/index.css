@@ -2,9 +2,12 @@
 
 :root {
   font-family: "Roboto", Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
 }
 
 @theme {
   --font-header: "Montserrat", Arial, sans-serif;
+  --color-primary: #2563eb;
   --color-error: var(--color-red-600);
 }
