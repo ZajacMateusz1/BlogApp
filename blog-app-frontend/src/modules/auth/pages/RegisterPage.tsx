@@ -15,7 +15,7 @@ import {
 import type { AuthResponseType } from "../auth-types";
 
 export default function RegisterPage() {
-  const { handleNewToken } = useAuth();
+  const { handleLogin } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -41,7 +41,7 @@ export default function RegisterPage() {
         body: JSON.stringify(formData),
       }),
     onSuccess: (formData) => {
-      handleNewToken(formData.token);
+      handleLogin(formData.token);
       navigate("/");
     },
     onError(error) {

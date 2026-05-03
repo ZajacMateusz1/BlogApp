@@ -8,7 +8,7 @@ export default function AuthContextProvider({
   children,
 }: AuthContextProviderProps) {
   const [token, setToken] = useState<string | null>(initToken || null);
-  const handleNewToken = useCallback((newToken: string) => {
+  const handleLogin = useCallback((newToken: string) => {
     setToken(newToken);
     localStorage.setItem("token", newToken);
   }, []);
@@ -19,10 +19,10 @@ export default function AuthContextProvider({
   const authCTX: AuthContextType = useMemo(
     () => ({
       token,
-      handleNewToken,
+      handleLogin,
       handleLogout,
     }),
-    [token, handleNewToken, handleLogout],
+    [token, handleLogin, handleLogout],
   );
   return <AuthContext value={authCTX}>{children}</AuthContext>;
 }
