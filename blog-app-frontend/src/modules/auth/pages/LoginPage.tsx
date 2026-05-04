@@ -9,7 +9,7 @@ import AuthForm from "../components/AuthForm";
 import InputElement from "../../shared/components/InputElement";
 
 import { LoginSchema, type LoginSchemaType } from "../schemas/auth-schema";
-import { type AuthResponseType } from "../auth-types";
+import { type AuthResponseType } from "../types/auth-types";
 export default function LoginPage() {
   const { handleLogin } = useAuth();
   const navigate = useNavigate();

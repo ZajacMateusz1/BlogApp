@@ -12,7 +12,7 @@ import {
   RegisterSchema,
   type RegisterSchemaType,
 } from "../schemas/auth-schema";
-import type { AuthResponseType } from "../auth-types";
+import type { AuthResponseType } from "../types/auth-types";
 
 export default function RegisterPage() {
   const { handleLogin } = useAuth();
