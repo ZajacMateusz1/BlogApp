@@ -4,7 +4,14 @@ export default function RootLayout() {
     <div className="min-h-screen flex flex-col gap-1">
       <header>
         <nav className="max-w-5xl mx-auto">
-          <Link to={"/register"}>Register</Link>
+          <ul>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
+          </ul>
         </nav>
       </header>
       <main className="flex-1">
