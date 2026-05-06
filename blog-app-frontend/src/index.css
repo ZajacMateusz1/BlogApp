@@ -9,5 +9,6 @@
 @theme {
   --font-header: "Montserrat", Arial, sans-serif;
   --color-primary: #2563eb;
+  --color-link: #1d4ed8;
   --color-error: var(--color-red-600);
 }

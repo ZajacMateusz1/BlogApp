@@ -6,7 +6,7 @@ interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
 export default function Button({ children, className, ...props }: ButtonProps) {
   return (
     <button
-      className={`${className} bg-primary text-white p-2 rounded-md hover:cursor-pointer`}
+      className={`${className || ""} bg-primary p-1.5 text-base text-white rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl`}
       {...props}
     >
       {children}
