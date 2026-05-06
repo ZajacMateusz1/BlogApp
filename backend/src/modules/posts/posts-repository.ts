@@ -1,6 +1,6 @@
 import User from "../../models/user-model";
 import Post from "../../models/post-model";
-import type { ClientSession } from "mongoose";
+import { type ClientSession, Types } from "mongoose";
 export const addPostRepository = async (
   title: string,
   image: string,
@@ -17,6 +17,40 @@ export const addPostRepository = async (
   await createdPost.save({ session });
   return createdPost;
 };
-export const findUserById = async (userId: string) => {
-  return await User.findById(userId);
+export const addPostToUser = async (
+  postId: Types.ObjectId,
+  userId: string,
+  session: ClientSession,
+) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    { $push: { posts: postId } },
+    { session },
+  );
+};
+
+export const removePostRepository = async (
+  postId: string,
+  userId: string,
+  session: ClientSession,
+) => {
+  const removedPost = await Post.findOneAndDelete(
+    {
+      _id: postId,
+      creator: userId,
+    },
+    { session },
+  );
+  return removedPost;
+};
+export const removePostFromUser = async (
+  postId: string,
+  userId: string,
+  session: ClientSession,
+) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    { $pull: { posts: postId } },
+    { session },
+  );
 };

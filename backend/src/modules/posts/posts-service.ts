@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
-import { addPostRepository, findUserById } from "./posts-repository";
+import {
+  addPostRepository,
+  addPostToUser,
+  removePostRepository,
+  removePostFromUser,
+} from "./posts-repository";
 import HttpError from "../../errors/HttpError";
 export const addPostService = async (
   title: string,
@@ -7,11 +12,9 @@ export const addPostService = async (
   description: string,
   userId: string,
 ) => {
-  const user = await findUserById(userId);
-  if (!user) throw new HttpError("Creating place failed", 500);
   const session = await mongoose.startSession();
-  session.startTransaction();
   try {
+    session.startTransaction();
     const createdPost = await addPostRepository(
       title,
       image,
@@ -19,13 +22,31 @@ export const addPostService = async (
       userId,
       session,
     );
-    user.posts.push(createdPost._id);
-    await user.save();
+    const updatedUser = await addPostToUser(createdPost._id, userId, session);
+    if (!updatedUser) throw new HttpError("User not found", 404);
     await session.commitTransaction();
-    await session.endSession();
     return createdPost;
   } catch (error) {
     await session.abortTransaction();
     throw error;
+  } finally {
+    await session.endSession();
+  }
+};
+
+export const removePostService = async (postId: string, userId: string) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const removedPost = await removePostRepository(postId, userId, session);
+    if (!removedPost) throw new HttpError("Post not found", 404);
+    await removePostFromUser(postId, userId, session);
+    await session.commitTransaction();
+    return removedPost;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
   }
 };
