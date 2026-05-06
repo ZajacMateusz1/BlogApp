@@ -1,13 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import env from "../config/env";
 
 import HttpError from "../errors/HttpError";
+import type { TokenPayload } from "../types/token/jwt-payload-type";
 
-interface TokenPayload extends JwtPayload {
-  userId: string;
-  email: string;
-}
 const checkAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
