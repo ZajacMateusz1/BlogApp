@@ -27,7 +27,6 @@ export const registerService = async (
   return {
     id: createdUser._id,
     email: createdUser.email,
-    username: createdUser.username,
     token,
   };
 };
