@@ -22,6 +22,7 @@ const getTokenExpireDate = (token: string | null): number => {
 };
 
 const initToken = localStorage.getItem("token");
+const initUserId = localStorage.getItem("userId");
 
 interface AuthContextProviderProps {
   children: ReactNode;
@@ -30,13 +31,18 @@ export default function AuthContextProvider({
   children,
 }: AuthContextProviderProps) {
   const [token, setToken] = useState<string | null>(initToken || null);
-  const handleLogin = useCallback((newToken: string) => {
+  const [userId, setUserId] = useState<string | null>(initUserId || null);
+  const handleLogin = useCallback((newToken: string, newUserId: string) => {
     setToken(newToken);
+    setUserId(newUserId);
     localStorage.setItem("token", newToken);
+    localStorage.setItem("userId", newUserId);
   }, []);
   const handleLogout = useCallback(() => {
     setToken(null);
+    setUserId(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
   }, []);
   useEffect(() => {
     if (!token) return;
@@ -48,10 +54,11 @@ export default function AuthContextProvider({
   const authCTX: AuthContextType = useMemo(
     () => ({
       token,
+      userId,
       handleLogin,
       handleLogout,
     }),
-    [token, handleLogin, handleLogout],
+    [token, handleLogin, handleLogout, userId],
   );
   return <AuthContext value={authCTX}>{children}</AuthContext>;
 }
