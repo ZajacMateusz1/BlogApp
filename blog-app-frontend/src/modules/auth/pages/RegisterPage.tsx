@@ -41,7 +41,7 @@ export default function RegisterPage() {
         body: JSON.stringify(formData),
       }),
     onSuccess: (formData) => {
-      handleLogin(formData.token);
+      handleLogin(formData.token, formData.id);
       navigate("/");
     },
     onError(error) {

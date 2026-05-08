@@ -35,7 +35,7 @@ export default function LoginPage() {
         body: JSON.stringify(formData),
       }),
     onSuccess: (data) => {
-      handleLogin(data.token);
+      handleLogin(data.token, data.id);
       navigate("/");
     },
     onError: (error) => {
