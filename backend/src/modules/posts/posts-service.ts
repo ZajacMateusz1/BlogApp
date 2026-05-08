@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
+import type { EditPostSchemaType } from "./posts-schema";
 import {
   addPostRepository,
   addPostToUser,
   removePostRepository,
   removePostFromUser,
+  editPostRepository,
 } from "./posts-repository";
 import HttpError from "../../errors/HttpError";
 export const addPostService = async (
@@ -47,6 +49,16 @@ export const removePostService = async (postId: string, userId: string) => {
     await session.abortTransaction();
     throw error;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
+};
+
+export const editPostService = async (
+  postId: string,
+  userId: string,
+  editPostData: EditPostSchemaType,
+) => {
+  const editedPost = await editPostRepository(postId, userId, editPostData);
+  if (editedPost === null) throw new HttpError("Post not found", 404);
+  return editedPost;
 };

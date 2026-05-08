@@ -7,4 +7,11 @@ export const PostSchema = z.object({
   image: z.string(),
   description: z.string(),
 });
+export const EditPostSchema = PostSchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  {
+    error: "You must provide at least one change",
+  },
+);
 export type PostSchemaType = z.infer<typeof PostSchema>;
+export type EditPostSchemaType = z.infer<typeof EditPostSchema>;

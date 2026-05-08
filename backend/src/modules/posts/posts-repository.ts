@@ -1,6 +1,7 @@
 import User from "../../models/user-model";
 import Post from "../../models/post-model";
 import { type ClientSession, Types } from "mongoose";
+import type { EditPostSchemaType } from "./posts-schema";
 export const addPostRepository = async (
   title: string,
   image: string,
@@ -52,5 +53,20 @@ export const removePostFromUser = async (
     userId,
     { $pull: { posts: postId } },
     { session },
+  );
+};
+
+export const editPostRepository = async (
+  postId: string,
+  userId: string,
+  editPostData: EditPostSchemaType,
+) => {
+  return await Post.findOneAndUpdate(
+    {
+      _id: postId,
+      creator: userId,
+    },
+    editPostData,
+    { new: true },
   );
 };

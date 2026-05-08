@@ -1,6 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
-import { PostSchemaType } from "./posts-schema";
-import { addPostService, removePostService } from "./posts-service";
+import type { PostSchemaType, EditPostSchemaType } from "./posts-schema";
+import {
+  addPostService,
+  removePostService,
+  editPostService,
+} from "./posts-service";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
 export const addPost = async (
   req: Request,
@@ -30,8 +34,24 @@ export const removePost = async (
   try {
     const { postId } = req.params;
     const { userId }: TokenPayload = req.userData!;
-    const removePostResponse = await removePostService(postId!, userId);
+    await removePostService(postId, userId);
     res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const editPost = async (
+  req: Request<{ postId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { postId } = req.params;
+    const editPostData: EditPostSchemaType = req.body;
+    const { userId }: TokenPayload = req.userData!;
+    const editPostRespone = await editPostService(postId, userId, editPostData);
+    res.status(200).json(editPostRespone);
   } catch (error) {
     next(error);
   }
