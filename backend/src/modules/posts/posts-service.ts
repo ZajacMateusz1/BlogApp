@@ -13,7 +13,8 @@ import HttpError from "../../errors/HttpError";
 export const getPostService = async (postId: string) => {
   const post = await getPostRepository(postId);
   if (post === null) throw new HttpError("Post not found", 404);
-  return post;
+  const { _id, ...postObject } = post;
+  return { id: _id, ...postObject };
 };
 
 export const addPostService = async (
@@ -35,7 +36,8 @@ export const addPostService = async (
     const updatedUser = await addPostToUser(createdPost._id, userId, session);
     if (!updatedUser) throw new HttpError("User not found", 404);
     await session.commitTransaction();
-    return createdPost;
+    const { _id, __v, ...postObject } = createdPost.toObject();
+    return { id: _id, ...postObject };
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -52,7 +54,8 @@ export const removePostService = async (postId: string, userId: string) => {
     if (!removedPost) throw new HttpError("Post not found", 404);
     await removePostFromUser(postId, userId, session);
     await session.commitTransaction();
-    return removedPost;
+    const { _id, __v, ...postObject } = removedPost.toObject();
+    return { id: _id, ...postObject };
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -68,5 +71,6 @@ export const editPostService = async (
 ) => {
   const editedPost = await editPostRepository(postId, userId, editPostData);
   if (editedPost === null) throw new HttpError("Post not found", 404);
-  return editedPost;
+  const { _id, __v, ...postObject } = editedPost.toObject();
+  return { id: _id, ...postObject };
 };

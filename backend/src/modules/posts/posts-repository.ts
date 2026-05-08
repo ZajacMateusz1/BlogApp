@@ -4,7 +4,7 @@ import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
 
 export const getPostRepository = async (postId: string) => {
-  return await Post.findById(postId);
+  return await Post.findById(postId, "-__v").lean();
 };
 
 export const addPostRepository = async (
