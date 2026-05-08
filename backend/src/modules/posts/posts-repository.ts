@@ -2,6 +2,11 @@ import User from "../../models/user-model";
 import Post from "../../models/post-model";
 import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
+
+export const getPostRepository = async (postId: string) => {
+  return await Post.findById(postId);
+};
+
 export const addPostRepository = async (
   title: string,
   image: string,

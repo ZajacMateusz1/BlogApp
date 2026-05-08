@@ -4,8 +4,24 @@ import {
   addPostService,
   removePostService,
   editPostService,
+  getPostService,
 } from "./posts-service";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
+
+export const getPost = async (
+  req: Request<{ postId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { postId } = req.params;
+    const getPostResponse = await getPostService(postId);
+    res.json(getPostResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const addPost = async (
   req: Request,
   res: Response,

@@ -6,8 +6,16 @@ import {
   removePostRepository,
   removePostFromUser,
   editPostRepository,
+  getPostRepository,
 } from "./posts-repository";
 import HttpError from "../../errors/HttpError";
+
+export const getPostService = async (postId: string) => {
+  const post = await getPostRepository(postId);
+  if (post === null) throw new HttpError("Post not found", 404);
+  return post;
+};
+
 export const addPostService = async (
   title: string,
   image: string,
