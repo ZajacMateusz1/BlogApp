@@ -25,9 +25,17 @@ export default function PostDetailsPage() {
   });
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
+  const isOwner = userId === data?.creator.id;
   return (
-    <div>
-      {data?.title}, {userId}
-    </div>
+    <article>
+      <header>
+        <h1>{data?.title}</h1>
+        <p>{new Date(data?.createdAt || "").toLocaleString()}</p>
+        <p>{data?.creator.username}</p>
+        {isOwner && <p>User can edit</p>}
+      </header>
+      {data?.image && <img src={data.image} alt="Post image" />}
+      <p>{data?.description}</p>
+    </article>
   );
 }
