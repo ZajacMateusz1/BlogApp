@@ -2,13 +2,17 @@
 
 :root {
   font-family: "Roboto", Arial, sans-serif;
-  background-color: #f8f9fa;
+  background-color: #f2f4f7;
   color: #333;
 }
 
 @theme {
   --font-header: "Montserrat", Arial, sans-serif;
+
   --color-primary: #2563eb;
+  --color-bg-header: #fff;
+  --color-light: #fff;
   --color-link: #1d4ed8;
+  --color-link-hover: #0a2b96;
   --color-error: var(--color-red-600);
 }
