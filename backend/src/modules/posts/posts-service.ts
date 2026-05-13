@@ -13,8 +13,12 @@ import HttpError from "../../errors/HttpError";
 export const getPostService = async (postId: string) => {
   const post = await getPostRepository(postId);
   if (post === null) throw new HttpError("Post not found", 404);
-  const { _id, ...postObject } = post;
-  return { id: _id, ...postObject };
+  const { _id, creator, ...postObject } = post;
+  return {
+    id: _id,
+    creator: { id: creator._id, username: creator.username },
+    ...postObject,
+  };
 };
 
 export const addPostService = async (

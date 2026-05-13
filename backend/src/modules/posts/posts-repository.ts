@@ -2,9 +2,12 @@ import User from "../../models/user-model";
 import Post from "../../models/post-model";
 import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
+import type { PopulatedPostType } from "./posts-types";
 
 export const getPostRepository = async (postId: string) => {
-  return await Post.findById(postId, "-__v").lean();
+  return await Post.findById(postId, "-__v")
+    .populate("creator", "username")
+    .lean<PopulatedPostType>();
 };
 
 export const addPostRepository = async (
