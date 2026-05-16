@@ -6,7 +6,7 @@ export default function ProtectedLayout() {
   if (!token) return <Navigate to="/login" replace />;
   return (
     <main className="mx-auto min-h-screen">
-      <Outlet />;
+      <Outlet />
     </main>
   );
 }
