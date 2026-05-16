@@ -26,14 +26,14 @@ export default function Navigation() {
         {openMenu ? <X /> : <Menu />}
       </Button>
       <nav
-        className={`fixed inset-0 ${openMenu ? "" : "translate-x-full"} transition-transform md:static md:translate-x-0 md:w-full md:max-w-5xl md:mx-auto md:p-4`}
+        className={`fixed inset-0 ${openMenu ? "" : "translate-x-full"} bg-bg-header transition-transform md:static md:translate-x-0 md:w-full md:max-w-5xl md:mx-auto md:p-4`}
       >
         <ul className="h-full w-full flex flex-col justify-center items-center gap-2 md:flex-row md:justify-end md:gap-4">
           {links.map((link) => (
             <li key={link.link}>
               <NavLink
                 className={({ isActive }) =>
-                  `border-b-2 ${isActive ? "text-link-active border-link-active" : "border-transparent"} text-2xl sm:text-3xl font-bold md:text-lg lg:text-xl`
+                  `border-b-2 ${isActive ? "text-link-active border-link-active" : "border-transparent"} text-2xl sm:text-3xl font-bold md:text-lg lg:text-xl hover:text-link-hover transition-colors`
                 }
                 to={link.link}
               >
