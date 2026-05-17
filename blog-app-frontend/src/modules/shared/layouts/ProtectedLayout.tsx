@@ -4,5 +4,9 @@ import useAuth from "../../auth/hooks/useAuth";
 export default function ProtectedLayout() {
   const { token } = useAuth();
   if (!token) return <Navigate to="/login" replace />;
-  return <Outlet />;
+  return (
+    <main className="mx-auto min-h-screen">
+      <Outlet />
+    </main>
+  );
 }

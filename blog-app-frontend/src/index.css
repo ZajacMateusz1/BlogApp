@@ -1,14 +1,20 @@
 @import "tailwindcss";
 
-:root {
-  font-family: "Roboto", Arial, sans-serif;
-  background-color: #f8f9fa;
-  color: #333;
-}
-
 @theme {
   --font-header: "Montserrat", Arial, sans-serif;
+
   --color-primary: #2563eb;
-  --color-link: #1d4ed8;
+  --color-bg-header: #fff;
+  --color-bg-primary: #f2f4f7;
+  --color-light: #fff;
+  --color-link: #274dea;
+  --color-link-hover: #10288c;
+  --color-link-active: #0f778c;
   --color-error: var(--color-red-600);
+}
+
+:root {
+  font-family: "Roboto", Arial, sans-serif;
+  background-color: var(--color-bg-primary);
+  color: #333;
 }

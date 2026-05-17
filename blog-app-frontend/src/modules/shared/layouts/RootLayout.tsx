@@ -1,20 +1,14 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+
+import Navigation from "../components/Navigation";
+
 export default function RootLayout() {
   return (
     <div className="min-h-screen flex flex-col gap-1">
-      <header>
-        <nav className="max-w-5xl mx-auto">
-          <ul>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          </ul>
-        </nav>
+      <header className="sticky p-1.5 mb-1 md:mb-2 lg:mb-3 flex justify-end bg-bg-header text-link shadow-sm font-bold">
+        <Navigation />
       </header>
-      <main className="flex-1">
+      <main className="flex-1 mx-auto p-2">
         <Outlet />
       </main>
     </div>
