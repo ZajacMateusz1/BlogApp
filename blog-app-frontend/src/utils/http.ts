@@ -14,6 +14,7 @@ export async function sendRequest<T>(
     }
     throw new Error(error.message || "Something went wrong!");
   }
+  if (response.status === 204) return null as T;
   const data: T = await response.json();
   return data;
 }
