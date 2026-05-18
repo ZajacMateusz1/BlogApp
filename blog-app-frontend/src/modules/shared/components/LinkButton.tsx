@@ -1,27 +1,28 @@
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { type ReactNode } from "react";
+import { Link, type LinkProps } from "react-router-dom";
 
 const variants = {
   solid: "bg-primary text-white border-transparent",
   outlined: "border-primary text-primary",
 };
 
-interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
+interface LinkButtonProps extends LinkProps {
   children: ReactNode;
   className?: string;
   variant?: "solid" | "outlined";
 }
-export default function Button({
+export default function LinkButton({
   children,
   className,
   variant = "solid",
   ...props
-}: ButtonProps) {
+}: LinkButtonProps) {
   return (
-    <button
+    <Link
       className={`${className || ""} ${variants[variant]} border p-1.5 text-base rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl`}
       {...props}
     >
       {children}
-    </button>
+    </Link>
   );
 }
