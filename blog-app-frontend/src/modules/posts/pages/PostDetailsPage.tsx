@@ -47,15 +47,17 @@ export default function PostDetailsPage() {
         </div>
         {isOwner && <PostDetailsButtons postId={postId!} token={token!} />}
       </header>
-      {data?.image && (
-        <div className="aspect-video overflow-hidden w-full mb-2">
-          <img
-            className="h-full w-full object-cover object-center"
-            src={data.image}
-            alt={`${data.title}`}
-          />
-        </div>
-      )}
+      <div className="aspect-video overflow-hidden w-full mb-4">
+        <img
+          className="h-full w-full object-cover object-center"
+          src={
+            data?.image ||
+            "https://ap-global.net/wp-content/uploads/2023/03/elementor-placeholder-image-3.webp"
+          }
+          alt={`${data?.title}`}
+        />
+      </div>
+
       <p className="px-1.5 py-2 bg-bg-primary border-l-2 border-primary">
         {data?.description}
       </p>

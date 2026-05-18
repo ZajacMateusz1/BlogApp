@@ -8,6 +8,7 @@ import RegisterPage from "../modules/auth/pages/RegisterPage";
 import LoginPage from "../modules/auth/pages/LoginPage";
 
 import PostDetailsPage from "../modules/posts/pages/PostDetailsPage";
+import CreatePostPage from "../modules/posts/pages/CreatePostPage";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
               {
                 path: "posts",
                 children: [
+                  {
+                    path: "create-post",
+                    element: <CreatePostPage />,
+                  },
                   {
                     path: ":postId",
                     element: <PostDetailsPage />,

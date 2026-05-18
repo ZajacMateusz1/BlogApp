@@ -9,3 +9,10 @@ export type PostResponseType = PostSchemaType & {
   createdAt: string;
   updatedAt: string;
 };
+
+export type AddPostResponseType = PostSchemaType & {
+  id: string;
+  creator: string;
+  createdAt: string;
+  updatedAt: string;
+};

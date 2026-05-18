@@ -9,7 +9,7 @@ export default function Navigation() {
   const { userId } = useAuth();
   const links = [
     { name: "Main page", link: "/" },
-    { name: "Create post", link: "/create-post" },
+    { name: "Create post", link: "/posts/create-post" },
     { name: "My profile", link: `/users/${userId}` },
   ];
 

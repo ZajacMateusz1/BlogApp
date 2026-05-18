@@ -1,4 +1,4 @@
-import type { ToastVariants } from "../store/toast/toast-context";
+import type { ToastVariants } from "./toast-context";
 
 interface ToastElementProps {
   children: string;
