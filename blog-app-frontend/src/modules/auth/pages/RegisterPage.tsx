@@ -51,13 +51,13 @@ export default function RegisterPage() {
       });
     },
   });
-  const onSubmit = (formData: RegisterSchemaType) => {
+  const submitHandler = (formData: RegisterSchemaType) => {
     mutate(formData);
   };
   return (
     <div>
       <AuthForm
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(submitHandler)}
         isSubmitting={isSubmitting || isPending}
         reset={reset}
         formTitle="Create your account"

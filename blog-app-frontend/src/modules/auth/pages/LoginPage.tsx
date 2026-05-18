@@ -45,13 +45,13 @@ export default function LoginPage() {
       });
     },
   });
-  const onSubmit = (formData: LoginSchemaType) => {
+  const submitHandler = (formData: LoginSchemaType) => {
     mutate(formData);
   };
   return (
     <div>
       <AuthForm
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(submitHandler)}
         isSubmitting={isSubmitting || isPending}
         reset={reset}
         formTitle="Log in to your account"

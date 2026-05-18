@@ -1,7 +1,9 @@
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 import { Link } from "react-router-dom";
+
+import FormWrapper from "../../shared/components/FormWrapper";
 import Button from "../../shared/components/Button";
-import ErrorBlock from "../../shared/components/ErrorBlock";
+
 interface AuthFormProps extends ComponentPropsWithoutRef<"form"> {
   children: ReactNode;
   isSubmitting: boolean;
@@ -12,6 +14,7 @@ interface AuthFormProps extends ComponentPropsWithoutRef<"form"> {
   formTitle: string;
   rootError: string | null;
 }
+
 export default function AuthForm({
   children,
   isSubmitting,
@@ -24,14 +27,7 @@ export default function AuthForm({
   ...props
 }: AuthFormProps) {
   return (
-    <form
-      className="mx-auto max-w-xl text-center shadow p-2 flex flex-col gap-2 md:p-3 xl:p-4"
-      {...props}
-    >
-      <h1 className="font-semibold text-lg font-header sm:text-xl md:text-2xl xl:text-3xl">
-        {formTitle}
-      </h1>
-      {rootError && <ErrorBlock>{rootError}</ErrorBlock>}
+    <FormWrapper formTitle={formTitle} rootError={rootError} {...props}>
       {children}
       <div className="flex justify-center gap-1 mt-1">
         <Button type="submit" disabled={isSubmitting}>
@@ -47,6 +43,6 @@ export default function AuthForm({
       >
         {bottomLinkText}
       </Link>
-    </form>
+    </FormWrapper>
   );
 }
