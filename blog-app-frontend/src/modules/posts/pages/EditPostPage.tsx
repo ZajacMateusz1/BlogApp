@@ -84,7 +84,10 @@ export default function EditPostPage() {
   });
 
   const submitHandler = (newData: PostSchemaType) => {
-    if (!isDirty) setError("root", { message: "You must provide changes!" });
+    if (!isDirty) {
+      setError("root", { message: "You must provide changes!" });
+      return;
+    }
     const changedData = (
       Object.keys(newData) as (keyof PostSchemaType)[]
     ).reduce((changes, key) => {
