@@ -23,7 +23,7 @@ export default function TextAreaElement({
         {children}
       </label>
       <textarea
-        className={`${className || ""} p-1.5 mb-0.5 min-w-1/2 rounded-lg border text-xs sm:text-sm md:text-base xl:text-lg`}
+        className={`${className || ""} p-1.5 mb-0.5 min-w-2/3 rounded-lg border text-xs sm:text-sm md:text-base xl:text-lg`}
         id={name}
         name={name}
         {...props}

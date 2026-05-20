@@ -15,7 +15,7 @@ export default function FormWrapper({
 }: FormWrapperProps) {
   return (
     <form
-      className="mx-auto xs:w-xs sm:w-sm md:w-md lg:w-lg xl:w-xl text-center rounded-md shadow p-2 flex flex-col gap-2 md:p-3 xl:p-4 bg-bg-header"
+      className="mx-auto xs:w-xs sm:w-sm md:w-md lg:w-lg xl:w-xl text-center rounded-md shadow p-4 flex flex-col gap-2 md:p-6 xl:p-4 bg-bg-header"
       {...props}
     >
       <h1 className="font-semibold text-lg font-header sm:text-xl md:text-2xl xl:text-3xl">

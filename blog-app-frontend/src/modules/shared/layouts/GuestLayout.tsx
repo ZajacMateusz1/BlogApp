@@ -5,5 +5,9 @@ export default function GuestLayout() {
   if (token) {
     return <Navigate to="/" replace />;
   }
-  return <Outlet />;
+  return (
+    <main className="mt-10 mx-2 md:mt-15 lg-mt:20">
+      <Outlet />
+    </main>
+  );
 }

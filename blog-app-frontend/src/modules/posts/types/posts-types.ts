@@ -1,18 +1,20 @@
 import type { PostSchemaType } from "../schemas/posts-schema";
 
-export type PostResponseType = PostSchemaType & {
+type BaseResponseType = PostSchemaType & {
   id: string;
-  creator: {
-    id: string;
-    username: string;
-  };
   createdAt: string;
   updatedAt: string;
 };
 
-export type AddPostResponseType = PostSchemaType & {
-  id: string;
-  creator: string;
-  createdAt: string;
-  updatedAt: string;
+export type PostResponseType = BaseResponseType & {
+  creator: {
+    id: string;
+    username: string;
+  };
 };
+
+export type AddPostResponseType = BaseResponseType & {
+  creator: string;
+};
+
+export type EditPostResponseType = AddPostResponseType;

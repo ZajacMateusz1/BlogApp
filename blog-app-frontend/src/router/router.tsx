@@ -9,6 +9,7 @@ import LoginPage from "../modules/auth/pages/LoginPage";
 
 import PostDetailsPage from "../modules/posts/pages/PostDetailsPage";
 import CreatePostPage from "../modules/posts/pages/CreatePostPage";
+import EditPostPage from "../modules/posts/pages/EditPostPage";
 
 const router = createBrowserRouter([
   {
@@ -39,8 +40,12 @@ const router = createBrowserRouter([
                 path: "posts",
                 children: [
                   {
-                    path: "create-post",
+                    path: "create",
                     element: <CreatePostPage />,
+                  },
+                  {
+                    path: "edit/:postId",
+                    element: <EditPostPage />,
                   },
                   {
                     path: ":postId",

@@ -29,7 +29,7 @@ export default function ToastContextProvider({
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
   const toastCtx: ToastContextType = {
-    addToast: addToast,
+    addToast,
   };
   return (
     <ToastContext.Provider value={toastCtx}>

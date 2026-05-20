@@ -10,6 +10,7 @@ interface PostFormProps extends ComponentPropsWithoutRef<"form"> {
   isSubmitting: boolean;
   formTitle: string;
   rootError: string | null;
+  cancelLink?: string;
 }
 export default function PostForm({
   children,
@@ -17,6 +18,7 @@ export default function PostForm({
   isSubmitting,
   formTitle,
   rootError,
+  cancelLink = "/",
   ...props
 }: PostFormProps) {
   return (
@@ -26,7 +28,7 @@ export default function PostForm({
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : submitButtonText}
         </Button>
-        <LinkButton to="/" variant="outlined">
+        <LinkButton to={cancelLink} variant="outlined">
           {isSubmitting ? "Submitting..." : "Cancel"}
         </LinkButton>
       </div>
