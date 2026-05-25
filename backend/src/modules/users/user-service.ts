@@ -7,9 +7,9 @@ import {
 
 export const getUsersService = async () => {
   const users = await getUsersRepository();
-  return users.map(({ _id, ...rest }) => ({
-    id: _id,
-    ...rest,
+  return users.map((user) => ({
+    id: user._id,
+    ...user,
   }));
 };
 export const getUserService = async (userId: string) => {
