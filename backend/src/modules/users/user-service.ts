@@ -1,9 +1,9 @@
-import HttpError from "../../errors/HttpError";
+import HttpError from "../../errors/HttpError.js";
 import {
   getUsersRepository,
   getUserRepository,
   getUserPosts,
-} from "./user-repository";
+} from "./user-repository.js";
 
 export const getUsersService = async () => {
   const users = await getUsersRepository();

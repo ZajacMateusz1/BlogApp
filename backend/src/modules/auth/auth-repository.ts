@@ -1,4 +1,4 @@
-import User from "../../models/user-model";
+import User from "../../models/user-model.js";
 export const registerRepository = async (
   email: string,
   password: string,

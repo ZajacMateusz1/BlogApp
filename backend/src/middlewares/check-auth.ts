@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import env from "../config/env";
+import env from "../config/env.js";
 
-import HttpError from "../errors/HttpError";
+import HttpError from "../errors/HttpError.js";
 import type { TokenPayload } from "../types/token/jwt-payload-type";
 
 const checkAuth = (req: Request, res: Response, next: NextFunction) => {

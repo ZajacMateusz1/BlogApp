@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { registerService, loginService } from "./auth-service";
+import { registerService, loginService } from "./auth-service.js";
 import type { LoginSchemaType, RegisterSchemaType } from "./auth-schema";
 export const register = async (
   req: Request,

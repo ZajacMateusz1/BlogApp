@@ -1,8 +1,8 @@
 import express from "express";
-import validate from "../../middlewares/validate";
-import { PostSchema, EditPostSchema } from "./posts-schema";
-import checkAuth from "../../middlewares/check-auth";
-import { addPost, removePost, editPost, getPost } from "./posts-controller";
+import validate from "../../middlewares/validate.js";
+import { PostSchema, EditPostSchema } from "./posts-schema.js";
+import checkAuth from "../../middlewares/check-auth.js";
+import { addPost, removePost, editPost, getPost } from "./posts-controller.js";
 
 const router = express.Router();
 router.get("/:postId", getPost);

@@ -1,4 +1,4 @@
-import HttpError from "../errors/HttpError";
+import HttpError from "../errors/HttpError.js";
 import { z } from "zod";
 
 const mapToHTTPError = (error: unknown) => {

@@ -7,8 +7,8 @@ import {
   removePostFromUser,
   editPostRepository,
   getPostRepository,
-} from "./posts-repository";
-import HttpError from "../../errors/HttpError";
+} from "./posts-repository.js";
+import HttpError from "../../errors/HttpError.js";
 
 export const getPostService = async (postId: string) => {
   const post = await getPostRepository(postId);

@@ -1,5 +1,5 @@
-import User from "../../models/user-model";
-import Post from "../../models/post-model";
+import User from "../../models/user-model.js";
+import Post from "../../models/post-model.js";
 import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
 import type { PopulatedPostType } from "./posts-types";

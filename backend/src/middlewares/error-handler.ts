@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import mapToHTTPError from "../utils/error-map";
+import mapToHTTPError from "../utils/error-map.js";
 const errorHandler = (
   error: unknown,
   req: Request,

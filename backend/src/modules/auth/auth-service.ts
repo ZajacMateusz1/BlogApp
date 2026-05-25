@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import env from "../../config/env";
-import HttpError from "../../errors/HttpError";
-import { registerRepository, findUserByEmail } from "./auth-repository";
+import env from "../../config/env.js";
+import HttpError from "../../errors/HttpError.js";
+import { registerRepository, findUserByEmail } from "./auth-repository.js";
 export const registerService = async (
   email: string,
   password: string,

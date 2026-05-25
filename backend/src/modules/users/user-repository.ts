@@ -1,5 +1,5 @@
-import User from "../../models/user-model";
-import Post from "../../models/post-model";
+import User from "../../models/user-model.js";
+import Post from "../../models/post-model.js";
 
 export const getUsersRepository = async () => {
   return await User.find({}, "-password -__v -posts").lean();

@@ -5,7 +5,7 @@ import {
   removePostService,
   editPostService,
   getPostService,
-} from "./posts-service";
+} from "./posts-service.js";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
 
 export const getPost = async (

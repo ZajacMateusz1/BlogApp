@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
-import authRoutes from "./modules/auth/auth-routes";
-import usersRoutes from "./modules/users/user-routes";
-import postsRouter from "./modules/posts/posts-routes";
-import HttpError from "./errors/HttpError";
-import errorHandler from "./middlewares/error-handler";
+import authRoutes from "./modules/auth/auth-routes.js";
+import usersRoutes from "./modules/users/user-routes.js";
+import postsRouter from "./modules/posts/posts-routes.js";
+import HttpError from "./errors/HttpError.js";
+import errorHandler from "./middlewares/error-handler.js";
 
 const app = express();
 app.use(express.json());
