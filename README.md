@@ -2,8 +2,6 @@
 
 Full-stack blog application built with React, TypeScript, Express and MongoDB.
 
-## [Live demo](https://blog-app-coral-one.vercel.app/)
-
 The project is still under active development.
 
 Backend is hosted on Render free, so the first request may take up to ~50 seconds due to cold start.
