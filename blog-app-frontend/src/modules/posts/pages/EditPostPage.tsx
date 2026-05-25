@@ -60,17 +60,14 @@ export default function EditPostPage() {
   }, [oldData, reset]);
   const { mutate, isPending: editIsPending } = useMutation({
     mutationFn: (formData: Partial<PostSchemaType>) =>
-      sendRequest<EditPostResponseType>(
-        `http://localhost:5000/api/posts/edit/${postId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
+      sendRequest<EditPostResponseType>(`/api/posts/edit/${postId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      ),
+        body: JSON.stringify(formData),
+      }),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["posts"],

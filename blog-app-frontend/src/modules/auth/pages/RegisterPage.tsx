@@ -35,7 +35,7 @@ export default function RegisterPage() {
   });
   const { mutate, isPending } = useMutation({
     mutationFn: (formData: RegisterSchemaType) =>
-      sendRequest<AuthResponseType>("http://localhost:5000/api/auth/register", {
+      sendRequest<AuthResponseType>("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

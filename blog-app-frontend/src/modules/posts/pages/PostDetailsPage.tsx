@@ -16,12 +16,9 @@ export default function PostDetailsPage() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["posts", postId],
     queryFn: ({ signal }) =>
-      sendRequest<PostResponseType>(
-        `http://localhost:5000/api/posts/${postId}`,
-        {
-          signal,
-        },
-      ),
+      sendRequest<PostResponseType>(`/api/posts/${postId}`, {
+        signal,
+      }),
     staleTime: 10000,
   });
   if (isLoading) return <LoadingSpinner />;

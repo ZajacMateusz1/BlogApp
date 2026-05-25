@@ -29,7 +29,7 @@ export default function LoginPage() {
   });
   const { mutate, isPending } = useMutation({
     mutationFn: (formData: LoginSchemaType) =>
-      sendRequest<AuthResponseType>("http://localhost:5000/api/auth/login", {
+      sendRequest<AuthResponseType>("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

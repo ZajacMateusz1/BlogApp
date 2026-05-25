@@ -6,7 +6,7 @@ export async function sendRequest<T>(
   url: string,
   options: RequestInit,
 ): Promise<T> {
-  const response = await fetch(url, options);
+  const response = await fetch(import.meta.env.VITE_API_URL + url, options);
   if (!response.ok) {
     const error: APIErrorType = await response.json();
     if (error.details) {

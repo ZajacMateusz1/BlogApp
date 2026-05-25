@@ -20,7 +20,7 @@ export default function PostDetailsButtons({
 
   const { mutate, isPending } = useMutation({
     mutationFn: (postId: string) =>
-      sendRequest<null>(`http://localhost:5000/api/posts/delete/${postId}`, {
+      sendRequest<null>(`/api/posts/delete/${postId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

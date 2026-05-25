@@ -32,17 +32,14 @@ export default function CreatePostPage() {
   });
   const { mutate, isPending } = useMutation({
     mutationFn: (formData: PostSchemaType) =>
-      sendRequest<AddPostResponseType>(
-        "http://localhost:5000/api/posts/create-post",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
+      sendRequest<AddPostResponseType>("/api/posts/create-post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      ),
+        body: JSON.stringify(formData),
+      }),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["posts"],
