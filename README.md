@@ -2,7 +2,7 @@
 
 Full-stack blog application built with React, TypeScript, Express and MongoDB.
 
-## [Live demo](https://blog-mz7nilr4w-zajacmateusz.vercel.app/)
+## [Live demo](https://blog-app-coral-one.vercel.app/)
 
 The project is still under active development.
 
