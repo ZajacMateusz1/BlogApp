@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { sendRequest } from "../../../utils/http";
 import AuthForm from "../components/AuthForm";
-import InputElement from "../../shared/components/InputElement";
+import InputElement from "../../shared/components/form/InputElement";
 
 import {
   RegisterSchema,

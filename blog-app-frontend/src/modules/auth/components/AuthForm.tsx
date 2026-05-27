@@ -1,7 +1,7 @@
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 import { Link } from "react-router-dom";
 
-import FormWrapper from "../../shared/components/FormWrapper";
+import FormWrapper from "../../shared/components/form/FormWrapper";
 import Button from "../../shared/components/Button";
 
 interface AuthFormProps extends ComponentPropsWithoutRef<"form"> {

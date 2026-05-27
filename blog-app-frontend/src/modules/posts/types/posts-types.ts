@@ -13,8 +13,6 @@ export type PostResponseType = BaseResponseType & {
   };
 };
 
-export type AddPostResponseType = BaseResponseType & {
+export type MutatePostResponseType = BaseResponseType & {
   creator: string;
 };
-
-export type EditPostResponseType = AddPostResponseType;
