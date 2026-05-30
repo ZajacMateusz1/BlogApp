@@ -25,7 +25,7 @@ export default function EditPostPage() {
   return (
     <PostForm
       postData={data}
-      requestLink={`/api/posts/edit/${postId}`}
+      requestLink={`/api/posts/${postId}`}
       formTitle="Edit post"
       submitButtonText="Edit post"
       cancelLink={`/posts/${postId}`}
