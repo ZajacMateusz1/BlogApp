@@ -51,7 +51,7 @@ export default function PostForm({
     defaultValues: postData
       ? {
           title: postData.title,
-          image: postData.image,
+          image: undefined,
           description: postData.description,
         }
       : {
@@ -66,10 +66,9 @@ export default function PostForm({
       sendRequest<MutatePostResponseType>(requestLink, {
         method: requestMethod,
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: formData,
       }),
     onSuccess: (data) => {
       queryClient.invalidateQueries({

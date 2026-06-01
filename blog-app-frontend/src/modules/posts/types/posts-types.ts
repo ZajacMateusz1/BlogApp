@@ -1,9 +1,10 @@
-import type { PostSchemaType } from "../schemas/posts-schema";
-
-type BaseResponseType = PostSchemaType & {
+type BaseResponseType = {
   id: string;
   createdAt: string;
   updatedAt: string;
+  title: string;
+  description: string;
+  image: string | null;
 };
 
 export type PostResponseType = BaseResponseType & {
