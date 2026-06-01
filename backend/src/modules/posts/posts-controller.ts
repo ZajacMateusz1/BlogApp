@@ -28,11 +28,12 @@ export const addPost = async (
   next: NextFunction,
 ) => {
   try {
-    const { title, image, description }: PostSchemaType = req.body;
+    const { title, description }: PostSchemaType = req.body;
+    const imageFile = req.file;
     const { userId }: TokenPayload = req.userData!;
     const addPostResponse = await addPostService(
       title,
-      image,
+      imageFile,
       description,
       userId,
     );
@@ -65,8 +66,14 @@ export const editPost = async (
   try {
     const { postId } = req.params;
     const editPostData: EditPostSchemaType = req.body;
+    const imageFile = req.file;
     const { userId }: TokenPayload = req.userData!;
-    const editPostRespone = await editPostService(postId, userId, editPostData);
+    const editPostRespone = await editPostService(
+      postId,
+      userId,
+      editPostData,
+      imageFile,
+    );
     res.status(200).json(editPostRespone);
   } catch (error) {
     next(error);

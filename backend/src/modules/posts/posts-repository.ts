@@ -12,14 +12,14 @@ export const getPostRepository = async (postId: string) => {
 
 export const addPostRepository = async (
   title: string,
-  image: string,
+  imagePath: string | null,
   description: string,
   userId: string,
   session: ClientSession,
 ) => {
   const createdPost = new Post({
     title,
-    image,
+    imagePath,
     description,
     creator: userId,
   });
@@ -62,6 +62,10 @@ export const removePostFromUser = async (
     { $pull: { posts: postId } },
     { session },
   );
+};
+
+export const findPostById = (postId: string) => {
+  return Post.findById(postId).lean();
 };
 
 export const editPostRepository = async (
