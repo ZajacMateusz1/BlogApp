@@ -7,6 +7,7 @@ import {
   getPostService,
 } from "./posts-service.js";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
+import HttpError from "../../errors/HttpError";
 
 export const getPost = async (
   req: Request<{ postId: string }>,
@@ -68,6 +69,10 @@ export const editPost = async (
     const editPostData: EditPostSchemaType = req.body;
     const imageFile = req.file;
     const { userId }: TokenPayload = req.userData!;
+
+    if (Object.keys(editPostData).length == 0 && !req.file)
+      throw new HttpError("You must provide at least one change", 400);
+
     const editPostRespone = await editPostService(
       postId,
       userId,
