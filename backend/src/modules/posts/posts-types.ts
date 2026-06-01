@@ -4,7 +4,7 @@ export type PopulatedPostType = {
   _id: Types.ObjectId;
   title: string;
   description: string;
-  image: string;
+  imagePath: string;
   creator: {
     _id: Types.ObjectId;
     username: string;

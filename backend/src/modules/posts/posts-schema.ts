@@ -5,7 +5,6 @@ export const PostSchema = z.object({
     .trim()
     .min(1, { error: "Min title length is 1" })
     .max(120, { error: "Max title length is 120" }),
-  image: z.string(),
   description: z.string(),
 });
 export const EditPostSchema = PostSchema.partial().refine(

@@ -3,7 +3,7 @@ import { Schema, model, Types } from "mongoose";
 const postSchema = new Schema(
   {
     title: { type: String, required: true },
-    image: { type: String },
+    imagePath: { type: String },
     description: { type: String },
     creator: { type: Types.ObjectId, required: true, ref: "User" },
   },
