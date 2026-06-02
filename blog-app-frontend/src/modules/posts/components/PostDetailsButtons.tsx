@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import useToast from "../../shared/hooks/useToast";
 
 import Button from "../../shared/components/Button";
+import LinkButton from "../../shared/components/LinkButton";
 
 import { sendRequest, queryClient } from "../../../utils/http";
 
@@ -37,7 +38,7 @@ export default function PostDetailsButtons({
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-2 mb-2">
       <Button
         onClick={() => {
           mutate(postId);
@@ -46,6 +47,7 @@ export default function PostDetailsButtons({
       >
         {isPending ? "Deleting..." : "Delete Post"}
       </Button>
+      <LinkButton to={`/posts/edit/${postId}`}>Edit Post</LinkButton>
     </div>
   );
 }
