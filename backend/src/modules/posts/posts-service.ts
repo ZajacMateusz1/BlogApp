@@ -74,7 +74,13 @@ export const removePostService = async (postId: string, userId: string) => {
     await removePostFromUser(postId, userId, session);
     await session.commitTransaction();
     const { _id, imagePath, __v, ...postObject } = removedPost.toObject();
-    if (imagePath) await removeFromSupabase(imagePath);
+    if (imagePath) {
+      try {
+        await removeFromSupabase(imagePath);
+      } catch (error) {
+        console.error(`Failed to remove image ${error}`);
+      }
+    }
     return { id: _id, ...postObject };
   } catch (error) {
     await session.abortTransaction();
@@ -90,16 +96,35 @@ export const editPostService = async (
   editPostData: EditPostSchemaType & { imagePath?: string },
   imageFile: Express.Multer.File | undefined,
 ) => {
-  const oldPostData = await findPostById(postId);
-  if (imageFile) {
-    const newImagePath = await uploadToSupabase(imageFile, "posts");
-    editPostData = { ...editPostData, imagePath: newImagePath };
+  let newImagePath: string | undefined = undefined;
+  let postUpdated: boolean = false;
+  try {
+    const oldPostData = await findPostById(postId);
+    if (!oldPostData) throw new HttpError("Post not found", 404);
+    if (imageFile) {
+      newImagePath = await uploadToSupabase(imageFile, "posts");
+      editPostData = { ...editPostData, imagePath: newImagePath };
+    }
+    const editedPost = await editPostRepository(postId, userId, editPostData);
+    if (editedPost === null) throw new HttpError("Post not found", 404);
+    postUpdated = true;
+    if (imageFile && oldPostData.imagePath) {
+      try {
+        await removeFromSupabase(oldPostData.imagePath);
+      } catch (error) {
+        console.error(`Failed to remove old image ${error}`);
+      }
+    }
+    const { _id, __v, ...postObject } = editedPost.toObject();
+    return { id: _id, ...postObject };
+  } catch (error) {
+    if (newImagePath && !postUpdated) {
+      try {
+        await removeFromSupabase(newImagePath);
+      } catch (removeError) {
+        console.error(`Failed to remove new image, ${removeError}`);
+      }
+    }
+    throw error;
   }
-  const editedPost = await editPostRepository(postId, userId, editPostData);
-  if (editedPost === null) throw new HttpError("Post not found", 404);
-  if (oldPostData && oldPostData.imagePath) {
-    await removeFromSupabase(oldPostData.imagePath);
-  }
-  const { _id, __v, ...postObject } = editedPost.toObject();
-  return { id: _id, ...postObject };
 };
