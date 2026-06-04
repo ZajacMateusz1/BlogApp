@@ -8,7 +8,7 @@ export default function RootLayout() {
       <header className="sticky p-1.5 mb-1 md:mb-2 lg:mb-3 flex justify-end bg-bg-header text-link shadow-sm font-bold">
         <Navigation />
       </header>
-      <main className="flex-1 mx-auto p-2">
+      <main className="flex-1 p-2">
         <Outlet />
       </main>
     </div>
