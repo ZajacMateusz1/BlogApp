@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
-import env from "../config/env";
+import env from "../config/env.js";
 import crypto from "crypto";
-import HttpError from "../errors/HttpError";
+import HttpError from "../errors/HttpError.js";
 
 const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SECRET_KEY);
 const MIME_TYPES_MAP: Record<string, string> = {

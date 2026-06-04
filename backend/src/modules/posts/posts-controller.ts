@@ -7,7 +7,7 @@ import {
   getPostService,
 } from "./posts-service.js";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
-import HttpError from "../../errors/HttpError";
+import HttpError from "../../errors/HttpError.js";
 
 export const getPost = async (
   req: Request<{ postId: string }>,

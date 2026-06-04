@@ -3,7 +3,7 @@ import {
   uploadToSupabase,
   removeFromSupabase,
   getpublicUrl,
-} from "../../utils/supabaseHelpers";
+} from "../../utils/supabaseHelpers.js";
 import type { EditPostSchemaType } from "./posts-schema";
 import {
   addPostRepository,

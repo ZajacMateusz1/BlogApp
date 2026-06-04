@@ -1,5 +1,5 @@
 import multer from "multer";
-import HttpError from "../errors/HttpError";
+import HttpError from "../errors/HttpError.js";
 
 const MIME_TYPES = ["image/png", "image/jpg", "image/jpeg"];
 
