@@ -90,7 +90,11 @@ export default function PostForm({
   ) => {
     const formData = new FormData();
     if (postData) {
-      if (!dirtyFields.title && !dirtyFields.description) {
+      if (
+        !dirtyFields.title &&
+        !dirtyFields.description &&
+        postData.image === undefined
+      ) {
         setError("root", { message: "You must provide changes!" });
         return;
       }
