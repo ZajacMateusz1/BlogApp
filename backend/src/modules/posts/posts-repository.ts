@@ -79,6 +79,6 @@ export const editPostRepository = async (
       creator: userId,
     },
     editPostData,
-    { new: true },
+    { returnDocument: "after" },
   );
 };
