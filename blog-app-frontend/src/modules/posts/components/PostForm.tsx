@@ -46,7 +46,7 @@ export default function PostForm({
 
   const {
     register,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, isSubmitting, isDirty },
     handleSubmit,
     setError,
     control,
@@ -90,11 +90,7 @@ export default function PostForm({
   ) => {
     const formData = new FormData();
     if (postData) {
-      if (
-        !dirtyFields.title &&
-        !dirtyFields.description &&
-        postData.image === undefined
-      ) {
+      if (!isDirty) {
         setError("root", { message: "You must provide changes!" });
         return;
       }

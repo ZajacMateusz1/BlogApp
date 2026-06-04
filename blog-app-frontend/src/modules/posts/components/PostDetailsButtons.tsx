@@ -38,7 +38,7 @@ export default function PostDetailsButtons({
   });
 
   return (
-    <div className="flex flex-col gap-2 mb-2 md:flex-col">
+    <div className="flex flex-col gap-2 mb-2">
       <Button
         onClick={() => {
           mutate(postId);

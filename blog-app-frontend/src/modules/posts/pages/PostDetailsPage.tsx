@@ -46,7 +46,7 @@ export default function PostDetailsPage() {
       </header>
       <div className="aspect-video overflow-hidden w-full mb-4">
         <img
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-contain"
           src={data?.image}
           alt={`${data?.title}`}
         />
