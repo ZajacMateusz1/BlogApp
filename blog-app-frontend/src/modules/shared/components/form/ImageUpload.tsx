@@ -1,4 +1,4 @@
-import { type ChangeEvent, type ComponentPropsWithRef } from "react";
+import { useEffect, type ChangeEvent, type ComponentPropsWithRef } from "react";
 
 interface ImageUploadProps extends ComponentPropsWithRef<"input"> {
   name: string;
@@ -15,10 +15,19 @@ export default function ImageUpload({
   changeValue,
   ...props
 }: ImageUploadProps) {
+  const previewUrl = imageValue ? URL.createObjectURL(imageValue) : null;
+  useEffect(() => {
+    if (!previewUrl) return;
+    return () => {
+      URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     changeValue(file);
   };
+
   return (
     <div className="flex flex-col items-center gap-2">
       <input
@@ -39,10 +48,16 @@ export default function ImageUpload({
           {errorMessage}
         </p>
       )}
-      {imageValue && (
-        <div>
-          <p>Selected file:</p>
-          {imageValue.name}
+      {previewUrl && (
+        <div className="w-full">
+          <p className="font-semibold text-xs sm:text-sm md:text-base xl:text-lg">
+            Preview:
+          </p>
+          <img
+            className="w-full max-h-64 object-contain"
+            src={previewUrl}
+            alt="Image preview"
+          />
         </div>
       )}
     </div>
