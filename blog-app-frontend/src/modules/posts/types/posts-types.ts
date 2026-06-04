@@ -4,7 +4,7 @@ type BaseResponseType = {
   updatedAt: string;
   title: string;
   description: string;
-  image: string | null;
+  image: string;
 };
 
 export type PostResponseType = BaseResponseType & {

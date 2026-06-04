@@ -33,12 +33,12 @@ export default function PostDetailsButtons({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       addToast("Post deleted", "success");
-      navigate("/");
+      navigate("/", { replace: true });
     },
   });
 
   return (
-    <div className="flex flex-col gap-2 mb-2">
+    <div className="flex flex-col gap-2 mb-2 md:flex-col">
       <Button
         onClick={() => {
           mutate(postId);

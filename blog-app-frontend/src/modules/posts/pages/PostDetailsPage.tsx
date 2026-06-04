@@ -25,7 +25,7 @@ export default function PostDetailsPage() {
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   const isOwner = userId === data?.creator.id;
   return (
-    <article className="bg-white rounded-md px-2 py-4">
+    <article className="bg-white rounded-md px-2 py-4 max-w-2xl mx-auto md:px-4 md:py-6">
       <header className="flex justify-between">
         <div>
           <Link
@@ -47,10 +47,7 @@ export default function PostDetailsPage() {
       <div className="aspect-video overflow-hidden w-full mb-4">
         <img
           className="h-full w-full object-cover object-center"
-          src={
-            data?.image ||
-            "https://ap-global.net/wp-content/uploads/2023/03/elementor-placeholder-image-3.webp"
-          }
+          src={data?.image}
           alt={`${data?.title}`}
         />
       </div>
