@@ -20,7 +20,7 @@ export const getPostService = async (postId: string) => {
   const post = await getPostRepository(postId);
   if (post === null) throw new HttpError("Post not found", 404);
   const { _id, creator, imagePath, ...postObject } = post;
-  const imageUrl = getpublicUrl(imagePath);
+  const imageUrl = imagePath ? getpublicUrl(imagePath) : null;
   return {
     id: _id,
     image: imageUrl,
