@@ -5,7 +5,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../auth/hooks/useAuth";
 
-import { PostSchema, type PostSchemaType } from "../schemas/posts-schema";
+import {
+  CreatePostSchema,
+  EditPostSchema,
+  type CreatePostSchemaType,
+  type EditPostSchemaType,
+} from "../schemas/posts-schema";
 import type {
   PostResponseType,
   MutatePostResponseType,
@@ -41,12 +46,12 @@ export default function PostForm({
 
   const {
     register,
-    formState: { errors, isSubmitting, isDirty },
+    formState: { errors, isSubmitting, dirtyFields },
     handleSubmit,
     setError,
     control,
-  } = useForm<PostSchemaType>({
-    resolver: zodResolver(PostSchema),
+  } = useForm<CreatePostSchemaType | EditPostSchemaType>({
+    resolver: zodResolver(postData ? EditPostSchema : CreatePostSchema),
     mode: "onBlur",
     defaultValues: postData
       ? {
@@ -80,10 +85,12 @@ export default function PostForm({
       setError("root", { message: error.message });
     },
   });
-  const submitHandler = (newPostData: PostSchemaType) => {
+  const submitHandler = (
+    newPostData: CreatePostSchemaType | EditPostSchemaType,
+  ) => {
     const formData = new FormData();
     if (postData) {
-      if (!isDirty) {
+      if (!dirtyFields.title && !dirtyFields.description) {
         setError("root", { message: "You must provide changes!" });
         return;
       }
