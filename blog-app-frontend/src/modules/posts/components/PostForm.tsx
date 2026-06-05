@@ -19,7 +19,7 @@ import { sendRequest, queryClient } from "../../../utils/http";
 
 import Button from "../../shared/components/Button";
 import LinkButton from "../../shared/components/LinkButton";
-import FormWrapper from "../../shared/components/form/FormWrapper";
+import FormWrapper from "../../shared/components/form/FormWrapper/FormWrapper";
 import InputElement from "../../shared/components/form/InputElement";
 import TextAreaElement from "../../shared/components/form/TextAreaElement";
 import ImageUpload from "../../shared/components/form/ImageUpload";

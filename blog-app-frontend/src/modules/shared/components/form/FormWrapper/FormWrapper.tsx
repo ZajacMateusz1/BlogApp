@@ -1,6 +1,6 @@
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 
-import ErrorBlock from "../ErrorBlock";
+import ErrorBlock from "../../ErrorBlock";
 
 interface FormWrapperProps extends ComponentPropsWithoutRef<"form"> {
   children: ReactNode;
