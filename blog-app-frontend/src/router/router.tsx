@@ -11,6 +11,8 @@ import PostDetailsPage from "../modules/posts/pages/PostDetailsPage";
 import CreatePostPage from "../modules/posts/pages/CreatePostPage";
 import EditPostPage from "../modules/posts/pages/EditPostPage";
 
+import UserDetailsPage from "../modules/users/pages/UserDetailsPage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,12 +28,12 @@ const router = createBrowserRouter([
           },
         ],
       },
+
       {
         element: <ProtectedLayout />,
         children: [
           {
             element: <RootLayout />,
-
             children: [
               {
                 index: true,
@@ -50,6 +52,15 @@ const router = createBrowserRouter([
                   {
                     path: ":postId",
                     element: <PostDetailsPage />,
+                  },
+                ],
+              },
+              {
+                path: "users",
+                children: [
+                  {
+                    path: ":userId",
+                    element: <UserDetailsPage />,
                   },
                 ],
               },
