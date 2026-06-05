@@ -97,17 +97,15 @@ export const editPostService = async (
   imageFile: Express.Multer.File | undefined,
 ) => {
   let newImagePath: string | undefined = undefined;
-  let postUpdated: boolean = false;
+  const oldPostData = await findPostById(postId);
+  if (!oldPostData) throw new HttpError("Post not found", 404);
+  if (imageFile) {
+    newImagePath = await uploadToSupabase(imageFile, "posts");
+    editPostData = { ...editPostData, imagePath: newImagePath };
+  }
   try {
-    const oldPostData = await findPostById(postId);
-    if (!oldPostData) throw new HttpError("Post not found", 404);
-    if (imageFile) {
-      newImagePath = await uploadToSupabase(imageFile, "posts");
-      editPostData = { ...editPostData, imagePath: newImagePath };
-    }
     const editedPost = await editPostRepository(postId, userId, editPostData);
     if (editedPost === null) throw new HttpError("Post not found", 404);
-    postUpdated = true;
     if (imageFile && oldPostData.imagePath) {
       try {
         await removeFromSupabase(oldPostData.imagePath);
@@ -118,7 +116,7 @@ export const editPostService = async (
     const { _id, __v, ...postObject } = editedPost.toObject();
     return { id: _id, ...postObject };
   } catch (error) {
-    if (newImagePath && !postUpdated) {
+    if (newImagePath) {
       try {
         await removeFromSupabase(newImagePath);
       } catch (removeError) {
