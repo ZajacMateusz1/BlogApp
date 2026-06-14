@@ -31,6 +31,7 @@ export const addPost = async (
   try {
     const { title, description }: PostSchemaType = req.body;
     const imageFile = req.file;
+    if (!imageFile) throw new HttpError("Image is required", 422);
     const { userId }: TokenPayload = req.userData!;
     const addPostResponse = await addPostService(
       title,
@@ -70,8 +71,8 @@ export const editPost = async (
     const imageFile = req.file;
     const { userId }: TokenPayload = req.userData!;
 
-    if (Object.keys(editPostData).length == 0 && !req.file)
-      throw new HttpError("You must provide at least one change", 400);
+    if (Object.keys(editPostData).length == 0 && !imageFile)
+      throw new HttpError("You must provide at least one change", 422);
 
     const editPostRespone = await editPostService(
       postId,

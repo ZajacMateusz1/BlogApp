@@ -4,9 +4,9 @@ import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
 import type { PopulatedPostType } from "./posts-types";
 
-export const getPostRepository = async (postId: string) => {
-  return await Post.findById(postId, "-__v")
-    .populate("creator", "username")
+export const getPostRepository = (postId: string) => {
+  return Post.findById(postId, "-__v")
+    .populate("creator", "username avatarPath")
     .lean<PopulatedPostType>();
 };
 
@@ -26,24 +26,24 @@ export const addPostRepository = async (
   await createdPost.save({ session });
   return createdPost;
 };
-export const addPostToUser = async (
+export const addPostToUser = (
   postId: Types.ObjectId,
   userId: string,
   session: ClientSession,
 ) => {
-  return await User.findByIdAndUpdate(
+  return User.findByIdAndUpdate(
     userId,
     { $push: { posts: postId } },
     { session },
   );
 };
 
-export const removePostRepository = async (
+export const removePostRepository = (
   postId: string,
   userId: string,
   session: ClientSession,
 ) => {
-  const removedPost = await Post.findOneAndDelete(
+  const removedPost = Post.findOneAndDelete(
     {
       _id: postId,
       creator: userId,
@@ -52,12 +52,12 @@ export const removePostRepository = async (
   );
   return removedPost;
 };
-export const removePostFromUser = async (
+export const removePostFromUser = (
   postId: string,
   userId: string,
   session: ClientSession,
 ) => {
-  return await User.findByIdAndUpdate(
+  return User.findByIdAndUpdate(
     userId,
     { $pull: { posts: postId } },
     { session },
@@ -68,17 +68,17 @@ export const findPostById = (postId: string) => {
   return Post.findById(postId).lean();
 };
 
-export const editPostRepository = async (
+export const editPostRepository = (
   postId: string,
   userId: string,
-  editPostData: EditPostSchemaType,
+  editPostData: EditPostSchemaType & { imagePath?: string },
 ) => {
-  return await Post.findOneAndUpdate(
+  return Post.findOneAndUpdate(
     {
       _id: postId,
       creator: userId,
     },
     editPostData,
     { returnDocument: "after" },
-  );
+  ).lean();
 };

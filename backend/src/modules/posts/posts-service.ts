@@ -20,25 +20,23 @@ export const getPostService = async (postId: string) => {
   const post = await getPostRepository(postId);
   if (post === null) throw new HttpError("Post not found", 404);
   const { _id, creator, imagePath, ...postObject } = post;
-  const imageUrl = imagePath ? getpublicUrl(imagePath) : null;
+  const imageUrl = getpublicUrl(imagePath);
+  const avatarUrl = getpublicUrl(creator.avatarPath);
   return {
     id: _id,
     image: imageUrl,
-    creator: { id: creator._id, username: creator.username },
+    creator: { id: creator._id, username: creator.username, avatar: avatarUrl },
     ...postObject,
   };
 };
 
 export const addPostService = async (
   title: string,
-  imageFile: Express.Multer.File | undefined,
+  imageFile: Express.Multer.File,
   description: string,
   userId: string,
 ) => {
-  let imagePath = null;
-  if (imageFile) {
-    imagePath = await uploadToSupabase(imageFile, "posts");
-  }
+  const imagePath = await uploadToSupabase(imageFile, "posts");
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
@@ -106,14 +104,14 @@ export const editPostService = async (
   try {
     const editedPost = await editPostRepository(postId, userId, editPostData);
     if (editedPost === null) throw new HttpError("Post not found", 404);
-    if (imageFile && oldPostData.imagePath) {
+    if (imageFile) {
       try {
         await removeFromSupabase(oldPostData.imagePath);
       } catch (error) {
         console.error(`Failed to remove old image ${error}`);
       }
     }
-    const { _id, __v, ...postObject } = editedPost.toObject();
+    const { _id, __v, ...postObject } = editedPost;
     return { id: _id, ...postObject };
   } catch (error) {
     if (newImagePath) {

@@ -8,5 +8,6 @@ export type PopulatedPostType = {
   creator: {
     _id: Types.ObjectId;
     username: string;
+    avatarPath: string;
   };
 };
