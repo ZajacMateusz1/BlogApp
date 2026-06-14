@@ -8,7 +8,6 @@ export const registerRepository = async (
     email,
     password,
     username,
-    posts: [],
   });
   const createdUser = await user.save();
   return createdUser;

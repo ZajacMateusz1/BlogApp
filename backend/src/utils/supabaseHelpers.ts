@@ -33,3 +33,5 @@ export const removeFromSupabase = async (path: string) => {
   const { error } = await supabase.storage.from("images").remove([path]);
   if (error) throw new HttpError(error.message, 500);
 };
+
+export const DEFAULT_AVATAR_PATH = "avatars/defaultAvatar.png";
