@@ -3,26 +3,26 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../auth/hooks/useAuth";
+import useAuth from "../../../auth/hooks/useAuth";
 
 import {
   CreatePostSchema,
   EditPostSchema,
   type CreatePostSchemaType,
   type EditPostSchemaType,
-} from "../schemas/posts-schema";
+} from "../../schemas/posts-schema";
 import type {
   PostResponseType,
   MutatePostResponseType,
-} from "../types/posts-types";
-import { sendRequest, queryClient } from "../../../utils/http";
+} from "../../types/posts-types";
+import { sendRequest, queryClient } from "../../../../utils/http";
 
-import Button from "../../shared/components/Button";
-import LinkButton from "../../shared/components/LinkButton";
-import FormWrapper from "../../shared/components/form/FormWrapper/FormWrapper";
-import InputElement from "../../shared/components/form/InputElement";
-import TextAreaElement from "../../shared/components/form/TextAreaElement";
-import ImageUpload from "../../shared/components/form/ImageUpload";
+import Button from "../../../shared/components/Button";
+import LinkButton from "../../../shared/components/LinkButton";
+import FormWrapper from "../../../shared/components/form/FormWrapper/FormWrapper";
+import InputElement from "../../../shared/components/form/InputElement";
+import TextAreaElement from "../../../shared/components/form/TextAreaElement";
+import ImageUpload from "../../../shared/components/form/ImageUpload";
 
 interface PostFormProps extends ComponentPropsWithoutRef<"form"> {
   postData?: PostResponseType;

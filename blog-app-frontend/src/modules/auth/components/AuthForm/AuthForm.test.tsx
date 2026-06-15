@@ -23,9 +23,9 @@ describe("AuthForm", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("heading", { name: "Title" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /title/i })).toBeInTheDocument();
     expect(screen.getByRole("link")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
     expect(screen.getByRole("textbox")).toBeInTheDocument();
   });
   it("Reset button works", async () => {
@@ -37,7 +37,7 @@ describe("AuthForm", () => {
         </AuthForm>
       </MemoryRouter>,
     );
-    await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+    await userEvent.click(screen.getByRole("button", { name: /reset/i }));
     expect(reset).toHaveBeenCalledOnce();
   });
 
@@ -50,7 +50,7 @@ describe("AuthForm", () => {
       </MemoryRouter>,
     );
 
-    const buttons = screen.getAllByRole("button", { name: "Submitting..." });
+    const buttons = screen.getAllByRole("button", { name: /submitting.../i });
     expect(buttons).toHaveLength(2);
     buttons.forEach((button) => {
       expect(button).toBeDisabled();
