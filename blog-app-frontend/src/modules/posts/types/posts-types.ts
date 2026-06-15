@@ -11,6 +11,7 @@ export type PostResponseType = BaseResponseType & {
   creator: {
     id: string;
     username: string;
+    avatar: string;
   };
 };
 
