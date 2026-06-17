@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { getAllByRole, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import PostForm from "./PostForm";
@@ -61,8 +61,7 @@ describe("Post From", () => {
     const submitButton = screen.getByRole("button", { name: /submit/i });
     await userEvent.type(title, "New Title");
     await userEvent.click(submitButton);
-    expect(mockedSendRequest).toHaveBeenCalledOnce();
-    expect(mockedSendRequest).toHaveBeenCalledWith(
+    expect(mockedSendRequest).toHaveBeenCalledExactlyOnceWith(
       "/",
       expect.objectContaining({
         headers: {
@@ -94,8 +93,7 @@ describe("Post From", () => {
       new File(["image"], "image.png", { type: "image/png" }),
     );
     await userEvent.click(submitButton);
-    expect(mockedSendRequest).toHaveBeenCalledOnce();
-    expect(mockedSendRequest).toHaveBeenCalledWith(
+    expect(mockedSendRequest).toHaveBeenCalledExactlyOnceWith(
       "/",
       expect.objectContaining({
         method: "POST",
@@ -142,8 +140,7 @@ describe("Post From", () => {
     const submitButton = screen.getByRole("button", { name: /submit/i });
     await userEvent.type(title, "New Title");
     await userEvent.click(submitButton);
-    expect(mockedSendRequest).toHaveBeenCalledOnce();
-    expect(mockedSendRequest).toHaveBeenCalledWith(
+    expect(mockedSendRequest).toHaveBeenCalledExactlyOnceWith(
       "/",
       expect.objectContaining({
         method: "PATCH",
@@ -178,5 +175,20 @@ describe("Post From", () => {
     expect(
       screen.getByRole("heading", { name: /You must provide changes!/i }),
     ).toBeInTheDocument();
+  });
+
+  it("Disables buttons while sending request", async () => {
+    mockedSendRequest.mockImplementation(() => new Promise(() => {}));
+    RenderWithProviders(
+      <PostForm {...defaultProps} postData={defaultPostData} />,
+    );
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+    await userEvent.type(
+      screen.getByRole("textbox", { name: /title/i }),
+      "New Title",
+    );
+    await userEvent.click(submitButton);
+    expect(submitButton).toBeDisabled();
+    expect(submitButton).toHaveTextContent(/submitting.../i);
   });
 });
