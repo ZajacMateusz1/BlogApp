@@ -4,7 +4,7 @@ import useAuth from "../../auth/hooks/useAuth";
 
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../shared/components/ErrorBlock";
-import PostDetailsButtons from "../components/PostDetailsButtons";
+import PostDetailsButtons from "../components/PostDetailsButtons/PostDetailsButtons";
 
 import { sendRequest } from "../../../utils/http";
 import type { PostResponseType } from "../types/posts-types";
