@@ -9,7 +9,7 @@ import LoginPage from "../modules/auth/pages/LoginPage";
 
 import PostDetailsPage from "../modules/posts/pages/PostDetailsPage";
 import CreatePostPage from "../modules/posts/pages/CreatePostPage";
-import EditPostPage from "../modules/posts/pages/EditPostPage";
+import EditPostPage from "../modules/posts/pages/EditPostPage/EditPostPage";
 
 import UserDetailsPage from "../modules/users/pages/UserDetailsPage";
 
