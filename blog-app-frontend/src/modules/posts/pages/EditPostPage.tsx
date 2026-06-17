@@ -7,7 +7,7 @@ import type { PostResponseType } from "../types/posts-types";
 
 import ErrorBlock from "../../shared/components/ErrorBlock";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
-import PostForm from "../components/PostForm";
+import PostForm from "../components/PostForm/PostForm";
 
 export default function EditPostPage() {
   const { postId } = useParams();
