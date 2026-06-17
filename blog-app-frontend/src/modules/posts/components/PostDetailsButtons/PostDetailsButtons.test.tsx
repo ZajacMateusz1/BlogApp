@@ -20,7 +20,7 @@ vi.mock("react-router-dom", async () => {
   };
 });
 vi.mock("../../../../utils/http", () => ({
-  sendRequest: vi.fn(),
+  sendRequest: vi.fn().mockResolvedValue(null),
 }));
 vi.mock("../../../shared/hooks/useToast", () => ({
   default: () => ({
@@ -51,7 +51,7 @@ describe("Post Details Buttons", () => {
     );
   });
   it("Disables button while deleting", async () => {
-    mockedSendRequest.mockImplementation(() => new Promise(() => {}));
+    mockedSendRequest.mockImplementationOnce(() => new Promise(() => {}));
     RenderWithProviders(<PostDetailsButtons {...defaultProps} />);
     const deleteButton = screen.getByRole("button", { name: /delete post/i });
     await userEvent.click(deleteButton);
@@ -60,7 +60,6 @@ describe("Post Details Buttons", () => {
   });
 
   it("Change page and add toast on success", async () => {
-    mockedSendRequest.mockResolvedValue(null);
     RenderWithProviders(<PostDetailsButtons {...defaultProps} />);
     await userEvent.click(screen.getByRole("button", { name: /delete post/i }));
     expect(mockedSendRequest).toHaveBeenCalledOnce();
@@ -79,7 +78,7 @@ describe("Post Details Buttons", () => {
 
   it("Add toast on error", async () => {
     const errorMsg = "error";
-    mockedSendRequest.mockRejectedValue(new Error(errorMsg));
+    mockedSendRequest.mockRejectedValueOnce(new Error(errorMsg));
     RenderWithProviders(<PostDetailsButtons {...defaultProps} />);
     await userEvent.click(screen.getByRole("button", { name: /delete post/i }));
     expect(mockedSendRequest).toHaveBeenCalledOnce();

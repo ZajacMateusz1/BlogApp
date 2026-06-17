@@ -3,7 +3,10 @@ import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-export default function RenderWithProviders(component: ReactElement) {
+export default function RenderWithProviders(
+  component: ReactElement,
+  initialEntries: string[] = ["/"],
+) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -16,7 +19,7 @@ export default function RenderWithProviders(component: ReactElement) {
   });
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter>{component}</MemoryRouter>
+      <MemoryRouter initialEntries={initialEntries}>{component}</MemoryRouter>
     </QueryClientProvider>,
   );
 }
