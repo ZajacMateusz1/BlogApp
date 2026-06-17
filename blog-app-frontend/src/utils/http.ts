@@ -1,6 +1,3 @@
-import { QueryClient } from "@tanstack/react-query";
-export const queryClient = new QueryClient();
-
 import type { APIErrorType } from "../modules/shared/types/api-error-types";
 export async function sendRequest<T>(
   url: string,

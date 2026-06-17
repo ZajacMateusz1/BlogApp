@@ -1,8 +1,7 @@
-import { getAllByRole, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import PostForm from "./PostForm";
-import useAuth from "../../../auth/hooks/useAuth";
 
 import { sendRequest } from "../../../../utils/http";
 
@@ -27,22 +26,19 @@ const defaultPostData = {
   },
 };
 
-const defaultUseAuthValue = {
-  token: "token",
-  userId: "1",
-  handleLogin: () => {},
-  handleLogout: () => {},
-};
-
-vi.mock("../../../auth/hooks/useAuth");
+vi.mock("../../../auth/hooks/useAuth", () => ({
+  default: () => ({
+    token: "token",
+    userId: "1",
+    handleLogin: () => {},
+    handleLogout: () => {},
+  }),
+}));
 vi.mock("../../../../utils/http", () => ({ sendRequest: vi.fn() }));
-const mockedUseAuth = vi.mocked(useAuth);
+
 const mockedSendRequest = vi.mocked(sendRequest);
 
 describe("Post From", () => {
-  beforeEach(() => {
-    mockedUseAuth.mockReturnValue(defaultUseAuthValue);
-  });
   it("Renders given props", () => {
     RenderWithProviders(<PostForm {...defaultProps} />);
     expect(screen.getByRole("heading", { name: /title/i })).toBeInTheDocument();
@@ -177,7 +173,7 @@ describe("Post From", () => {
     ).toBeInTheDocument();
   });
 
-  it("Disables buttons while sending request", async () => {
+  it("Disables button while sending request", async () => {
     mockedSendRequest.mockImplementation(() => new Promise(() => {}));
     RenderWithProviders(
       <PostForm {...defaultProps} postData={defaultPostData} />,

@@ -32,7 +32,7 @@ export default function ToastContextProvider({
     addToast,
   };
   return (
-    <ToastContext.Provider value={toastCtx}>
+    <ToastContext value={toastCtx}>
       <>
         {children}
         <div className="fixed left-3 top-3">
@@ -43,6 +43,6 @@ export default function ToastContextProvider({
           ))}
         </div>
       </>
-    </ToastContext.Provider>
+    </ToastContext>
   );
 }

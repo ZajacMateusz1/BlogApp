@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import useToast from "../../shared/hooks/useToast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useToast from "../../../shared/hooks/useToast";
 
-import Button from "../../shared/components/Button";
-import LinkButton from "../../shared/components/LinkButton";
+import Button from "../../../shared/components/Button";
+import LinkButton from "../../../shared/components/LinkButton";
 
-import { sendRequest, queryClient } from "../../../utils/http";
+import { sendRequest } from "../../../../utils/http";
 
 interface PostDetailsButtonsProps {
   postId: string;
@@ -17,6 +17,7 @@ export default function PostDetailsButtons({
   token,
 }: PostDetailsButtonsProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { addToast } = useToast();
 
   const { mutate, isPending } = useMutation({

@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../auth/hooks/useAuth";
 
@@ -15,7 +15,7 @@ import type {
   PostResponseType,
   MutatePostResponseType,
 } from "../../types/posts-types";
-import { sendRequest, queryClient } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http";
 
 import Button from "../../../shared/components/Button";
 import LinkButton from "../../../shared/components/LinkButton";
@@ -40,6 +40,7 @@ export default function PostForm({
   ...props
 }: PostFormProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { token } = useAuth();
 
   const requestMethod = postData ? "PATCH" : "POST";
