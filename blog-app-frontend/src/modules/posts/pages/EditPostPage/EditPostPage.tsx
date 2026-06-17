@@ -1,13 +1,13 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "../../auth/hooks/useAuth";
+import useAuth from "../../../auth/hooks/useAuth";
 
-import { sendRequest } from "../../../utils/http";
-import type { PostResponseType } from "../types/posts-types";
+import { sendRequest } from "../../../../utils/http";
+import type { PostResponseType } from "../../types/posts-types";
 
-import ErrorBlock from "../../shared/components/ErrorBlock";
-import LoadingSpinner from "../../shared/components/LoadingSpinner";
-import PostForm from "../components/PostForm/PostForm";
+import ErrorBlock from "../../../shared/components/ErrorBlock";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
+import PostForm from "../../components/PostForm/PostForm";
 
 export default function EditPostPage() {
   const { postId } = useParams();
@@ -18,8 +18,8 @@ export default function EditPostPage() {
       sendRequest<PostResponseType>(`/api/posts/${postId}`, { signal }),
   });
 
-  if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   if (isLoading) return <LoadingSpinner />;
+  if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   if (data?.creator.id !== userId) return <Navigate to="/" replace />;
 
   return (
