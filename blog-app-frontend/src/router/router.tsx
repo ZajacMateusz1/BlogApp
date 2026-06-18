@@ -7,7 +7,7 @@ import ProtectedLayout from "../modules/shared/layouts/ProtectedLayout";
 import RegisterPage from "../modules/auth/pages/RegisterPage";
 import LoginPage from "../modules/auth/pages/LoginPage";
 
-import PostDetailsPage from "../modules/posts/pages/PostDetailsPage";
+import PostDetailsPage from "../modules/posts/pages/PostDetailsPage/PostDetailsPage";
 import CreatePostPage from "../modules/posts/pages/CreatePostPage";
 import EditPostPage from "../modules/posts/pages/EditPostPage/EditPostPage";
 

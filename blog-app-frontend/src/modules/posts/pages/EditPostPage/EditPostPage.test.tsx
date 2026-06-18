@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { Routes, Route } from "react-router-dom";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import EditPostPage from "./EditPostPage";
@@ -30,20 +30,18 @@ describe("Edit Post Page", () => {
     const errorMsg = "error";
     mockedSendRequest.mockRejectedValueOnce(new Error(errorMsg));
     RenderWithProviders(<EditPostPage />);
-    await waitFor(() =>
-      expect(
-        screen.getByRole("heading", { name: `${errorMsg}` }),
-      ).toBeInTheDocument(),
-    );
+
+    expect(
+      await screen.findByRole("heading", { name: `${errorMsg}` }),
+    ).toBeInTheDocument();
   });
 
   it("Renders form when userId is creator id", async () => {
     RenderWithProviders(<EditPostPage />);
-    await waitFor(() =>
-      expect(
-        screen.getByRole("heading", { name: /edit post/i }),
-      ).toBeInTheDocument(),
-    );
+
+    expect(
+      await screen.findByRole("heading", { name: /edit post/i }),
+    ).toBeInTheDocument();
   });
 
   it("Change page when userId is not creatorId", async () => {
@@ -55,8 +53,6 @@ describe("Edit Post Page", () => {
       </Routes>,
       ["/posts/edit/2"],
     );
-    await waitFor(() =>
-      expect(screen.getByText(/home page/i)).toBeInTheDocument(),
-    );
+    expect(await screen.findByText(/home page/i)).toBeInTheDocument();
   });
 });
