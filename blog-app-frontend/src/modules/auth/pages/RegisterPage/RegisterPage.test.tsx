@@ -1,33 +1,46 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
-import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
 
 import { sendRequest } from "../../../../utils/http";
 
+import type { RegisterSchemaType } from "../../schemas/auth-schema";
 import type { AuthResponseType } from "../../types/auth-types";
-import type { LoginSchemaType } from "../../schemas/auth-schema";
 
-const defaultData: LoginSchemaType = {
+const defaultData: RegisterSchemaType = {
   email: "email@email.com",
+  username: "username",
   password: "Password123",
+  repeatPassword: "Password123",
 };
+
 const defaultResponse = vi.hoisted<AuthResponseType>(() => ({
   token: "token",
   id: "1",
   email: "",
 }));
 
-const fillAndSubmit = async () => {
+const fillAndSubmit = async (repeatPassword?: true) => {
   await userEvent.type(
     screen.getByRole("textbox", { name: /email/i }),
     defaultData.email,
   );
   await userEvent.type(
-    screen.getByLabelText(/password/i),
+    screen.getByRole("textbox", { name: /username/i }),
+    defaultData.username,
+  );
+  await userEvent.type(
+    screen.getByLabelText(/^password/i),
     defaultData.password,
   );
-  await userEvent.click(screen.getByRole("button", { name: /log in/i }));
+  await userEvent.type(
+    screen.getByLabelText(/^repeat password/i),
+    repeatPassword
+      ? defaultData.repeatPassword + "1"
+      : defaultData.repeatPassword,
+  );
+  await userEvent.click(screen.getByRole("button", { name: /register/i }));
 };
 
 const mockedHandleLogin = vi.fn();
@@ -50,27 +63,37 @@ vi.mock("../../../../utils/http", () => ({
 }));
 const mockedSendRequest = vi.mocked(sendRequest);
 
-describe("Login Page", () => {
-  it("Shows validation errors", async () => {
-    RenderWithProviders(<LoginPage />);
-    await userEvent.click(screen.getByRole("button", { name: /log in/i }));
+describe("Register Page", () => {
+  it("Shows validation errors for empty fields", async () => {
+    RenderWithProviders(<RegisterPage />);
+    await userEvent.click(screen.getByRole("button", { name: /register/i }));
     expect(screen.getByText(/invalid email address/i)).toBeInTheDocument();
-    expect(screen.getByText(/min password length is/i)).toBeInTheDocument();
+    expect(screen.getByText(/min username length is/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/min password length is /i)).toHaveLength(2);
+    expect(mockedSendRequest).not.toHaveBeenCalled();
+  });
+
+  it("Shows error when passwords do not match", async () => {
+    RenderWithProviders(<RegisterPage />);
+    await fillAndSubmit(true);
+    expect(screen.getByText(/passwords are not the same/i)).toBeInTheDocument();
     expect(mockedSendRequest).not.toHaveBeenCalled();
   });
 
   it("Sends correct request", async () => {
-    RenderWithProviders(<LoginPage />);
+    RenderWithProviders(<RegisterPage />);
     await fillAndSubmit();
 
     expect(mockedSendRequest).toHaveBeenCalledExactlyOnceWith(
-      "/api/auth/login",
+      "/api/auth/register",
       expect.objectContaining({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: defaultData.email,
           password: defaultData.password,
+          username: defaultData.username,
+          repeatPassword: defaultData.repeatPassword,
         }),
       }),
     );
@@ -79,14 +102,14 @@ describe("Login Page", () => {
   it("Shows backend errors", async () => {
     const errorMsg = "error";
     mockedSendRequest.mockRejectedValueOnce(new Error(errorMsg));
-    RenderWithProviders(<LoginPage />);
+    RenderWithProviders(<RegisterPage />);
     await fillAndSubmit();
 
     expect(await screen.findByText(errorMsg)).toBeInTheDocument();
   });
 
-  it("Calls handleLogin and navigates to home page after successful login", async () => {
-    RenderWithProviders(<LoginPage />);
+  it("Calls handleLogin and navigates to home page after successful request", async () => {
+    RenderWithProviders(<RegisterPage />);
     await fillAndSubmit();
 
     await waitFor(() => {

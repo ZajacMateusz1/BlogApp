@@ -3,16 +3,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth";
-import { sendRequest } from "../../../utils/http";
-import AuthForm from "../components/AuthForm/AuthForm";
-import InputElement from "../../shared/components/form/InputElement";
+import useAuth from "../../hooks/useAuth";
+import { sendRequest } from "../../../../utils/http";
+import AuthForm from "../../components/AuthForm/AuthForm";
+import InputElement from "../../../shared/components/form/InputElement";
 
 import {
   RegisterSchema,
   type RegisterSchemaType,
-} from "../schemas/auth-schema";
-import type { AuthResponseType } from "../types/auth-types";
+} from "../../schemas/auth-schema";
+import type { AuthResponseType } from "../../types/auth-types";
 
 export default function RegisterPage() {
   const { handleLogin } = useAuth();
