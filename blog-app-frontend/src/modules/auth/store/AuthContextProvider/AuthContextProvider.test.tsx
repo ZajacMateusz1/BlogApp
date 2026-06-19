@@ -18,6 +18,7 @@ const renderUseAuth = () => {
 
 describe("Auth Context Provider", () => {
   afterEach(() => vi.useRealTimers());
+
   it("Provides initial auth state", () => {
     const result = renderUseAuth();
     expect(result.current.token).toBeNull();

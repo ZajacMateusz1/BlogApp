@@ -3,9 +3,9 @@ import ToastContext, {
   type ToastContextType,
   type ToastType,
   type ToastVariants,
-} from "./toast-context";
+} from "../toast-context";
 
-import ToastElement from "./ToastElement";
+import ToastElement from "../ToastElement";
 
 interface ToastContextProviderProps {
   children: ReactNode;
