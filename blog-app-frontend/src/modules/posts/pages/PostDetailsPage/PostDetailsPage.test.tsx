@@ -4,18 +4,20 @@ import PostDetailsPage from "./PostDetailsPage";
 
 import { sendRequest } from "../../../../utils/http";
 
-const { defaultPost } = vi.hoisted(() => ({
-  defaultPost: {
-    title: "Title",
-    image: "Image",
-    description: "Description",
-    creator: {
-      id: "1",
-      username: "user",
-      avatar: "avatar",
-    },
-    createdAt: "2026-01-01",
+import type { PostResponseType } from "../../types/posts-types";
+
+const defaultPost = vi.hoisted<PostResponseType>(() => ({
+  id: "1",
+  title: "Title",
+  image: "Image",
+  description: "Description",
+  creator: {
+    id: "1",
+    username: "user",
+    avatar: "avatar",
   },
+  createdAt: "2026-01-01",
+  updatedAt: "2026-01-01",
 }));
 
 vi.mock("../../../shared/hooks/useToast", () => ({

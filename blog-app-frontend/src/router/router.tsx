@@ -5,7 +5,7 @@ import GuestLayout from "../modules/shared/layouts/GuestLayout";
 import ProtectedLayout from "../modules/shared/layouts/ProtectedLayout";
 
 import RegisterPage from "../modules/auth/pages/RegisterPage";
-import LoginPage from "../modules/auth/pages/LoginPage";
+import LoginPage from "../modules/auth/pages/LoginPage/LoginPage";
 
 import PostDetailsPage from "../modules/posts/pages/PostDetailsPage/PostDetailsPage";
 import CreatePostPage from "../modules/posts/pages/CreatePostPage";

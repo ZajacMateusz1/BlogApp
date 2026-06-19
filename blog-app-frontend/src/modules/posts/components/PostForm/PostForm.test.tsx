@@ -5,6 +5,8 @@ import PostForm from "./PostForm";
 
 import { sendRequest } from "../../../../utils/http";
 
+import type { PostResponseType } from "../../types/posts-types";
+
 const defaultProps = {
   postData: undefined,
   requestLink: "/",
@@ -12,7 +14,7 @@ const defaultProps = {
   formTitle: "Title",
   cancelLink: "/",
 };
-const defaultPostData = {
+const defaultPostData: PostResponseType = {
   id: "1",
   createdAt: "",
   updatedAt: "",
@@ -25,6 +27,13 @@ const defaultPostData = {
     avatar: "",
   },
 };
+
+const getFormElements = () => ({
+  submitButton: screen.getByRole("button", { name: /submit/i }),
+  title: screen.getByRole("textbox", { name: /title/i }),
+  description: screen.getByRole("textbox", { name: /description/i }),
+  image: screen.getByLabelText(/pick image/i),
+});
 
 vi.mock("../../../auth/hooks/useAuth", () => ({
   default: () => ({
@@ -53,8 +62,8 @@ describe("Post From", () => {
     RenderWithProviders(
       <PostForm {...defaultProps} postData={defaultPostData} />,
     );
-    const title = screen.getByRole("textbox", { name: /title/i });
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const { submitButton, title } = getFormElements();
+
     await userEvent.type(title, "New Title");
     await userEvent.click(submitButton);
     expect(mockedSendRequest).toHaveBeenCalledExactlyOnceWith(
@@ -69,7 +78,8 @@ describe("Post From", () => {
 
   it("Does not send request with empty fields and renders errors", async () => {
     RenderWithProviders(<PostForm {...defaultProps} />);
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const { submitButton } = getFormElements();
+
     await userEvent.click(submitButton);
     expect(mockedSendRequest).not.toHaveBeenCalled();
     expect(screen.getByText(/Min title length is 1/i)).toBeInTheDocument();
@@ -78,10 +88,8 @@ describe("Post From", () => {
 
   it("Sends POST request in create mode", async () => {
     RenderWithProviders(<PostForm {...defaultProps} />);
-    const submitButton = screen.getByRole("button", { name: /submit/i });
-    const title = screen.getByRole("textbox", { name: /title/i });
-    const description = screen.getByRole("textbox", { name: /description/i });
-    const image = screen.getByLabelText(/pick image/i);
+    const { submitButton, title, description, image } = getFormElements();
+
     await userEvent.type(title, "Title");
     await userEvent.type(description, "description");
     await userEvent.upload(
@@ -99,11 +107,9 @@ describe("Post From", () => {
 
   it("Sends proper data in create mode", async () => {
     RenderWithProviders(<PostForm {...defaultProps} />);
+    const { submitButton, title, description, image } = getFormElements();
+
     const file = new File(["image"], "image.png", { type: "image/png" });
-    const submitButton = screen.getByRole("button", { name: /submit/i });
-    const title = screen.getByRole("textbox", { name: /title/i });
-    const description = screen.getByRole("textbox", { name: /description/i });
-    const image = screen.getByLabelText(/pick image/i);
     await userEvent.type(title, "Title");
     await userEvent.type(description, "Description");
     await userEvent.upload(image, file);
@@ -132,8 +138,8 @@ describe("Post From", () => {
     RenderWithProviders(
       <PostForm {...defaultProps} postData={defaultPostData} />,
     );
-    const title = screen.getByRole("textbox", { name: /title/i });
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const { submitButton, title } = getFormElements();
+
     await userEvent.type(title, "New Title");
     await userEvent.click(submitButton);
     expect(mockedSendRequest).toHaveBeenCalledExactlyOnceWith(
@@ -148,8 +154,8 @@ describe("Post From", () => {
     RenderWithProviders(
       <PostForm {...defaultProps} postData={defaultPostData} />,
     );
-    const title = screen.getByRole("textbox", { name: /title/i });
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const { submitButton, title } = getFormElements();
+
     await userEvent.clear(title);
     await userEvent.type(title, "New Title");
     await userEvent.click(submitButton);
@@ -165,7 +171,8 @@ describe("Post From", () => {
     RenderWithProviders(
       <PostForm {...defaultProps} postData={defaultPostData} />,
     );
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const { submitButton } = getFormElements();
+
     await userEvent.click(submitButton);
     expect(mockedSendRequest).not.toHaveBeenCalled();
     expect(
@@ -178,11 +185,9 @@ describe("Post From", () => {
     RenderWithProviders(
       <PostForm {...defaultProps} postData={defaultPostData} />,
     );
-    const submitButton = screen.getByRole("button", { name: /submit/i });
-    await userEvent.type(
-      screen.getByRole("textbox", { name: /title/i }),
-      "New Title",
-    );
+    const { submitButton, title } = getFormElements();
+
+    await userEvent.type(title, "New Title");
     await userEvent.click(submitButton);
     expect(submitButton).toBeDisabled();
     expect(submitButton).toHaveTextContent(/submitting.../i);
