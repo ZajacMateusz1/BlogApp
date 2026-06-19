@@ -5,7 +5,7 @@ import {
   useMemo,
   type ReactNode,
 } from "react";
-import AuthContext, { type AuthContextType } from "./auth-context";
+import AuthContext, { type AuthContextType } from "../auth-context";
 
 const getTokenExpireDate = (token: string | null): number => {
   if (!token) return -1;
