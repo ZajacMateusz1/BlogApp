@@ -12,6 +12,7 @@ import CreatePostPage from "../modules/posts/pages/CreatePostPage";
 import EditPostPage from "../modules/posts/pages/EditPostPage/EditPostPage";
 
 import UserDetailsPage from "../modules/users/pages/UserDetailsPage";
+import EditUserProfilePage from "../modules/users/pages/EditUserProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
               {
                 path: "users",
                 children: [
+                  {
+                    path: "edit-profile",
+                    element: <EditUserProfilePage />,
+                  },
                   {
                     path: ":userId",
                     element: <UserDetailsPage />,
