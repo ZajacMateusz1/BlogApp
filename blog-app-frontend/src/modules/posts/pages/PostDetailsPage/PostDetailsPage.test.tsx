@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import PostDetailsPage from "./PostDetailsPage";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 
 import type { PostResponseType } from "../../types/posts-types";
 
@@ -33,7 +33,7 @@ vi.mock("../../../auth/hooks/useAuth", () => ({
     handleLogout: () => {},
   }),
 }));
-vi.mock("../../../../utils/http", () => ({
+vi.mock("../../../../utils/http/http", () => ({
   sendRequest: vi.fn().mockResolvedValue(defaultPost),
 }));
 const mockedSendRequest = vi.mocked(sendRequest);

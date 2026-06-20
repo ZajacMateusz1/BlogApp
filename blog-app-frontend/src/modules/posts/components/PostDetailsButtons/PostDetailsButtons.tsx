@@ -5,7 +5,7 @@ import useToast from "../../../shared/hooks/useToast";
 import Button from "../../../shared/components/Button";
 import LinkButton from "../../../shared/components/LinkButton";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 
 interface PostDetailsButtonsProps {
   postId: string;

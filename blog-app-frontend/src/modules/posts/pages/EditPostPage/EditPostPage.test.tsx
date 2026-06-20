@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import EditPostPage from "./EditPostPage";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 
 vi.mock("../../../auth/hooks/useAuth", () => ({
   default: () => ({
@@ -13,7 +13,7 @@ vi.mock("../../../auth/hooks/useAuth", () => ({
     handleLogout: () => {},
   }),
 }));
-vi.mock("../../../../utils/http", () => ({
+vi.mock("../../../../utils/http/http", () => ({
   sendRequest: vi.fn().mockResolvedValue({ creator: { id: "1" } }),
 }));
 

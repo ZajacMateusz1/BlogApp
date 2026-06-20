@@ -15,7 +15,7 @@ import type {
   PostResponseType,
   MutatePostResponseType,
 } from "../../types/posts-types";
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 
 import Button from "../../../shared/components/Button";
 import LinkButton from "../../../shared/components/LinkButton";

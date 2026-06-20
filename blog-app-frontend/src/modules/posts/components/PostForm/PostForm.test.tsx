@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import PostForm from "./PostForm";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 
 import type { PostResponseType } from "../../types/posts-types";
 
@@ -43,7 +43,7 @@ vi.mock("../../../auth/hooks/useAuth", () => ({
     handleLogout: () => {},
   }),
 }));
-vi.mock("../../../../utils/http", () => ({ sendRequest: vi.fn() }));
+vi.mock("../../../../utils/http/http", () => ({ sendRequest: vi.fn() }));
 
 const mockedSendRequest = vi.mocked(sendRequest);
 

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import LoginPage from "./LoginPage";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 
 import type { AuthResponseType } from "../../types/auth-types";
 import type { LoginSchemaType } from "../../schemas/auth-schema";
@@ -45,7 +45,7 @@ vi.mock("../../hooks/useAuth", () => ({
     handleLogin: mockedHandleLogin,
   }),
 }));
-vi.mock("../../../../utils/http", () => ({
+vi.mock("../../../../utils/http/http", () => ({
   sendRequest: vi.fn().mockResolvedValue(defaultResponse),
 }));
 const mockedSendRequest = vi.mocked(sendRequest);

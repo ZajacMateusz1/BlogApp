@@ -6,7 +6,7 @@ import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../../shared/components/ErrorBlock";
 import PostDetailsButtons from "../../components/PostDetailsButtons/PostDetailsButtons";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 import type { PostResponseType } from "../../types/posts-types";
 
 export default function PostDetailsPage() {

@@ -1,4 +1,4 @@
-import type { APIErrorType } from "../modules/shared/types/api-error-types";
+import type { APIErrorType } from "../../modules/shared/types/api-error-types";
 export async function sendRequest<T>(
   url: string,
   options: RequestInit,

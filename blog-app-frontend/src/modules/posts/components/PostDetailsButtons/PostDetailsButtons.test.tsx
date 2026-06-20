@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import RenderWithProviders from "../../../../utils/tests/RenderWithProviders";
 import PostDetailsButtons from "./PostDetailsButtons";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 
 const defaultProps = {
   postId: "1",
@@ -19,7 +19,7 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => navigateMock,
   };
 });
-vi.mock("../../../../utils/http", () => ({
+vi.mock("../../../../utils/http/http", () => ({
   sendRequest: vi.fn().mockResolvedValue(null),
 }));
 vi.mock("../../../shared/hooks/useToast", () => ({

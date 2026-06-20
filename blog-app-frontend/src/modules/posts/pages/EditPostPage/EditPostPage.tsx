@@ -2,7 +2,7 @@ import { useParams, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../auth/hooks/useAuth";
 
-import { sendRequest } from "../../../../utils/http";
+import { sendRequest } from "../../../../utils/http/http";
 import type { PostResponseType } from "../../types/posts-types";
 
 import ErrorBlock from "../../../shared/components/ErrorBlock";
