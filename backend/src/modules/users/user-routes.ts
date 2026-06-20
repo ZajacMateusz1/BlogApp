@@ -3,16 +3,16 @@ import checkAuth from "../../middlewares/check-auth.js";
 import fileUpload from "../../middlewares/file-upload.js";
 import validate from "../../middlewares/validate.js";
 import { getUsers, getUser, editUser } from "./user-controller.js";
-import { EditPostSchema } from "../posts/posts-schema.js";
+import { EditUserSchema } from "./user-schema.js";
 
 const router = express.Router();
 router.get("/", getUsers);
 router.get("/:userId", getUser);
 router.use(checkAuth);
 router.patch(
-  "/:userId",
+  "/me",
   fileUpload.single("avatar"),
-  validate(EditPostSchema),
+  validate(EditUserSchema),
   editUser,
 );
 

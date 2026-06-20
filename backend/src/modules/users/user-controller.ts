@@ -33,7 +33,11 @@ export const getUser = async (
   }
 };
 
-export const editUser = (req: Request, res: Response, next: NextFunction) => {
+export const editUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { userId } = req.userData!;
     const avatarFile = req.file;
@@ -43,7 +47,11 @@ export const editUser = (req: Request, res: Response, next: NextFunction) => {
       throw new HttpError("You must provide at least one change", 422);
     }
 
-    const editUserResponse = editUserService(userId, editUserData, avatarFile);
+    const editUserResponse = await editUserService(
+      userId,
+      editUserData,
+      avatarFile,
+    );
     res.json(editUserResponse);
   } catch (error) {
     next(error);
