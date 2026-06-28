@@ -15,15 +15,15 @@ export default function TextAreaElement({
   ...props
 }: TextAreaElementProps) {
   return (
-    <div className="flex flex-col items-center gap-0.5 w-full">
+    <div className="flex w-full flex-col items-start gap-1">
       <label
-        className="text-sm sm:text-base md:text-lg xl:text-xl"
+        className="pl-2 font-semibold text-sm sm:text-base md:text-lg xl:text-xl"
         htmlFor={name}
       >
         {children}
       </label>
       <textarea
-        className={`${className || ""} p-1.5 mb-0.5 min-w-2/3 rounded-lg border text-xs sm:text-sm md:text-base xl:text-lg`}
+        className={`${className || ""} ${errorMessage ? "border-error" : ""} p-1.5 mb-0.5 min-h-24 rounded-lg w-full max-w-md border text-xs sm:text-sm md:text-base xl:text-lg md:min-h-28 lg:min-h-32`}
         id={name}
         name={name}
         {...props}
