@@ -19,7 +19,7 @@ export default function LinkButton({
 }: LinkButtonProps) {
   return (
     <Link
-      className={`${className || ""} ${variants[variant]} text-center border p-1.5 text-base rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl`}
+      className={`${className || ""} ${variants[variant]} flex gap-2 text-center border p-1.5 text-base rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl`}
       {...props}
     >
       {children}

@@ -18,7 +18,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`${className || ""} ${variants[variant]} border p-1.5 text-base rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl`}
+      className={`${className || ""} ${variants[variant]} flex gap-2 border p-1.5 text-base rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl`}
       {...props}
     >
       {children}
