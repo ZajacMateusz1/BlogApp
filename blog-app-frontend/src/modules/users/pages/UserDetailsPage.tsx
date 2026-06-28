@@ -5,9 +5,9 @@ import UserPosts from "../components/UserPosts";
 export default function UserDetailsPage() {
   const { userId } = useParams();
   return (
-    <>
-      <UserProfile userId={userId} />
+    <div className="max-w-3xl mx-auto">
+      <UserProfile profileId={userId} />
       <UserPosts userId={userId} />
-    </>
+    </div>
   );
 }
