@@ -81,13 +81,14 @@ export const getUserPostsService = async (
   const posts = await getUserPostsRepository(userId, limit, cursor);
   const nextCursor = posts.at(-1)?._id;
   return {
-    posts: posts.map(({ _id, creator, ...postData }) => ({
+    posts: posts.map(({ _id, creator, imagePath, ...postData }) => ({
       id: _id,
       creator: {
         id: creator._id,
         username: creator.username,
         avatar: getpublicUrl(creator.avatarPath),
       },
+      image: getpublicUrl(imagePath),
       ...postData,
     })),
     nextCursor,
