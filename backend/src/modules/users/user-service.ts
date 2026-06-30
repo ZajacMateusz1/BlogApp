@@ -3,6 +3,7 @@ import {
   getUsersRepository,
   getUserRepository,
   editUserRepository,
+  getUserPostsRepository,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -70,4 +71,25 @@ export const editUserService = async (
     }
     throw error;
   }
+};
+
+export const getUserPostsService = async (
+  userId: string,
+  limit: number,
+  cursor: string | undefined,
+) => {
+  const posts = await getUserPostsRepository(userId, limit, cursor);
+  const nextCursor = posts.at(-1)?._id;
+  return {
+    posts: posts.map(({ _id, creator, ...postData }) => ({
+      id: _id,
+      creator: {
+        id: creator._id,
+        username: creator.username,
+        avatar: getpublicUrl(creator.avatarPath),
+      },
+      ...postData,
+    })),
+    nextCursor,
+  };
 };

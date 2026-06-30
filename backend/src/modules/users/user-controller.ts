@@ -5,6 +5,7 @@ import {
   getUsersService,
   getUserService,
   editUserService,
+  getUserPostsService,
 } from "./user-service.js";
 
 export const getUsers = async (
@@ -53,6 +54,29 @@ export const editUser = async (
       avatarFile,
     );
     res.json(editUserResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserPosts = async (
+  req: Request<{ userId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.params;
+    const limit = Math.min(Number(req.query.limit) || 10, 10);
+    const cursor =
+      typeof req.query.cursor === "string"
+        ? typeof req.query.cursor
+        : undefined;
+    const getUserPostsResponse = await getUserPostsService(
+      userId,
+      limit,
+      cursor,
+    );
+    res.json(getUserPostsResponse);
   } catch (error) {
     next(error);
   }

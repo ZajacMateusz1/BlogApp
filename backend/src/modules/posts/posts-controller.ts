@@ -80,7 +80,7 @@ export const editPost = async (
       editPostData,
       imageFile,
     );
-    res.status(200).json(editPostRespone);
+    res.json(editPostRespone);
   } catch (error) {
     next(error);
   }
