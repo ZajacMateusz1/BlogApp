@@ -68,8 +68,8 @@ export const getUserPosts = async (
     const { userId } = req.params;
     const limit = Math.min(Number(req.query.limit) || 10, 10);
     const cursor =
-      typeof req.query.cursor === "string"
-        ? typeof req.query.cursor
+      typeof req.query.cursor === "string" && req.query.cursor !== ""
+        ? req.query.cursor
         : undefined;
     const getUserPostsResponse = await getUserPostsService(
       userId,
