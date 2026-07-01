@@ -116,7 +116,7 @@ export default function UserForm({ userData }: UserFormProps) {
           </ImageUpload>
         )}
       />
-      <div>
+      <div className="flex justify-center gap-2 md:gap-4">
         <Button type="submit" disabled={isSubmitting || isPending}>
           Edit profile
         </Button>

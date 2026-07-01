@@ -52,9 +52,11 @@ export default function UserPosts({ userId }: UserPostsProps) {
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   return (
     <section className="flex flex-col gap-4 mt-6">
-      <h2 className="font-semibold">Posts:</h2>
+      <h2 className="font-bold uppercase text-center text-lg md:text-xl lg:text-2xl">
+        Posts
+      </h2>
       {data?.pages.map((page) =>
-        page.posts.map((post) => <PostCard postData={post} />),
+        page.posts.map((post) => <PostCard key={post.id} postData={post} />),
       )}
       <div ref={loaderRef} className="loader"></div>
     </section>
