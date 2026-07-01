@@ -1,13 +1,13 @@
+import { Link } from "react-router-dom";
 import type { PostResponseType } from "../types/posts-types";
 
 interface PostCardInterfaceProps {
   postData: PostResponseType;
 }
 export default function PostCard({ postData }: PostCardInterfaceProps) {
-  console.log(postData);
   return (
-    <article>
-      <header>
+    <article className="bg-light rounded-xl p-3 md:p-4">
+      <header className="mb-2 md:mb-4">
         <div className="user-data flex items-center mb-2 gap-2">
           <img
             className="w-10 h-10 rounded-lg sm:w-12 sm:h-12 md:w-14 md:h-14"
@@ -18,13 +18,31 @@ export default function PostCard({ postData }: PostCardInterfaceProps) {
             {postData.creator.username}
           </p>
         </div>
-        <p>{postData.createdAt}</p>
+        <p className="text-xs lg:text-sm">
+          {new Date(postData.createdAt).toLocaleString(undefined, {
+            dateStyle: "short",
+            timeStyle: "short",
+          })}
+        </p>
       </header>
-      <h3>{postData.title}</h3>
-      <p className="line-clamp-3">{postData.description}</p>
-      <div className="w-full">
-        <img src={postData.image} alt={postData.title} />
-      </div>
+      <Link
+        className="group flex flex-col gap-2 md:gap-4"
+        to={`/posts/${postData.id}`}
+      >
+        <div className="w-full h-48 overflow-hidden text-xs md:h-80 lg:h-96">
+          <img
+            className="object-cover size-full"
+            src={postData.image}
+            alt={postData.title}
+          />
+        </div>
+        <h3 className="font-bold text-base group-hover:text-primary transition-colors md:text-lg lg:text-xl">
+          {postData.title}
+        </h3>
+        <p className="line-clamp-3 md:text-base lg:text-xl">
+          {postData.description}
+        </p>
+      </Link>
     </article>
   );
 }
