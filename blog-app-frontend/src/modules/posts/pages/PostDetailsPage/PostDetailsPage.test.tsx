@@ -18,6 +18,8 @@ const defaultPost = vi.hoisted<PostResponseType>(() => ({
   },
   createdAt: "2026-01-01",
   updatedAt: "2026-01-01",
+  likesCount: 0,
+  isLiked: false,
 }));
 
 vi.mock("../../../shared/hooks/useToast", () => ({

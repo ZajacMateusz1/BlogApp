@@ -26,6 +26,8 @@ const defaultPostData: PostResponseType = {
     username: "",
     avatar: "",
   },
+  likesCount: 0,
+  isLiked: false,
 };
 
 const getFormElements = () => ({
