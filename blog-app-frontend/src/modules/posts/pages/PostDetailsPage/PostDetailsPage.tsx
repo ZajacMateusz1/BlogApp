@@ -5,6 +5,7 @@ import useAuth from "../../../auth/hooks/useAuth";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../../shared/components/ErrorBlock";
 import PostDetailsButtons from "../../components/PostDetailsButtons/PostDetailsButtons";
+import PostFooter from "../../components/PostFooter/PostFooter";
 
 import { sendRequest } from "../../../../utils/http/http";
 import type { PostResponseType } from "../../types/posts-types";
@@ -18,6 +19,9 @@ export default function PostDetailsPage() {
     queryFn: ({ signal }) =>
       sendRequest<PostResponseType>(`/api/posts/${postId}`, {
         signal,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
     staleTime: 10000,
   });
@@ -25,7 +29,7 @@ export default function PostDetailsPage() {
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   const isOwner = userId === data?.creator.id;
   return (
-    <article className="bg-white rounded-md px-2 py-4 max-w-2xl mx-auto md:px-4 md:py-6">
+    <article className="bg-white rounded-md my-2 px-2 py-4 max-w-2xl mx-auto md:my-6 md:px-4 md:py-6">
       <header className="flex justify-between">
         <div>
           <div className="user-data flex items-center mb-2 gap-2">
@@ -64,9 +68,14 @@ export default function PostDetailsPage() {
         />
       </div>
 
-      <p className="px-1.5 py-2 bg-bg-primary border-l-2 border-primary md:text-base">
+      <p className="px-1.5 py-2 bg-bg-primary border-l-2 border-primary md:text-base wrap-break-word">
         {data?.description}
       </p>
+      <PostFooter
+        postId={data?.id}
+        isLiked={data?.isLiked}
+        likesCount={data?.likesCount}
+      />
     </article>
   );
 }

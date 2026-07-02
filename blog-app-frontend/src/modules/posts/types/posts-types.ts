@@ -13,6 +13,8 @@ export type PostResponseType = BaseResponseType & {
     username: string;
     avatar: string;
   };
+  likesCount: number;
+  isLiked: boolean;
 };
 
 export type MutatePostResponseType = BaseResponseType & {
