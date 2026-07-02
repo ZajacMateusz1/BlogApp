@@ -10,7 +10,6 @@ const userSchema = new Schema({
     default: DEFAULT_AVATAR_PATH,
   },
   description: { type: String, default: "" },
-  posts: [{ type: Types.ObjectId, ref: "Post", default: [] }],
 });
 
 const User = model("User", userSchema);

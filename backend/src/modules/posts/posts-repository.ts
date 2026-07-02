@@ -1,5 +1,6 @@
 import User from "../../models/user-model.js";
 import Post from "../../models/post-model.js";
+import Like from "../../models/like-model.js";
 import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
 import type { PopulatedPostType } from "./posts-types";
@@ -81,4 +82,20 @@ export const editPostRepository = (
     editPostData,
     { returnDocument: "after" },
   ).lean();
+};
+
+export const addLikeRepository = async (postId: string, userId: string) => {
+  const createdLike = new Like({
+    user: userId,
+    post: postId,
+  });
+  await createdLike.save();
+  return createdLike;
+};
+
+export const removeLikeRepository = async (postId: string, userId: string) => {
+  return Like.findOneAndDelete({
+    post: postId,
+    user: userId,
+  });
 };

@@ -13,6 +13,8 @@ import {
   editPostRepository,
   getPostRepository,
   findPostById,
+  addLikeRepository,
+  removeLikeRepository,
 } from "./posts-repository.js";
 import HttpError from "../../errors/HttpError.js";
 
@@ -123,4 +125,20 @@ export const editPostService = async (
     }
     throw error;
   }
+};
+
+export const addLikeService = async (postId: string, userId: string) => {
+  const { _id, __v, ...createdPost } = (
+    await addLikeRepository(postId, userId)
+  ).toObject();
+  return {
+    ...createdPost,
+    id: _id,
+  };
+};
+
+export const removeLikeService = async (postId: string, userId: string) => {
+  const removedPost = await removeLikeRepository(postId, userId);
+  if (removedPost === null) throw new HttpError("Like not found", 404);
+  return removedPost;
 };

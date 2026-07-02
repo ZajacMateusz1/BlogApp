@@ -5,6 +5,8 @@ import {
   removePostService,
   editPostService,
   getPostService,
+  addLikeService,
+  removeLikeService,
 } from "./posts-service.js";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
 import HttpError from "../../errors/HttpError.js";
@@ -81,6 +83,36 @@ export const editPost = async (
       imageFile,
     );
     res.json(editPostRespone);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addLike = async (
+  req: Request<{ postId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { postId } = req.params;
+    const { userId }: TokenPayload = req.userData!;
+    const addLikeResponse = await addLikeService(postId, userId);
+    res.status(201).json(addLikeResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const reomveLike = async (
+  req: Request<{ postId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { postId } = req.params;
+    const { userId }: TokenPayload = req.userData!;
+    await removeLikeService(postId, userId);
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

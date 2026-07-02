@@ -21,5 +21,7 @@ router.patch(
   validate(EditPostSchema),
   editPost,
 );
+router.post("/:postId/like");
+router.delete("/:postId/like");
 
 export default router;
