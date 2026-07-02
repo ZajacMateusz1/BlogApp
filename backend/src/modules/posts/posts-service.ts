@@ -15,12 +15,18 @@ import {
   findPostById,
   addLikeRepository,
   removeLikeRepository,
+  getLikesCount,
+  getIsLiked,
 } from "./posts-repository.js";
 import HttpError from "../../errors/HttpError.js";
 
-export const getPostService = async (postId: string) => {
+export const getPostService = async (postId: string, userId: string) => {
   const post = await getPostRepository(postId);
   if (post === null) throw new HttpError("Post not found", 404);
+  const [likesCount, isLiked] = await Promise.all([
+    getLikesCount(postId),
+    getIsLiked(postId, userId),
+  ]);
   const { _id, creator, imagePath, ...postObject } = post;
   const imageUrl = getpublicUrl(imagePath);
   const avatarUrl = getpublicUrl(creator.avatarPath);
@@ -29,6 +35,8 @@ export const getPostService = async (postId: string) => {
     image: imageUrl,
     creator: { id: creator._id, username: creator.username, avatar: avatarUrl },
     ...postObject,
+    likesCount,
+    isLiked,
   };
 };
 

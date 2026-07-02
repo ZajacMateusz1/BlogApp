@@ -18,7 +18,8 @@ export const getPost = async (
 ) => {
   try {
     const { postId } = req.params;
-    const getPostResponse = await getPostService(postId);
+    const { userId }: TokenPayload = req.userData!;
+    const getPostResponse = await getPostService(postId, userId);
     res.json(getPostResponse);
   } catch (error) {
     next(error);

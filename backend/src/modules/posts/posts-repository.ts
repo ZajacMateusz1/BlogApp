@@ -99,3 +99,10 @@ export const removeLikeRepository = async (postId: string, userId: string) => {
     user: userId,
   });
 };
+
+export const getLikesCount = (postId: string) => {
+  return Like.countDocuments({ post: postId });
+};
+export const getIsLiked = async (postId: string, userId: string) => {
+  return Boolean(await Like.exists({ post: postId, user: userId }));
+};

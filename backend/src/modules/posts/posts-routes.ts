@@ -3,11 +3,18 @@ import validate from "../../middlewares/validate.js";
 import fileUpload from "../../middlewares/file-upload.js";
 import { PostSchema, EditPostSchema } from "./posts-schema.js";
 import checkAuth from "../../middlewares/check-auth.js";
-import { addPost, removePost, editPost, getPost } from "./posts-controller.js";
+import {
+  addPost,
+  removePost,
+  editPost,
+  getPost,
+  addLike,
+  reomveLike,
+} from "./posts-controller.js";
 
 const router = express.Router();
-router.get("/:postId", getPost);
 router.use(checkAuth);
+router.get("/:postId", getPost);
 router.post(
   "/create",
   fileUpload.single("image"),
@@ -21,7 +28,7 @@ router.patch(
   validate(EditPostSchema),
   editPost,
 );
-router.post("/:postId/like");
-router.delete("/:postId/like");
+router.post("/:postId/like", addLike);
+router.delete("/:postId/like", reomveLike);
 
 export default router;
