@@ -7,18 +7,21 @@ import type { PostResponseType } from "../../../types/posts-types";
 
 interface LikeButtonProps {
   postId: string | undefined;
+  creatorId?: string;
   isLiked: boolean | undefined;
   likesCount: number | undefined;
   token: string | null;
 }
 export default function LikeButton({
   postId,
+  creatorId,
   isLiked,
   likesCount,
   token,
 }: LikeButtonProps) {
   const queryClient = useQueryClient();
   const requestMethod = isLiked ? "DELETE" : "POST";
+  const queryKeyId = creatorId ?? postId;
   const { mutate, isPending } = useMutation({
     mutationFn: () =>
       sendRequest(`/api/posts/${postId}/like`, {
@@ -28,26 +31,29 @@ export default function LikeButton({
         method: requestMethod,
       }),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ["posts", postId] });
+      await queryClient.cancelQueries({ queryKey: ["posts", queryKeyId] });
       const previousPost = queryClient.getQueryData<PostResponseType>([
         "posts",
         postId,
       ]);
-      queryClient.setQueryData<PostResponseType>(["posts", postId], (old) => {
-        if (!old) return;
-        return {
-          ...old,
-          isLiked: !old.isLiked,
-          likesCount: old.isLiked ? old.likesCount - 1 : old.likesCount + 1,
-        };
-      });
+      queryClient.setQueryData<PostResponseType>(
+        ["posts", queryKeyId],
+        (old) => {
+          if (!old) return;
+          return {
+            ...old,
+            isLiked: !old.isLiked,
+            likesCount: old.isLiked ? old.likesCount - 1 : old.likesCount + 1,
+          };
+        },
+      );
       return { previousPost };
     },
     onError: (_error, _data, context) => {
-      queryClient.setQueryData(["posts", postId], context?.previousPost);
+      queryClient.setQueryData(["posts", queryKeyId], context?.previousPost);
     },
     onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ["posts", postId] }),
+      queryClient.invalidateQueries({ queryKey: ["posts", queryKeyId] }),
   });
 
   return (

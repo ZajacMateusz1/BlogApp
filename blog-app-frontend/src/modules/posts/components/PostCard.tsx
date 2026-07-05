@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { PostResponseType } from "../types/posts-types";
+import PostFooter from "./PostFooter/PostFooter";
 
 interface PostCardInterfaceProps {
   postData: PostResponseType;
@@ -43,6 +44,12 @@ export default function PostCard({ postData }: PostCardInterfaceProps) {
           {postData.description}
         </p>
       </Link>
+      <PostFooter
+        postId={postData.id}
+        creatorId={postData.creator.id}
+        likesCount={postData.likesCount}
+        isLiked={postData.isLiked}
+      />
     </article>
   );
 }

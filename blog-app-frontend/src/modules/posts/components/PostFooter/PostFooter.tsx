@@ -5,11 +5,13 @@ import CommentButton from "./PostFooterButtons/CommentButton";
 
 interface PostFooterProps {
   postId: string | undefined;
+  creatorId?: string;
   isLiked: boolean | undefined;
   likesCount: number | undefined;
 }
 export default function PostFooter({
   postId,
+  creatorId,
   isLiked,
   likesCount,
 }: PostFooterProps) {
@@ -19,6 +21,7 @@ export default function PostFooter({
       <LikeButton
         isLiked={isLiked}
         postId={postId}
+        creatorId={creatorId}
         likesCount={likesCount}
         token={token}
       />
