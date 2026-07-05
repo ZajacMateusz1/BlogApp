@@ -4,6 +4,8 @@ import {
   getUserRepository,
   editUserRepository,
   getUserPostsRepository,
+  getUserPostsLikes,
+  getUserPostsIsLiked,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -79,18 +81,32 @@ export const getUserPostsService = async (
   cursor: string | undefined,
 ) => {
   const posts = await getUserPostsRepository(userId, limit, cursor);
+  const postsIds = posts.map(({ _id }) => _id);
   const nextCursor = posts.at(-1)?._id;
+  const postsLikes = await getUserPostsLikes(postsIds);
+  const likesMap: Record<string, number> = {};
+  postsLikes.forEach(({ _id, count }) => {
+    likesMap[_id.toString()] = count;
+  });
+  const isLiked = await getUserPostsIsLiked(userId, postsIds);
+  const isLikedSet = new Set();
+  isLiked.forEach(({ post }) => isLikedSet.add(post.toString()));
   return {
-    posts: posts.map(({ _id, creator, imagePath, ...postData }) => ({
-      id: _id,
-      creator: {
-        id: creator._id,
-        username: creator.username,
-        avatar: getpublicUrl(creator.avatarPath),
-      },
-      image: getpublicUrl(imagePath),
-      ...postData,
-    })),
+    posts: posts.map(({ _id, creator, imagePath, ...postData }) => {
+      const id = _id.toString();
+      return {
+        id,
+        creator: {
+          id: creator._id,
+          username: creator.username,
+          avatar: getpublicUrl(creator.avatarPath),
+        },
+        likesCount: likesMap[id] ?? 0,
+        isLiked: isLikedSet.has(id),
+        image: getpublicUrl(imagePath),
+        ...postData,
+      };
+    }),
     nextCursor,
   };
 };

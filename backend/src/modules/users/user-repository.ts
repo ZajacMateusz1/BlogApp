@@ -1,5 +1,7 @@
 import User from "../../models/user-model.js";
 import Post from "../../models/post-model.js";
+import Like from "../../models/like-model.js";
+import type { Types } from "mongoose";
 import type { EditUserSchemaType } from "./user-schema.js";
 
 import type { PopulatedPostType } from "../posts/posts-types";
@@ -20,6 +22,8 @@ export const editUserRepository = (
   }).lean();
 };
 
+// User posts
+
 export const getUserPostsRepository = (
   userId: string,
   limit: number,
@@ -33,4 +37,28 @@ export const getUserPostsRepository = (
     .sort({ _id: -1 })
     .limit(limit)
     .lean<PopulatedPostType[]>();
+};
+
+export const getUserPostsLikes = (postsIds: Types.ObjectId[]) => {
+  return Like.aggregate<{ _id: Types.ObjectId; count: number }>([
+    { $match: { post: { $in: postsIds } } },
+    {
+      $group: {
+        _id: "$post",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+};
+
+export const getUserPostsIsLiked = (
+  userId: string,
+  postsIds: Types.ObjectId[],
+) => {
+  return Like.find({
+    user: userId,
+    post: { $in: postsIds },
+  })
+    .select("post -_id")
+    .lean();
 };
