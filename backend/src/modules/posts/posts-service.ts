@@ -17,6 +17,7 @@ import {
   removeLikeRepository,
   getLikesCount,
   getIsLiked,
+  addCommentRepository,
 } from "./posts-repository.js";
 import HttpError from "../../errors/HttpError.js";
 
@@ -135,18 +136,36 @@ export const editPostService = async (
   }
 };
 
+// Likes
+
 export const addLikeService = async (postId: string, userId: string) => {
-  const { _id, __v, ...createdPost } = (
+  const { _id, __v, ...createdLike } = (
     await addLikeRepository(postId, userId)
   ).toObject();
   return {
-    ...createdPost,
+    ...createdLike,
     id: _id,
   };
 };
 
 export const removeLikeService = async (postId: string, userId: string) => {
-  const removedPost = await removeLikeRepository(postId, userId);
-  if (removedPost === null) throw new HttpError("Like not found", 404);
-  return removedPost;
+  const removedLike = await removeLikeRepository(postId, userId);
+  if (removedLike === null) throw new HttpError("Like not found", 404);
+  return removedLike;
+};
+
+// Comments
+
+export const addCommentService = async (
+  postId: string,
+  userId: string,
+  content: string,
+) => {
+  const { _id, __v, ...createdComment } = (
+    await addCommentRepository(postId, userId, content)
+  ).toObject();
+  return {
+    ...createdComment,
+    id: _id,
+  };
 };

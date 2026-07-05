@@ -1,5 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
-import type { PostSchemaType, EditPostSchemaType } from "./posts-schema";
+import type {
+  PostSchemaType,
+  EditPostSchemaType,
+  CommentSchemaType,
+} from "./posts-schema";
 import {
   addPostService,
   removePostService,
@@ -7,6 +11,7 @@ import {
   getPostService,
   addLikeService,
   removeLikeService,
+  addCommentService,
 } from "./posts-service.js";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
 import HttpError from "../../errors/HttpError.js";
@@ -89,6 +94,8 @@ export const editPost = async (
   }
 };
 
+// Likes
+
 export const addLike = async (
   req: Request<{ postId: string }>,
   res: Response,
@@ -114,6 +121,24 @@ export const reomveLike = async (
     const { userId }: TokenPayload = req.userData!;
     await removeLikeService(postId, userId);
     res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Comments
+
+export const addComment = async (
+  req: Request<{ postId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { postId } = req.params;
+    const { userId }: TokenPayload = req.userData!;
+    const { content }: CommentSchemaType = req.body;
+    const addCommentResponse = await addCommentService(postId, userId, content);
+    res.json(addCommentResponse);
   } catch (error) {
     next(error);
   }

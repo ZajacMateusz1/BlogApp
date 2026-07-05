@@ -1,7 +1,7 @@
 import express from "express";
 import validate from "../../middlewares/validate.js";
 import fileUpload from "../../middlewares/file-upload.js";
-import { PostSchema, EditPostSchema } from "./posts-schema.js";
+import { PostSchema, EditPostSchema, CommentSchema } from "./posts-schema.js";
 import checkAuth from "../../middlewares/check-auth.js";
 import {
   addPost,
@@ -10,6 +10,7 @@ import {
   getPost,
   addLike,
   reomveLike,
+  addComment,
 } from "./posts-controller.js";
 
 const router = express.Router();
@@ -30,5 +31,6 @@ router.patch(
 );
 router.post("/:postId/like", addLike);
 router.delete("/:postId/like", reomveLike);
+router.post("/:postId/comment", validate(CommentSchema), addComment);
 
 export default router;

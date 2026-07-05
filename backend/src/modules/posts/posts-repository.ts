@@ -1,6 +1,7 @@
 import User from "../../models/user-model.js";
 import Post from "../../models/post-model.js";
 import Like from "../../models/like-model.js";
+import Comment from "../../models/comment-model.js";
 import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
 import type { PopulatedPostType } from "./posts-types";
@@ -84,6 +85,8 @@ export const editPostRepository = (
   ).lean();
 };
 
+// Likes
+
 export const addLikeRepository = async (postId: string, userId: string) => {
   const createdLike = new Like({
     user: userId,
@@ -93,7 +96,7 @@ export const addLikeRepository = async (postId: string, userId: string) => {
   return createdLike;
 };
 
-export const removeLikeRepository = async (postId: string, userId: string) => {
+export const removeLikeRepository = (postId: string, userId: string) => {
   return Like.findOneAndDelete({
     post: postId,
     user: userId,
@@ -105,4 +108,28 @@ export const getLikesCount = (postId: string) => {
 };
 export const getIsLiked = async (postId: string, userId: string) => {
   return Boolean(await Like.exists({ post: postId, user: userId }));
+};
+
+// Comments
+
+export const addCommentRepository = async (
+  postId: string,
+  userId: string,
+  content: string,
+) => {
+  const createdComment = new Comment({
+    post: postId,
+    author: userId,
+    content,
+  });
+  await createdComment.save();
+  return createdComment;
+};
+
+export const getAllComments = (postId: string) => {
+  return Comment.find({ post: postId });
+};
+
+export const getCommentCount = (postId: string) => {
+  return Comment.countDocuments({ post: postId });
 };
