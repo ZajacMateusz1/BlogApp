@@ -6,6 +6,7 @@ import type { getUserPostsResponseType } from "../types/users-types";
 
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../shared/components/ErrorBlock";
+import PostsNotFound from "./PostsNotFound";
 import PostCard from "../../posts/components/PostCard";
 
 interface UserPostsProps {
@@ -50,8 +51,10 @@ export default function UserPosts({ userId }: UserPostsProps) {
 
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
+  if (data?.pages[0].posts.length === 0)
+    return <PostsNotFound creatorId={userId} />;
   return (
-    <section className="flex flex-col gap-4 mt-6">
+    <section className="flex flex-col gap-4 mt-6 rounded-xl">
       <h2 className="font-bold uppercase text-center text-lg md:text-xl lg:text-2xl">
         Posts
       </h2>
