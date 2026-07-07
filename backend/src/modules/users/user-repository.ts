@@ -32,7 +32,7 @@ export const getUserPostsRepository = (
   const filters = cursor
     ? { creator: userId, _id: { $lt: cursor } }
     : { creator: userId };
-  return Post.find(filters, "-__v -creator")
+  return Post.find(filters, "-__v")
     .populate("creator", "username avatarPath")
     .sort({ _id: -1 })
     .limit(limit)

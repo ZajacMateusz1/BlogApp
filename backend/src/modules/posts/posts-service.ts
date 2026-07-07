@@ -18,6 +18,7 @@ import {
   getLikesCount,
   getIsLiked,
   addCommentRepository,
+  getCommentsRepository,
 } from "./posts-repository.js";
 import HttpError from "../../errors/HttpError.js";
 
@@ -167,5 +168,18 @@ export const addCommentService = async (
   return {
     ...createdComment,
     id: _id,
+  };
+};
+
+export const getCommentsService = async (
+  postId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const comments = await getCommentsRepository(postId, cursor, limit);
+  const nextCursor = comments.at(-1)?._id;
+  return {
+    comments: comments.map(({ _id, ...comment }) => ({ id: _id, ...comment })),
+    nextCursor,
   };
 };

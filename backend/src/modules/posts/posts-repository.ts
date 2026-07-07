@@ -126,10 +126,16 @@ export const addCommentRepository = async (
   return createdComment;
 };
 
-export const getAllComments = (postId: string) => {
-  return Comment.find({ post: postId });
-};
-
-export const getCommentCount = (postId: string) => {
-  return Comment.countDocuments({ post: postId });
+export const getCommentsRepository = (
+  postId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const filters = cursor
+    ? { post: postId, _id: { $lt: cursor } }
+    : { post: postId };
+  return Comment.find(filters, "-__v")
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .lean();
 };

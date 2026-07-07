@@ -10,6 +10,7 @@ import {
   getPost,
   addLike,
   reomveLike,
+  getComments,
   addComment,
 } from "./posts-controller.js";
 
@@ -29,8 +30,15 @@ router.patch(
   validate(EditPostSchema),
   editPost,
 );
+
+// likes
+
 router.post("/:postId/like", addLike);
 router.delete("/:postId/like", reomveLike);
-router.post("/:postId/comment", validate(CommentSchema), addComment);
+
+// coments
+
+router.get("/:postId/comments", getComments);
+router.post("/:postId/comments", validate(CommentSchema), addComment);
 
 export default router;

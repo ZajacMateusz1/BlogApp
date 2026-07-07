@@ -12,6 +12,7 @@ import {
   addLikeService,
   removeLikeService,
   addCommentService,
+  getCommentsService,
 } from "./posts-service.js";
 import type { TokenPayload } from "../../types/token/jwt-payload-type";
 import HttpError from "../../errors/HttpError.js";
@@ -139,6 +140,25 @@ export const addComment = async (
     const { content }: CommentSchemaType = req.body;
     const addCommentResponse = await addCommentService(postId, userId, content);
     res.json(addCommentResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getComments = async (
+  req: Request<{ postId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { postId } = req.params!;
+    const limit = Math.min(Number(req.query.limit) || 10, 10);
+    const cursor =
+      typeof req.query.cursor === "string" && req.query.cursor !== ""
+        ? req.query.cursor
+        : undefined;
+    const getCommentsResponse = await getCommentsService(postId, cursor, limit);
+    res.json(getCommentsResponse);
   } catch (error) {
     next(error);
   }
