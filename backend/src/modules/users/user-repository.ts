@@ -1,6 +1,7 @@
 import User from "../../models/user-model.js";
 import Post from "../../models/post-model.js";
 import Like from "../../models/like-model.js";
+import Follow from "../../models/follow-model.js";
 import type { Types } from "mongoose";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -61,4 +62,18 @@ export const getUserPostsIsLiked = (
   })
     .select("post -_id")
     .lean();
+};
+
+// follows
+
+export const followUserRepository = async (
+  followerId: string,
+  followingId: string,
+) => {
+  const createdFollow = new Follow({
+    follower: followerId,
+    following: followingId,
+  });
+  await createdFollow.save();
+  return createdFollow;
 };

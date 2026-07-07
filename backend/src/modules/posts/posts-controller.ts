@@ -139,7 +139,7 @@ export const addComment = async (
     const { userId }: TokenPayload = req.userData!;
     const { content }: CommentSchemaType = req.body;
     const addCommentResponse = await addCommentService(postId, userId, content);
-    res.json(addCommentResponse);
+    res.status(201).json(addCommentResponse);
   } catch (error) {
     next(error);
   }

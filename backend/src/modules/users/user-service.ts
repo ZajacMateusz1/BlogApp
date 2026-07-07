@@ -6,6 +6,7 @@ import {
   getUserPostsRepository,
   getUserPostsLikes,
   getUserPostsIsLiked,
+  followUserRepository,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -108,5 +109,22 @@ export const getUserPostsService = async (
       };
     }),
     nextCursor,
+  };
+};
+
+// follows
+
+export const followUserService = async (
+  followerId: string,
+  followingId: string,
+) => {
+  if (followerId === followingId)
+    throw new HttpError("You cannot follow yourself.", 400);
+  const { _id, __v, ...createdFollow } = (
+    await followUserRepository(followerId, followingId)
+  ).toObject();
+  return {
+    ...createdFollow,
+    id: _id,
   };
 };
