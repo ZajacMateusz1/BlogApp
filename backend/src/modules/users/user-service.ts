@@ -7,6 +7,7 @@ import {
   getUserPostsLikes,
   getUserPostsIsLiked,
   followUserRepository,
+  unfollowUserRepository,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -127,4 +128,12 @@ export const followUserService = async (
     ...createdFollow,
     id: _id,
   };
+};
+
+export const unfollowUserService = async (
+  followerId: string,
+  followingId: string,
+) => {
+  const deletedFollow = await unfollowUserRepository(followerId, followingId);
+  return deletedFollow;
 };

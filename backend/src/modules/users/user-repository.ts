@@ -77,3 +77,13 @@ export const followUserRepository = async (
   await createdFollow.save();
   return createdFollow;
 };
+
+export const unfollowUserRepository = (
+  followerId: string,
+  followingId: string,
+) => {
+  return Follow.findOneAndDelete({
+    follower: followerId,
+    following: followingId,
+  }).lean();
+};

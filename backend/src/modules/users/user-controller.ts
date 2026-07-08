@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import type { EditUserSchemaType, FollowSchemaType } from "./user-schema.js";
+import type { EditUserSchemaType } from "./user-schema.js";
 import HttpError from "../../errors/HttpError.js";
 import {
   getUsersService,
@@ -7,6 +7,7 @@ import {
   editUserService,
   getUserPostsService,
   followUserService,
+  unfollowUserService,
 } from "./user-service.js";
 
 import type { TokenPayload } from "../../types/token/jwt-payload-type.js";
@@ -88,15 +89,30 @@ export const getUserPosts = async (
 // follows
 
 export const followUser = async (
-  req: Request,
+  req: Request<{ followingId: string }>,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const { followingId }: FollowSchemaType = req.body;
+    const { followingId } = req.params;
     const { userId }: TokenPayload = req.userData!;
     const followUserResponse = await followUserService(userId, followingId);
     res.status(201).json(followUserResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unfollowUser = async (
+  req: Request<{ followingId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { followingId } = req.params;
+    const { userId }: TokenPayload = req.userData!;
+    await unfollowUserService(userId, followingId);
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

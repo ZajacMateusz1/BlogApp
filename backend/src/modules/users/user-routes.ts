@@ -8,8 +8,9 @@ import {
   editUser,
   getUserPosts,
   followUser,
+  unfollowUser,
 } from "./user-controller.js";
-import { EditUserSchema, FollowSchema } from "./user-schema.js";
+import { EditUserSchema } from "./user-schema.js";
 
 const router = express.Router();
 router.get("/", getUsers);
@@ -22,6 +23,7 @@ router.patch(
   validate(EditUserSchema),
   editUser,
 );
-router.post("/:userId/follow", validate(FollowSchema), followUser);
+router.post("/:followingId/follow", followUser);
+router.delete("/:followingId/follow", unfollowUser);
 
 export default router;
