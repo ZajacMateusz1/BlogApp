@@ -110,6 +110,10 @@ export const getIsLiked = async (postId: string, userId: string) => {
   return Boolean(await Like.exists({ post: postId, user: userId }));
 };
 
+export const removeAllPostLikes = (postId: string, session: ClientSession) => {
+  return Like.deleteMany({ post: postId }, { session });
+};
+
 // Comments
 
 export const addCommentRepository = async (
@@ -145,4 +149,11 @@ export const getCommentsCount = (postId: string) => {
   return Comment.countDocuments({
     post: postId,
   });
+};
+
+export const removeAllPostComments = (
+  postId: string,
+  session: ClientSession,
+) => {
+  return Comment.deleteMany({ post: postId }, { session });
 };

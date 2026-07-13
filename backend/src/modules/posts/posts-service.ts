@@ -17,9 +17,11 @@ import {
   removeLikeRepository,
   getLikesCount,
   getIsLiked,
+  removeAllPostLikes,
   addCommentRepository,
   getCommentsRepository,
   getCommentsCount,
+  removeAllPostComments,
 } from "./posts-repository.js";
 import HttpError from "../../errors/HttpError.js";
 
@@ -85,6 +87,10 @@ export const removePostService = async (postId: string, userId: string) => {
     const removedPost = await removePostRepository(postId, userId, session);
     if (!removedPost) throw new HttpError("Post not found", 404);
     await removePostFromUser(postId, userId, session);
+    await Promise.all([
+      removeAllPostLikes(postId, session),
+      removeAllPostComments(postId, session),
+    ]);
     await session.commitTransaction();
     const { _id, imagePath, __v, ...postObject } = removedPost.toObject();
     if (imagePath) {
