@@ -179,7 +179,15 @@ export const getCommentsService = async (
   const comments = await getCommentsRepository(postId, cursor, limit);
   const nextCursor = comments.at(-1)?._id;
   return {
-    comments: comments.map(({ _id, ...comment }) => ({ id: _id, ...comment })),
+    comments: comments.map(({ _id, author, ...comment }) => ({
+      id: _id,
+      author: {
+        id: author._id,
+        username: author.username,
+        avatar: getpublicUrl(author.avatarPath),
+      },
+      ...comment,
+    })),
     nextCursor,
   };
 };

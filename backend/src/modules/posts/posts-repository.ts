@@ -4,7 +4,7 @@ import Like from "../../models/like-model.js";
 import Comment from "../../models/comment-model.js";
 import { type ClientSession, Types } from "mongoose";
 import type { EditPostSchemaType } from "./posts-schema";
-import type { PopulatedPostType } from "./posts-types";
+import type { PopulatedPostType, PopulatedCommentType } from "./posts-types";
 
 export const getPostRepository = (postId: string) => {
   return Post.findById(postId, "-__v")
@@ -137,5 +137,6 @@ export const getCommentsRepository = (
   return Comment.find(filters, "-__v")
     .sort({ createdAt: -1 })
     .limit(limit)
-    .lean();
+    .populate("author", "username avatarPath")
+    .lean<PopulatedCommentType[]>();
 };

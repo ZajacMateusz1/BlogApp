@@ -11,3 +11,13 @@ export type PopulatedPostType = {
     avatarPath: string;
   };
 };
+
+export type PopulatedCommentType = {
+  _id: Types.ObjectId;
+  content: string;
+  author: {
+    _id: Types.ObjectId;
+    username: string;
+    avatarPath: string;
+  };
+};
