@@ -140,3 +140,9 @@ export const getCommentsRepository = (
     .populate("author", "username avatarPath")
     .lean<PopulatedCommentType[]>();
 };
+
+export const getCommentsCount = (postId: string) => {
+  return Comment.countDocuments({
+    post: postId,
+  });
+};
