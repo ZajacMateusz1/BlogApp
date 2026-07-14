@@ -20,8 +20,12 @@ const defaultPost = vi.hoisted<PostResponseType>(() => ({
   updatedAt: "2026-01-01",
   likesCount: 0,
   isLiked: false,
+  commentsCount: 0,
 }));
 
+vi.mock("../../components/Comment/CommentSection", () => ({
+  default: () => <div></div>,
+}));
 vi.mock("../../../shared/hooks/useToast", () => ({
   default: () => ({
     addToast: () => {},

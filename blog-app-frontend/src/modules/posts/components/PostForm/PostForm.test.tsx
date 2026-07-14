@@ -28,6 +28,7 @@ const defaultPostData: PostResponseType = {
   },
   likesCount: 0,
   isLiked: false,
+  commentsCount: 0,
 };
 
 const getFormElements = () => ({
