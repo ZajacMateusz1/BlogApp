@@ -6,6 +6,7 @@ import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../../shared/components/ErrorBlock";
 import PostDetailsButtons from "../../components/PostDetailsButtons/PostDetailsButtons";
 import PostFooter from "../../components/PostFooter/PostFooter";
+import CommentSection from "../../components/Comment/CommentSection";
 
 import { sendRequest } from "../../../../utils/http/http";
 import type { PostResponseType } from "../../types/posts-types";
@@ -75,7 +76,9 @@ export default function PostDetailsPage() {
         postId={data?.id}
         isLiked={data?.isLiked}
         likesCount={data?.likesCount}
+        commentsCount={data?.commentsCount}
       />
+      <CommentSection postId={postId} />
     </article>
   );
 }

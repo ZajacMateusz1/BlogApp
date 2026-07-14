@@ -49,6 +49,7 @@ export default function PostCard({ postData }: PostCardInterfaceProps) {
         creatorId={postData.creator.id}
         likesCount={postData.likesCount}
         isLiked={postData.isLiked}
+        commentsCount={postData.commentsCount}
       />
     </article>
   );

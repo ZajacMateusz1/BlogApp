@@ -63,6 +63,7 @@ export default function UserForm({ userData }: UserFormProps) {
       description: userData?.description,
       avatar: undefined,
     },
+    mode: "onBlur",
   });
 
   const submitHandler = (newUserData: EditUserSchemaType) => {
@@ -94,7 +95,12 @@ export default function UserForm({ userData }: UserFormProps) {
       formTitle="Edit Profile"
       rootError={errors.root?.message || null}
     >
-      <InputElement {...register("username")}>Username</InputElement>
+      <InputElement
+        {...register("username")}
+        errorMessage={errors.username?.message}
+      >
+        Username
+      </InputElement>
       <TextAreaElement {...register("description")}>
         Description
       </TextAreaElement>
