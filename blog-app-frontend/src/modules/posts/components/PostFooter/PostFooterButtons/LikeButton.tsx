@@ -34,7 +34,7 @@ export default function LikeButton({
       await queryClient.cancelQueries({ queryKey: ["posts", queryKeyId] });
       const previousPost = queryClient.getQueryData<PostResponseType>([
         "posts",
-        postId,
+        queryKeyId,
       ]);
       queryClient.setQueryData<PostResponseType>(
         ["posts", queryKeyId],

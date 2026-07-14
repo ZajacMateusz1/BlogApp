@@ -1,17 +1,17 @@
-import { useMutation } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { MessageCircleMore } from "lucide-react";
-import { sendRequest } from "../../../../../utils/http/http";
 interface CommentButtonProps {
   postId: string | undefined;
+  commentsCount: number | undefined;
 }
-export default function CommentButton({ postId }: CommentButtonProps) {
-  const { isPending } = useMutation({
-    mutationFn: () => sendRequest<null>(`${postId}`, {}),
-  });
+export default function CommentButton({
+  postId,
+  commentsCount,
+}: CommentButtonProps) {
   return (
-    <button className="cursor-pointer" disabled={isPending}>
+    <Link to={`/posts/${postId}`} className="text-center">
       <MessageCircleMore />
-      <span>217</span>
-    </button>
+      <span>{commentsCount}</span>
+    </Link>
   );
 }
