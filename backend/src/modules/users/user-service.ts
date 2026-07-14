@@ -7,6 +7,7 @@ import {
   getUserPostsIsLiked,
   followUserRepository,
   unfollowUserRepository,
+  getIsFollowing,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -25,13 +26,18 @@ export const getUsersService = async () => {
     ...user,
   }));
 };
-export const getUserService = async (userId: string) => {
-  const user = await getUserRepository(userId);
+export const getUserService = async (
+  profileUserId: string,
+  loggedUserId: string,
+) => {
+  const user = await getUserRepository(profileUserId);
   if (user === null) throw new HttpError("User not found", 404);
+  const isFollowing = await getIsFollowing(loggedUserId, profileUserId);
   const { _id, avatarPath, ...userObject } = user;
   return {
     id: _id,
     avatar: getpublicUrl(avatarPath),
+    isFollowing,
     ...userObject,
   };
 };

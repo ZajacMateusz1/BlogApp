@@ -13,6 +13,14 @@ export const getUsersRepository = () => {
 export const getUserRepository = (userId: string) => {
   return User.findById(userId, "-__v -password -posts -email").lean();
 };
+export const getIsFollowing = async (
+  followerId: string,
+  followingId: string,
+) => {
+  return Boolean(
+    await Follow.exists({ follower: followerId, following: followingId }),
+  );
+};
 
 export const editUserRepository = (
   userId: string,

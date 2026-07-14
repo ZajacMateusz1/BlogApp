@@ -30,8 +30,9 @@ export const getUser = async (
   next: NextFunction,
 ) => {
   try {
-    const { userId } = req.params;
-    const getUserResponse = await getUserService(userId);
+    const { userId: profileUserId } = req.params;
+    const { userId: loggedUserId } = req.userData!;
+    const getUserResponse = await getUserService(profileUserId, loggedUserId);
     res.json(getUserResponse);
   } catch (error) {
     next(error);

@@ -14,9 +14,9 @@ import { EditUserSchema } from "./user-schema.js";
 
 const router = express.Router();
 router.get("/", getUsers);
-router.get("/:userId", getUser);
 router.get("/:userId/posts", getUserPosts);
 router.use(checkAuth);
+router.get("/:userId", getUser);
 router.patch(
   "/me",
   fileUpload.single("avatar"),
