@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../auth/hooks/useAuth";
 
 import { sendRequest } from "../../../utils/http/http";
 import type { UserResponseType } from "../types/users-types";
@@ -14,10 +15,16 @@ interface UserProfileProps {
 }
 
 export default function UserProfile({ profileId }: UserProfileProps) {
+  const { token, userId } = useAuth();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["users", profileId],
     queryFn: ({ signal }) =>
-      sendRequest<UserResponseType>(`/api/users/${profileId}`, { signal }),
+      sendRequest<UserResponseType>(`/api/users/${profileId}`, {
+        signal,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
     staleTime: 10000,
   });
   if (isLoading) return <LoadingSpinner />;
@@ -38,7 +45,11 @@ export default function UserProfile({ profileId }: UserProfileProps) {
       <p className="text-center mb-2 px-4 md:px-8 text-sm md:text-base lg:text-lg">
         {data?.description}
       </p>
-      <ProfileButton profileId={profileId} />
+      <ProfileButton
+        userId={userId}
+        profileId={profileId}
+        isFollowing={data?.isFollowing}
+      />
     </article>
   );
 }

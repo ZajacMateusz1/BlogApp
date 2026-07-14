@@ -35,7 +35,7 @@ export default function ToastContextProvider({
     <ToastContext value={toastCtx}>
       <>
         {children}
-        <div className="fixed left-3 top-3">
+        <div className="fixed left-3 top-3 z-20">
           {toasts.map((toast) => (
             <ToastElement key={toast.id} type={toast.type}>
               {toast.message}

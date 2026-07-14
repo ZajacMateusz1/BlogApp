@@ -1,14 +1,18 @@
-import useAuth from "../../auth/hooks/useAuth";
 import { PencilLine } from "lucide-react";
 
-import Button from "../../shared/components/Button";
 import LinkButton from "../../shared/components/LinkButton";
+import FollowButton from "./FollowButton";
 
 interface ProfileButtonProps {
   profileId: string | undefined;
+  userId: string | null;
+  isFollowing: boolean | undefined;
 }
-export default function ProfileButton({ profileId }: ProfileButtonProps) {
-  const { userId } = useAuth();
+export default function ProfileButton({
+  profileId,
+  userId,
+  isFollowing,
+}: ProfileButtonProps) {
   const isOwner = profileId === userId;
   if (isOwner) {
     return (
@@ -17,5 +21,5 @@ export default function ProfileButton({ profileId }: ProfileButtonProps) {
       </LinkButton>
     );
   }
-  return <Button>Follow</Button>;
+  return <FollowButton followingId={profileId} isFollowing={isFollowing} />;
 }
