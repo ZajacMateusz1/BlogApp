@@ -87,25 +87,49 @@ export const editPostRepository = (
 
 // Likes
 
-export const addLikeRepository = async (postId: string, userId: string) => {
+export const addLikeRepository = async (
+  postId: string,
+  userId: string,
+  session: ClientSession,
+) => {
   const createdLike = new Like({
     user: userId,
     post: postId,
   });
-  await createdLike.save();
+  await createdLike.save({ session });
   return createdLike;
 };
 
-export const removeLikeRepository = (postId: string, userId: string) => {
-  return Like.findOneAndDelete({
-    post: postId,
-    user: userId,
-  });
+export const incrementPostLikes = (postId: string, session: ClientSession) => {
+  return Post.updateOne(
+    { _id: postId },
+    { $inc: { likesCount: 1 } },
+    { session },
+  );
 };
 
-export const getLikesCount = (postId: string) => {
-  return Like.countDocuments({ post: postId });
+export const decrementPostLikes = (postId: string, session: ClientSession) => {
+  return Post.updateOne(
+    { _id: postId },
+    { $inc: { likesCount: -1 } },
+    { session },
+  );
 };
+
+export const removeLikeRepository = (
+  postId: string,
+  userId: string,
+  session: ClientSession,
+) => {
+  return Like.findOneAndDelete(
+    {
+      post: postId,
+      user: userId,
+    },
+    { session },
+  );
+};
+
 export const getIsLiked = async (postId: string, userId: string) => {
   return Boolean(await Like.exists({ post: postId, user: userId }));
 };
@@ -120,14 +144,26 @@ export const addCommentRepository = async (
   postId: string,
   userId: string,
   content: string,
+  session: ClientSession,
 ) => {
   const createdComment = new Comment({
     post: postId,
     author: userId,
     content,
   });
-  await createdComment.save();
+  await createdComment.save({ session });
   return createdComment;
+};
+
+export const incrementPostComments = (
+  postId: string,
+  session: ClientSession,
+) => {
+  return Post.updateOne(
+    { _id: postId },
+    { $inc: { commentsCount: 1 } },
+    { session },
+  );
 };
 
 export const getCommentsRepository = (
@@ -143,12 +179,6 @@ export const getCommentsRepository = (
     .limit(limit)
     .populate("author", "username avatarPath")
     .lean<PopulatedCommentType[]>();
-};
-
-export const getCommentsCount = (postId: string) => {
-  return Comment.countDocuments({
-    post: postId,
-  });
 };
 
 export const removeAllPostComments = (

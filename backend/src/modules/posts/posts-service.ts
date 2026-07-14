@@ -15,12 +15,13 @@ import {
   findPostById,
   addLikeRepository,
   removeLikeRepository,
-  getLikesCount,
+  incrementPostLikes,
+  decrementPostLikes,
   getIsLiked,
   removeAllPostLikes,
   addCommentRepository,
+  incrementPostComments,
   getCommentsRepository,
-  getCommentsCount,
   removeAllPostComments,
 } from "./posts-repository.js";
 import HttpError from "../../errors/HttpError.js";
@@ -28,11 +29,7 @@ import HttpError from "../../errors/HttpError.js";
 export const getPostService = async (postId: string, userId: string) => {
   const post = await getPostRepository(postId);
   if (post === null) throw new HttpError("Post not found", 404);
-  const [likesCount, isLiked, commentCount] = await Promise.all([
-    getLikesCount(postId),
-    getIsLiked(postId, userId),
-    getCommentsCount(postId),
-  ]);
+  const isLiked = await getIsLiked(postId, userId);
   const { _id, creator, imagePath, ...postObject } = post;
   const imageUrl = getpublicUrl(imagePath);
   const avatarUrl = getpublicUrl(creator.avatarPath);
@@ -41,9 +38,7 @@ export const getPostService = async (postId: string, userId: string) => {
     image: imageUrl,
     creator: { id: creator._id, username: creator.username, avatar: avatarUrl },
     ...postObject,
-    likesCount,
     isLiked,
-    commentCount,
   };
 };
 
@@ -56,24 +51,23 @@ export const addPostService = async (
   const imagePath = await uploadToSupabase(imageFile, "posts");
   const session = await mongoose.startSession();
   try {
-    session.startTransaction();
-    const createdPost = await addPostRepository(
-      title,
-      imagePath,
-      description,
-      userId,
-      session,
-    );
-    const updatedUser = await addPostToUser(createdPost._id, userId, session);
-    if (!updatedUser) throw new HttpError("User not found", 404);
-    await session.commitTransaction();
-    const { _id, __v, ...postObject } = createdPost.toObject();
-    return { id: _id, ...postObject };
+    return await session.withTransaction(async () => {
+      const createdPost = await addPostRepository(
+        title,
+        imagePath,
+        description,
+        userId,
+        session,
+      );
+      const updatedUser = await addPostToUser(createdPost._id, userId, session);
+      if (!updatedUser) throw new HttpError("User not found", 404);
+      const { _id, __v, ...postObject } = createdPost.toObject();
+      return { id: _id, ...postObject };
+    });
   } catch (error) {
     if (imagePath) {
       await removeFromSupabase(imagePath);
     }
-    await session.abortTransaction();
     throw error;
   } finally {
     await session.endSession();
@@ -83,16 +77,17 @@ export const addPostService = async (
 export const removePostService = async (postId: string, userId: string) => {
   const session = await mongoose.startSession();
   try {
-    session.startTransaction();
-    const removedPost = await removePostRepository(postId, userId, session);
-    if (!removedPost) throw new HttpError("Post not found", 404);
-    await removePostFromUser(postId, userId, session);
-    await Promise.all([
-      removeAllPostLikes(postId, session),
-      removeAllPostComments(postId, session),
-    ]);
-    await session.commitTransaction();
-    const { _id, imagePath, __v, ...postObject } = removedPost.toObject();
+    const { _id, imagePath, __v, ...postObject } =
+      await session.withTransaction(async () => {
+        const removedPost = await removePostRepository(postId, userId, session);
+        if (!removedPost) throw new HttpError("Post not found", 404);
+        await removePostFromUser(postId, userId, session);
+        await Promise.all([
+          removeAllPostLikes(postId, session),
+          removeAllPostComments(postId, session),
+        ]);
+        return removedPost.toObject();
+      });
     if (imagePath) {
       try {
         await removeFromSupabase(imagePath);
@@ -102,7 +97,6 @@ export const removePostService = async (postId: string, userId: string) => {
     }
     return { id: _id, ...postObject };
   } catch (error) {
-    await session.abortTransaction();
     throw error;
   } finally {
     await session.endSession();
@@ -149,19 +143,39 @@ export const editPostService = async (
 // Likes
 
 export const addLikeService = async (postId: string, userId: string) => {
-  const { _id, __v, ...createdLike } = (
-    await addLikeRepository(postId, userId)
-  ).toObject();
-  return {
-    ...createdLike,
-    id: _id,
-  };
+  const session = await mongoose.startSession();
+  try {
+    return await session.withTransaction(async () => {
+      const { _id, __v, ...createdLike } = (
+        await addLikeRepository(postId, userId, session)
+      ).toObject();
+      await incrementPostLikes(postId, session);
+      return {
+        ...createdLike,
+        id: _id,
+      };
+    });
+  } catch (error) {
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 };
 
 export const removeLikeService = async (postId: string, userId: string) => {
-  const removedLike = await removeLikeRepository(postId, userId);
-  if (removedLike === null) throw new HttpError("Like not found", 404);
-  return removedLike;
+  const session = await mongoose.startSession();
+  try {
+    return await session.withTransaction(async () => {
+      const removedLike = await removeLikeRepository(postId, userId, session);
+      await decrementPostLikes(postId, session);
+      if (removedLike === null) throw new HttpError("Like not found", 404);
+      return removedLike;
+    });
+  } catch (error) {
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 };
 
 // Comments
@@ -171,13 +185,23 @@ export const addCommentService = async (
   userId: string,
   content: string,
 ) => {
-  const { _id, __v, ...createdComment } = (
-    await addCommentRepository(postId, userId, content)
-  ).toObject();
-  return {
-    ...createdComment,
-    id: _id,
-  };
+  const session = await mongoose.startSession();
+  try {
+    return await session.withTransaction(async () => {
+      const { _id, __v, ...createdComment } = (
+        await addCommentRepository(postId, userId, content, session)
+      ).toObject();
+      await incrementPostComments(postId, session);
+      return {
+        ...createdComment,
+        id: _id,
+      };
+    });
+  } catch (error) {
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 };
 
 export const getCommentsService = async (

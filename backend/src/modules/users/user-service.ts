@@ -4,7 +4,6 @@ import {
   getUserRepository,
   editUserRepository,
   getUserPostsRepository,
-  getUserPostsLikes,
   getUserPostsIsLiked,
   followUserRepository,
   unfollowUserRepository,
@@ -85,11 +84,6 @@ export const getUserPostsService = async (
   const posts = await getUserPostsRepository(userId, limit, cursor);
   const postsIds = posts.map(({ _id }) => _id);
   const nextCursor = posts.at(-1)?._id;
-  const postsLikes = await getUserPostsLikes(postsIds);
-  const likesMap: Record<string, number> = {};
-  postsLikes.forEach(({ _id, count }) => {
-    likesMap[_id.toString()] = count;
-  });
   const isLiked = await getUserPostsIsLiked(userId, postsIds);
   const isLikedSet = new Set();
   isLiked.forEach(({ post }) => isLikedSet.add(post.toString()));
@@ -103,7 +97,6 @@ export const getUserPostsService = async (
           username: creator.username,
           avatar: getpublicUrl(creator.avatarPath),
         },
-        likesCount: likesMap[id] ?? 0,
         isLiked: isLikedSet.has(id),
         image: getpublicUrl(imagePath),
         ...postData,

@@ -40,18 +40,6 @@ export const getUserPostsRepository = (
     .lean<PopulatedPostType[]>();
 };
 
-export const getUserPostsLikes = (postsIds: Types.ObjectId[]) => {
-  return Like.aggregate<{ _id: Types.ObjectId; count: number }>([
-    { $match: { post: { $in: postsIds } } },
-    {
-      $group: {
-        _id: "$post",
-        count: { $sum: 1 },
-      },
-    },
-  ]);
-};
-
 export const getUserPostsIsLiked = (
   userId: string,
   postsIds: Types.ObjectId[],
