@@ -6,6 +6,8 @@ const postSchema = new Schema(
     imagePath: { type: String, required: true },
     description: { type: String },
     creator: { type: Types.ObjectId, required: true, ref: "User" },
+    likesCount: { type: Number, default: 0 },
+    commentsCount: { type: Number, default: 0 },
   },
   { timestamps: true },
 );
