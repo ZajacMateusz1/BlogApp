@@ -21,7 +21,7 @@ export default function InputElement({
         {children}
       </label>
       <input
-        className={`${className || ""} ${errorMessage ? "border-error" : ""} p-1.5 mb-0.5 max-w-lg w-full rounded-lg border text-xs sm:text-sm md:text-base xl:text-lg`}
+        className={`${className || ""} ${errorMessage ? "border-error" : ""} p-1.5 mb-0.5 w-full rounded-lg border text-xs sm:text-sm md:text-base xl:text-lg`}
         name={name}
         id={name}
         {...props}
