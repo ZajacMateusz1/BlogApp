@@ -29,11 +29,7 @@ export default function UserProfile({ profileId }: UserProfileProps) {
         style={{ backgroundImage: `url(${PROFILECOVER})` }}
       >
         <div className="size-24 overflow-hidden rounded-full absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 md:size-28 lg:size-32">
-          <img
-            className="object-cover size-full"
-            src={data?.avatar}
-            alt={data?.username}
-          />
+          <img className="size-full" src={data?.avatar} alt={data?.username} />
         </div>
       </div>
       <h2 className="font-bold pt-16 text-lg md:text-xl lg:text-2xl">

@@ -10,6 +10,7 @@
   --color-link: #274dea;
   --color-link-hover: #10288c;
   --color-link-active: #0f778c;
+  --color-border-light: var(--color-gray-400);
   --color-error: var(--color-red-600);
 }
 

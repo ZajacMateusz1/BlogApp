@@ -60,7 +60,10 @@ export default function CommentForm({ postId, token }: CommentFormProps) {
     mutate(formData);
   };
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col">
+    <form
+      onSubmit={handleSubmit(submitHandler)}
+      className="flex flex-col gap-2 md:gap-4"
+    >
       <TextAreaElement
         {...register("content")}
         className="w-full"

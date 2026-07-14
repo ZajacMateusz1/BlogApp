@@ -60,8 +60,8 @@ export default function CommentSection({ postId }: CommentSectionProps) {
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   return (
-    <section>
-      <h2>Comments</h2>
+    <section className="flex flex-col gap-1 md:gap-2 lg:gap-4">
+      <h2 className="font-bold md:text-lg lg:text-xl">Comments</h2>
       <CommentForm postId={postId} token={token} />
       {data?.pages.map((page) =>
         page.comments.map((comment) => (
