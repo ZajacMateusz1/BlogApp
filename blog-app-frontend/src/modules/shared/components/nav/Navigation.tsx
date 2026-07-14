@@ -6,7 +6,7 @@ import useAuth from "../../../auth/hooks/useAuth";
 import Button from "../Button";
 
 export default function Navigation() {
-  const { userId } = useAuth();
+  const { userId, handleLogout } = useAuth();
   const links = [
     { name: "Main page", link: "/" },
     { name: "Create post", link: "/posts/create" },
@@ -46,6 +46,14 @@ export default function Navigation() {
               </NavLink>
             </li>
           ))}
+          <li>
+            <button
+              onClick={handleLogout}
+              className="text-2xl sm:text-3xl font-bold md:text-lg lg:text-xl hover:text-link-hover transition-colors cursor-pointer"
+            >
+              Logout
+            </button>
+          </li>
         </ul>
       </nav>
     </>
