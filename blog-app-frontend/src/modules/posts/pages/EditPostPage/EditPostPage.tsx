@@ -11,11 +11,16 @@ import PostForm from "../../components/PostForm/PostForm";
 
 export default function EditPostPage() {
   const { postId } = useParams();
-  const { userId } = useAuth();
+  const { userId, token } = useAuth();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["posts", postId],
     queryFn: ({ signal }) =>
-      sendRequest<PostResponseType>(`/api/posts/${postId}`, { signal }),
+      sendRequest<PostResponseType>(`/api/posts/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        signal,
+      }),
   });
 
   if (isLoading) return <LoadingSpinner />;
