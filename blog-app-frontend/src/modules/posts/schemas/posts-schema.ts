@@ -24,3 +24,13 @@ export const EditPostSchema = CreatePostSchema.extend({
 });
 export type CreatePostSchemaType = z.infer<typeof CreatePostSchema>;
 export type EditPostSchemaType = z.infer<typeof EditPostSchema>;
+
+export const CommentSchema = z.object({
+  content: z
+    .string()
+    .trim()
+    .min(1, { error: "Min comment length is 1" })
+    .max(500, { error: "Max comment length is 500" }),
+});
+
+export type CommentSchemaType = z.infer<typeof CommentSchema>;
