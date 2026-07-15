@@ -31,6 +31,15 @@ export const editUserRepository = (
   }).lean();
 };
 
+export const searchUserRepository = (searchQuery: string) => {
+  return User.find(
+    { username: { $regex: searchQuery, $options: "i" } },
+    "-__v -password -posts -email",
+  )
+    .limit(5)
+    .lean();
+};
+
 // User posts
 
 export const getUserPostsRepository = (

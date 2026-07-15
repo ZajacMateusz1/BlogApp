@@ -8,6 +8,7 @@ import {
   followUserRepository,
   unfollowUserRepository,
   getIsFollowing,
+  searchUserRepository,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -81,6 +82,17 @@ export const editUserService = async (
     throw error;
   }
 };
+
+export const searchUserService = async (searchQuery: string) => {
+  const usersList = await searchUserRepository(searchQuery);
+  return usersList.map(({ _id, avatarPath, ...userInfo }) => ({
+    id: _id,
+    avatar: getpublicUrl(avatarPath),
+    ...userInfo,
+  }));
+};
+
+// User posts
 
 export const getUserPostsService = async (
   userId: string,

@@ -8,6 +8,7 @@ import {
   getUserPostsService,
   followUserService,
   unfollowUserService,
+  searchUserService,
 } from "./user-service.js";
 
 import type { TokenPayload } from "../../types/token/jwt-payload-type.js";
@@ -63,6 +64,23 @@ export const editUser = async (
     next(error);
   }
 };
+
+export const searchUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const searchQuery =
+      typeof req.query.search === "string" ? req.query.search : "";
+    const searchUserResponse = await searchUserService(searchQuery);
+    res.json(searchUserResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// User posts
 
 export const getUserPosts = async (
   req: Request<{ userId: string }>,
