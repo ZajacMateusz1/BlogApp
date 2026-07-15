@@ -7,6 +7,8 @@ import ProtectedLayout from "../modules/shared/layouts/ProtectedLayout";
 import RegisterPage from "../modules/auth/pages/RegisterPage/RegisterPage";
 import LoginPage from "../modules/auth/pages/LoginPage/LoginPage";
 
+import HomePage from "../modules/home/pages/HomePage";
+
 import PostDetailsPage from "../modules/posts/pages/PostDetailsPage/PostDetailsPage";
 import CreatePostPage from "../modules/posts/pages/CreatePostPage";
 import EditPostPage from "../modules/posts/pages/EditPostPage/EditPostPage";
@@ -38,6 +40,7 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
+                element: <HomePage />,
               },
               {
                 path: "posts",
