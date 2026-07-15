@@ -1,11 +1,14 @@
 import type { PostResponseType } from "../../posts/types/posts-types";
 
-export type UserResponseType = {
+export type BaseUserResponseType = {
   id: string;
   username: string;
-  isFollowing: boolean;
   avatar: string;
   description: string;
+};
+
+export type UserResponseType = BaseUserResponseType & {
+  isFollowing: boolean;
 };
 
 export type getUserPostsResponseType = {
