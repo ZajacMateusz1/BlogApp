@@ -2,10 +2,11 @@ import User from "../../models/user-model.js";
 import Post from "../../models/post-model.js";
 import Like from "../../models/like-model.js";
 import Follow from "../../models/follow-model.js";
-import type { Types } from "mongoose";
+import type { Types, ClientSession } from "mongoose";
 import type { EditUserSchemaType } from "./user-schema.js";
 
 import type { PopulatedPostType } from "../posts/posts-types";
+import type { PopulatedSuggestionType } from "./user-types.js";
 
 export const getUsersRepository = () => {
   return User.find({}, "-password -__v -posts").lean();
@@ -91,4 +92,57 @@ export const unfollowUserRepository = (
     follower: followerId,
     following: followingId,
   }).lean();
+};
+
+export const updateFollowersNumber = (
+  userId: string,
+  session: ClientSession,
+  value: -1 | 1,
+) => {
+  return User.updateOne(
+    {
+      _id: userId,
+    },
+    { $inc: { followers: value } },
+    { session },
+  );
+};
+
+export const updateFollowingsNumber = (
+  userId: string,
+  session: ClientSession,
+  value: -1 | 1,
+) => {
+  return User.updateOne(
+    {
+      _id: userId,
+    },
+    { $inc: { followings: value } },
+    { session },
+  );
+};
+
+// friend suggestions
+
+export const getFollowings = async (userId: string) => {
+  const followings = await Follow.find({ follower: userId })
+    .select("following -_id")
+    .lean();
+  return followings.map(({ following }) => following);
+};
+
+export const getFriendsSuggestionsRepository = (
+  userId: string,
+  followings: Types.ObjectId[],
+) => {
+  return Follow.find(
+    {
+      follower: { $in: followings },
+      following: { $nin: [userId, ...followings] },
+    },
+    "-follower -_id -__v",
+  )
+    .limit(5)
+    .populate("following", "-__v -password -email")
+    .lean<PopulatedSuggestionType[]>();
 };

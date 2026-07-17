@@ -9,6 +9,7 @@ import {
   followUserService,
   unfollowUserService,
   searchUserService,
+  getFriendsSuggestionsService,
 } from "./user-service.js";
 
 import type { TokenPayload } from "../../types/token/jwt-payload-type.js";
@@ -132,6 +133,23 @@ export const unfollowUser = async (
     const { userId }: TokenPayload = req.userData!;
     await unfollowUserService(userId, followingId);
     res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+// friend suggestions
+
+export const getFriendsSuggestions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.userData!;
+    const getFriendsSuggestionsResponse =
+      await getFriendsSuggestionsService(userId);
+    res.json(getFriendsSuggestionsResponse);
   } catch (error) {
     next(error);
   }

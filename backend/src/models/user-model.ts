@@ -10,6 +10,8 @@ const userSchema = new Schema({
     default: DEFAULT_AVATAR_PATH,
   },
   description: { type: String, default: "" },
+  followersCount: { type: Number, default: 0 },
+  followingsCount: { type: Number, default: 0 },
 });
 
 const User = model("User", userSchema);

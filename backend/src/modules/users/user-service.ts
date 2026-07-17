@@ -1,3 +1,4 @@
+import mongoose, { mongo } from "mongoose";
 import HttpError from "../../errors/HttpError.js";
 import {
   getUsersRepository,
@@ -7,8 +8,12 @@ import {
   getUserPostsIsLiked,
   followUserRepository,
   unfollowUserRepository,
+  updateFollowersNumber,
+  updateFollowingsNumber,
   getIsFollowing,
   searchUserRepository,
+  getFollowings,
+  getFriendsSuggestionsRepository,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -132,19 +137,56 @@ export const followUserService = async (
 ) => {
   if (followerId === followingId)
     throw new HttpError("You cannot follow yourself.", 400);
-  const { _id, __v, ...createdFollow } = (
-    await followUserRepository(followerId, followingId)
-  ).toObject();
-  return {
-    ...createdFollow,
-    id: _id,
-  };
+  const session = await mongoose.startSession();
+  try {
+    return await session.withTransaction(async () => {
+      const { _id, __v, ...createdFollow } = (
+        await followUserRepository(followerId, followingId)
+      ).toObject();
+      await updateFollowersNumber(followingId, session, 1);
+      await updateFollowingsNumber(followerId, session, 1);
+      return {
+        ...createdFollow,
+        id: _id,
+      };
+    });
+  } finally {
+    await session.endSession();
+  }
 };
 
 export const unfollowUserService = async (
   followerId: string,
   followingId: string,
 ) => {
-  const deletedFollow = await unfollowUserRepository(followerId, followingId);
-  return deletedFollow;
+  const session = await mongoose.startSession();
+  try {
+    const deletedFollow = await unfollowUserRepository(followerId, followingId);
+    await updateFollowersNumber(followingId, session, -1);
+    await updateFollowingsNumber(followerId, session, -1);
+    return deletedFollow;
+  } finally {
+    await session.endSession();
+  }
+};
+
+// friend suggestions
+
+export const getFriendsSuggestionsService = async (userId: string) => {
+  const followings = await getFollowings(userId);
+  if (followings.length === 0) {
+  } else {
+    const suggestions = await getFriendsSuggestionsRepository(
+      userId,
+      followings,
+    );
+    return suggestions.map(({ following }) => {
+      const { _id, avatarPath, ...followingData } = following;
+      return {
+        id: _id,
+        avatar: getpublicUrl(avatarPath),
+        ...followingData,
+      };
+    });
+  }
 };

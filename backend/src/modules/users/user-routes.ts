@@ -10,6 +10,7 @@ import {
   followUser,
   unfollowUser,
   searchUser,
+  getFriendsSuggestions,
 } from "./user-controller.js";
 import { EditUserSchema } from "./user-schema.js";
 
@@ -18,6 +19,7 @@ router.get("/", getUsers);
 router.get("/:userId/posts", getUserPosts);
 router.use(checkAuth);
 router.get("/search", searchUser);
+router.get("/suggestions", getFriendsSuggestions);
 router.get("/:userId", getUser);
 router.patch(
   "/me",
