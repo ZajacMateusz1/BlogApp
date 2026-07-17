@@ -141,10 +141,12 @@ export const followUserService = async (
   try {
     return await session.withTransaction(async () => {
       const { _id, __v, ...createdFollow } = (
-        await followUserRepository(followerId, followingId)
+        await followUserRepository(followerId, followingId, session)
       ).toObject();
-      await updateFollowersNumber(followingId, session, 1);
-      await updateFollowingsNumber(followerId, session, 1);
+      await Promise.all([
+        await updateFollowersNumber(followingId, session, 1),
+        await updateFollowingsNumber(followerId, session, 1),
+      ]);
       return {
         ...createdFollow,
         id: _id,
@@ -161,10 +163,18 @@ export const unfollowUserService = async (
 ) => {
   const session = await mongoose.startSession();
   try {
-    const deletedFollow = await unfollowUserRepository(followerId, followingId);
-    await updateFollowersNumber(followingId, session, -1);
-    await updateFollowingsNumber(followerId, session, -1);
-    return deletedFollow;
+    return await session.withTransaction(async () => {
+      const deletedFollow = await unfollowUserRepository(
+        followerId,
+        followingId,
+        session,
+      );
+      await Promise.all([
+        updateFollowersNumber(followingId, session, -1),
+        updateFollowingsNumber(followerId, session, -1),
+      ]);
+      return deletedFollow;
+    });
   } finally {
     await session.endSession();
   }

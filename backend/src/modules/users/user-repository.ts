@@ -75,23 +75,28 @@ export const getUserPostsIsLiked = (
 export const followUserRepository = async (
   followerId: string,
   followingId: string,
+  session: ClientSession,
 ) => {
   const createdFollow = new Follow({
     follower: followerId,
     following: followingId,
   });
-  await createdFollow.save();
+  await createdFollow.save({ session });
   return createdFollow;
 };
 
 export const unfollowUserRepository = (
   followerId: string,
   followingId: string,
+  session: ClientSession,
 ) => {
-  return Follow.findOneAndDelete({
-    follower: followerId,
-    following: followingId,
-  }).lean();
+  return Follow.findOneAndDelete(
+    {
+      follower: followerId,
+      following: followingId,
+    },
+    { session },
+  ).lean();
 };
 
 export const updateFollowersNumber = (
@@ -103,7 +108,7 @@ export const updateFollowersNumber = (
     {
       _id: userId,
     },
-    { $inc: { followers: value } },
+    { $inc: { followersCount: value } },
     { session },
   );
 };
@@ -117,7 +122,7 @@ export const updateFollowingsNumber = (
     {
       _id: userId,
     },
-    { $inc: { followings: value } },
+    { $inc: { followingsCount: value } },
     { session },
   );
 };
