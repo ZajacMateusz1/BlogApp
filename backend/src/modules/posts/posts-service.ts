@@ -96,8 +96,6 @@ export const removePostService = async (postId: string, userId: string) => {
       }
     }
     return { id: _id, ...postObject };
-  } catch (error) {
-    throw error;
   } finally {
     await session.endSession();
   }
@@ -155,8 +153,6 @@ export const addLikeService = async (postId: string, userId: string) => {
         id: _id,
       };
     });
-  } catch (error) {
-    throw error;
   } finally {
     await session.endSession();
   }
@@ -171,8 +167,6 @@ export const removeLikeService = async (postId: string, userId: string) => {
       if (removedLike === null) throw new HttpError("Like not found", 404);
       return removedLike;
     });
-  } catch (error) {
-    throw error;
   } finally {
     await session.endSession();
   }
@@ -197,8 +191,6 @@ export const addCommentService = async (
         id: _id,
       };
     });
-  } catch (error) {
-    throw error;
   } finally {
     await session.endSession();
   }
