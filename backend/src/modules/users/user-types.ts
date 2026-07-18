@@ -1,6 +1,7 @@
 import type { Types } from "mongoose";
-export type PopulatedSuggestionType = {
-  following: {
+export type SuggestionType = {
+  mutualFriends: number;
+  suggestion: {
     _id: Types.ObjectId;
     username: string;
     avatarPath: string;

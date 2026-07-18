@@ -2,11 +2,12 @@ import User from "../../models/user-model.js";
 import Post from "../../models/post-model.js";
 import Like from "../../models/like-model.js";
 import Follow from "../../models/follow-model.js";
-import type { Types, ClientSession } from "mongoose";
+import { Types } from "mongoose";
+import type { ClientSession } from "mongoose";
 import type { EditUserSchemaType } from "./user-schema.js";
 
 import type { PopulatedPostType } from "../posts/posts-types";
-import type { PopulatedSuggestionType } from "./user-types.js";
+import type { SuggestionType } from "./user-types.js";
 
 export const getUsersRepository = () => {
   return User.find({}, "-password -__v -posts").lean();
@@ -136,18 +137,43 @@ export const getFollowings = async (userId: string) => {
   return followings.map(({ following }) => following);
 };
 
-export const getFriendsSuggestionsRepository = (
+export const getFriendsSuggestionsRepository = async (
   userId: string,
   followings: Types.ObjectId[],
 ) => {
-  return Follow.find(
+  return Follow.aggregate<SuggestionType>([
     {
-      follower: { $in: followings },
-      following: { $nin: [userId, ...followings] },
+      $match: {
+        follower: { $in: followings },
+        following: { $nin: [new Types.ObjectId(userId), ...followings] },
+      },
     },
-    "-follower -_id -__v",
-  )
-    .limit(5)
-    .populate("following", "-__v -password -email")
-    .lean<PopulatedSuggestionType[]>();
+    {
+      $group: { _id: "$following", mutualFriends: { $sum: 1 } },
+    },
+    { $sort: { mutualFriends: -1 } },
+    { $limit: 5 },
+    {
+      $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "suggestion",
+      },
+    },
+    {
+      $unwind: "$suggestion",
+    },
+    {
+      $project: {
+        mutualFriends: 1,
+        suggestion: {
+          _id: 1,
+          avatarPath: 1,
+          username: 1,
+          description: 1,
+        },
+      },
+    },
+  ]);
 };

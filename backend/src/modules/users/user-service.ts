@@ -144,8 +144,8 @@ export const followUserService = async (
         await followUserRepository(followerId, followingId, session)
       ).toObject();
       await Promise.all([
-        await updateFollowersNumber(followingId, session, 1),
-        await updateFollowingsNumber(followerId, session, 1),
+        updateFollowersNumber(followingId, session, 1),
+        updateFollowingsNumber(followerId, session, 1),
       ]);
       return {
         ...createdFollow,
@@ -183,20 +183,16 @@ export const unfollowUserService = async (
 // friend suggestions
 
 export const getFriendsSuggestionsService = async (userId: string) => {
+  const limit = 5;
   const followings = await getFollowings(userId);
-  if (followings.length === 0) {
-  } else {
-    const suggestions = await getFriendsSuggestionsRepository(
-      userId,
-      followings,
-    );
-    return suggestions.map(({ following }) => {
-      const { _id, avatarPath, ...followingData } = following;
-      return {
-        id: _id,
-        avatar: getpublicUrl(avatarPath),
-        ...followingData,
-      };
-    });
-  }
+  const suggestions = await getFriendsSuggestionsRepository(userId, followings);
+  return suggestions.map(({ mutualFriends, suggestion }) => {
+    const { _id, avatarPath, ...suggestionData } = suggestion;
+    return {
+      id: _id,
+      avatar: getpublicUrl(avatarPath),
+      ...suggestionData,
+      mutualFriends,
+    };
+  });
 };
