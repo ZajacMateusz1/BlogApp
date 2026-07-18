@@ -14,6 +14,7 @@ import {
   searchUserRepository,
   getFollowings,
   getFriendsSuggestionsRepository,
+  getPopularUsersSuggestions,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -186,7 +187,7 @@ export const getFriendsSuggestionsService = async (userId: string) => {
   const limit = 5;
   const followings = await getFollowings(userId);
   const suggestions = await getFriendsSuggestionsRepository(userId, followings);
-  return suggestions.map(({ mutualFriends, suggestion }) => {
+  const response = suggestions.map(({ mutualFriends, suggestion }) => {
     const { _id, avatarPath, ...suggestionData } = suggestion;
     return {
       id: _id,
@@ -195,4 +196,22 @@ export const getFriendsSuggestionsService = async (userId: string) => {
       mutualFriends,
     };
   });
+  if (response.length < limit) {
+    const responseIds = response.map(({ id }) => id);
+    const popularUsers = await getPopularUsersSuggestions(
+      userId,
+      followings,
+      responseIds,
+      limit - response.length,
+    );
+    popularUsers.forEach(({ _id, avatarPath, ...suggestionData }) => {
+      response.push({
+        id: _id,
+        avatar: getpublicUrl(avatarPath),
+        ...suggestionData,
+        mutualFriends: 0,
+      });
+    });
+  }
+  return response;
 };

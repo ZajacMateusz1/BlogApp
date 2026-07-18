@@ -169,11 +169,25 @@ export const getFriendsSuggestionsRepository = async (
         mutualFriends: 1,
         suggestion: {
           _id: 1,
-          avatarPath: 1,
           username: 1,
-          description: 1,
+          avatarPath: 1,
         },
       },
     },
   ]);
+};
+
+export const getPopularUsersSuggestions = (
+  userId: string,
+  followings: Types.ObjectId[],
+  responseIds: Types.ObjectId[],
+  limit: number,
+) => {
+  return User.find({
+    _id: { $nin: [new Types.ObjectId(userId), ...followings, ...responseIds] },
+  })
+    .select("username avatarPath")
+    .sort({ followersCount: -1 })
+    .limit(limit)
+    .lean();
 };
