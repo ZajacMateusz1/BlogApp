@@ -5,6 +5,8 @@ export type BaseUserResponseType = {
   username: string;
   avatar: string;
   description: string;
+  followersCount: number;
+  followingsCount: number;
 };
 
 export type UserResponseType = BaseUserResponseType & {
@@ -20,4 +22,11 @@ export type FollowResponseType = {
   id: string;
   follower: string;
   following: string;
+};
+
+export type FriendSuggestionType = {
+  mutualFriends: number;
+  username: string;
+  id: string;
+  avatar: string;
 };

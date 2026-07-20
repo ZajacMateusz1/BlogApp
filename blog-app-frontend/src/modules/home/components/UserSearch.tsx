@@ -5,7 +5,7 @@ import useAuth from "../../auth/hooks/useAuth";
 import { sendRequest } from "../../../utils/http/http";
 
 import SearchBar from "../../shared/components/SearchBar";
-import UserCard from "../../users/components/UserCard";
+import UserSearchCard from "../../users/components/UserSearchCard";
 import ErrorBlock from "../../shared/components/ErrorBlock";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 
@@ -54,7 +54,7 @@ export default function UserSearch() {
         {data &&
           data.length > 0 &&
           data.map((userData) => (
-            <UserCard key={userData.id} userData={userData} />
+            <UserSearchCard key={userData.id} userData={userData} />
           ))}
       </div>
     </section>

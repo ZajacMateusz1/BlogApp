@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  type QueryKey,
+} from "@tanstack/react-query";
 import useAuth from "../../auth/hooks/useAuth";
 
 import useToast from "../../shared/hooks/useToast";
@@ -10,11 +14,13 @@ import Button from "../../shared/components/Button";
 interface FollowButtonProps {
   isFollowing: boolean | undefined;
   followingId: string | undefined;
+  invalidateQueryKey: QueryKey;
 }
 
 export default function FollowButton({
   isFollowing,
   followingId,
+  invalidateQueryKey,
 }: FollowButtonProps) {
   const queryClient = useQueryClient();
   const { token } = useAuth();
@@ -25,7 +31,6 @@ export default function FollowButton({
     },
     method: isFollowing ? "DELETE" : "POST",
   };
-  console.log(followingId);
   const { mutate, isPending } = useMutation({
     mutationFn: () =>
       isFollowing
@@ -36,7 +41,7 @@ export default function FollowButton({
           ),
     onSuccess: () => {
       addToast("Success", "success");
-      queryClient.invalidateQueries({ queryKey: ["users", followingId] });
+      queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
     },
     onError: (error) => {
       addToast(error.message, "error");

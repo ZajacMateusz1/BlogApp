@@ -1,29 +1,27 @@
-import { Link } from "react-router-dom";
-import type { BaseUserResponseType } from "../types/users-types";
+import type { FriendSuggestionType } from "../types/users-types";
+
+import FollowButton from "./FollowButton";
+
 interface UserCardProps {
-  userData: BaseUserResponseType;
+  userData: FriendSuggestionType;
 }
 export default function UserCard({ userData }: UserCardProps) {
   return (
-    <Link
-      to={`/users/${userData.id}`}
-      className="flex gap-2 p-2 border-b border-border-light md:gap-4 overflow-hidden hover:bg-bg-primary"
-    >
-      <div className="shrink-0 flex justify-center items-center w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18">
+    <article className="rounded-xl bg-light p-1 md:p-1.5 lg:p-2 flex flex-col justify-center items-center">
+      <div className="h-12 w-12 md:h-14 md:w-14 lg:h-16 lg:w-16">
         <img
-          className="size-full rounded-full"
+          className="size-full"
           src={userData.avatar}
           alt={userData.username}
         />
       </div>
-      <div className="flex flex-col gap-1 justify-center items-center">
-        <p className="text-primary hover:text-link-hover lg:text-lg">
-          {userData.username}
-        </p>
-        <p className="break-all text-xs md:text-sm lg:text-base">
-          {userData.description}
-        </p>
-      </div>
-    </Link>
+      <h3>{userData.username}</h3>
+      <p>{userData.mutualFriends > 0 ? userData.mutualFriends : ""}</p>
+      <FollowButton
+        isFollowing={false}
+        followingId={userData.id}
+        invalidateQueryKey={["suggestions"]}
+      />
+    </article>
   );
 }

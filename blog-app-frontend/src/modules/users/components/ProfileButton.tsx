@@ -21,5 +21,11 @@ export default function ProfileButton({
       </LinkButton>
     );
   }
-  return <FollowButton followingId={profileId} isFollowing={isFollowing} />;
+  return (
+    <FollowButton
+      followingId={profileId}
+      isFollowing={isFollowing}
+      invalidateQueryKey={["users", profileId]}
+    />
+  );
 }
