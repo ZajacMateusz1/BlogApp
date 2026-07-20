@@ -10,10 +10,10 @@ import type { PopulatedPostType } from "../posts/posts-types";
 import type { SuggestionType } from "./user-types.js";
 
 export const getUsersRepository = () => {
-  return User.find({}, "-password -__v -posts").lean();
+  return User.find({}, "-password -__v").lean();
 };
 export const getUserRepository = (userId: string) => {
-  return User.findById(userId, "-__v -password -posts -email").lean();
+  return User.findById(userId, "-__v -password -email").lean();
 };
 export const getIsFollowing = async (
   followerId: string,
@@ -34,10 +34,9 @@ export const editUserRepository = (
 };
 
 export const searchUserRepository = (searchQuery: string) => {
-  return User.find(
-    { username: { $regex: searchQuery, $options: "i" } },
-    "-__v -password -posts -email",
-  )
+  const escepedQuery = RegExp.escape(searchQuery);
+  return User.find({ username: { $regex: escepedQuery, $options: "i" } })
+    .select("username avatarPath")
     .limit(5)
     .lean();
 };
