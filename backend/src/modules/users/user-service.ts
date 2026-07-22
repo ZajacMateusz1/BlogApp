@@ -187,13 +187,13 @@ export const getFriendsSuggestionsService = async (userId: string) => {
   const limit = 5;
   const followings = await getFollowings(userId);
   const suggestions = await getFriendsSuggestionsRepository(userId, followings);
-  const response = suggestions.map(({ mutualFriends, suggestion }) => {
+  const response = suggestions.map(({ mutualFollowings, suggestion }) => {
     const { _id, avatarPath, ...suggestionData } = suggestion;
     return {
       id: _id,
       avatar: getpublicUrl(avatarPath),
       ...suggestionData,
-      mutualFriends,
+      mutualFollowings,
     };
   });
   if (response.length < limit) {
@@ -209,7 +209,7 @@ export const getFriendsSuggestionsService = async (userId: string) => {
         id: _id,
         avatar: getpublicUrl(avatarPath),
         ...suggestionData,
-        mutualFriends: 0,
+        mutualFollowings: 0,
       });
     });
   }

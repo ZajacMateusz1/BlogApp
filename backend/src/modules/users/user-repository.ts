@@ -148,7 +148,7 @@ export const getFriendsSuggestionsRepository = async (
       },
     },
     {
-      $group: { _id: "$following", mutualFriends: { $sum: 1 } },
+      $group: { _id: "$following", mutualFollowings: { $sum: 1 } },
     },
     { $sort: { mutualFriends: -1 } },
     { $limit: 5 },
@@ -165,7 +165,7 @@ export const getFriendsSuggestionsRepository = async (
     },
     {
       $project: {
-        mutualFriends: 1,
+        mutualFollowings: 1,
         suggestion: {
           _id: 1,
           username: 1,
