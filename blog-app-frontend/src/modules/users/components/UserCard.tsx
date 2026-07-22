@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { FriendSuggestionType } from "../types/users-types";
 
 import FollowButton from "./FollowButton";
@@ -7,16 +8,28 @@ interface UserCardProps {
 }
 export default function UserCard({ userData }: UserCardProps) {
   return (
-    <article className="rounded-xl bg-light p-1 md:p-1.5 lg:p-2 flex flex-col justify-center items-center">
-      <div className="h-12 w-12 md:h-14 md:w-14 lg:h-16 lg:w-16">
+    <article className="min-w-40 max-w-60 rounded-xl bg-light p-1 pb-2 md:p-1.5 md:pb-3 lg:p-2 lg:pb-4 flex flex-col gap-2 justify-center items-center">
+      <div className="size-full">
         <img
           className="size-full"
           src={userData.avatar}
           alt={userData.username}
         />
       </div>
-      <h3>{userData.username}</h3>
-      <p>{userData.mutualFriends > 0 ? userData.mutualFriends : ""}</p>
+      <Link
+        className="text-primary hover:text-link-hover"
+        to={`/users/${userData.id}`}
+      >
+        {userData.username}
+      </Link>
+      {userData.mutualFollowings > 0 && (
+        <p>
+          Followed by {userData.mutualFollowings}
+          {userData.mutualFollowings === 1
+            ? " account you follow"
+            : " accounts you follow"}
+        </p>
+      )}
       <FollowButton
         isFollowing={false}
         followingId={userData.id}

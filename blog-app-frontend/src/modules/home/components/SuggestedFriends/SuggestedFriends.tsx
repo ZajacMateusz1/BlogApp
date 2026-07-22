@@ -24,10 +24,15 @@ export default function SuggestedFriends() {
   if (isLoading) return <LoadingSpinner fullScreen={false} />;
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   return (
-    <section className="p-3 md:p-4 flex">
-      {data?.map((friendSuggestion) => (
-        <UserCard key={friendSuggestion.id} userData={friendSuggestion} />
-      ))}
+    <section className="p-3 md:p-4 ">
+      <h2 className="text-lg md:text-xl lg:text-2xl mb-1 md:mb-2 lg:mb-3">
+        People you may know
+      </h2>
+      <div className="flex justify-center gap-3 overflow-x-scroll">
+        {data?.map((friendSuggestion) => (
+          <UserCard key={friendSuggestion.id} userData={friendSuggestion} />
+        ))}
+      </div>
     </section>
   );
 }

@@ -25,7 +25,7 @@ export type FollowResponseType = {
 };
 
 export type FriendSuggestionType = {
-  mutualFriends: number;
+  mutualFollowings: number;
   username: string;
   id: string;
   avatar: string;
