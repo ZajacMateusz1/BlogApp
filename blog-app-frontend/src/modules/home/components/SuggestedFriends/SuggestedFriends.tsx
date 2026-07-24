@@ -25,11 +25,11 @@ export default function SuggestedFriends() {
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   if (!data?.length) return null;
   return (
-    <section className="p-3 md:p-4 ">
+    <section className="p-3 md:p-4">
       <h2 className="text-lg md:text-xl lg:text-2xl mb-1 md:mb-2 lg:mb-3">
         People you may know
       </h2>
-      <div className="flex justify-center gap-3 overflow-x-scroll">
+      <div className="flex gap-3 overflow-x-auto">
         {data?.map((friendSuggestion) => (
           <UserCard key={friendSuggestion.id} userData={friendSuggestion} />
         ))}

@@ -22,19 +22,21 @@ export default function UserCard({ userData }: UserCardProps) {
       >
         {userData.username}
       </Link>
-      {userData.mutualFollowings > 0 && (
-        <p>
-          Followed by {userData.mutualFollowings}
-          {userData.mutualFollowings === 1
-            ? " account you follow"
-            : " accounts you follow"}
-        </p>
-      )}
       <FollowButton
         isFollowing={false}
         followingId={userData.id}
         invalidateQueryKey={["suggestions"]}
       />
+      <div className="mt-3 min-h-12 text-center text-sm text-secondary">
+        {userData.mutualFollowings > 0 && (
+          <p>
+            Followed by {userData.mutualFollowings}
+            {userData.mutualFollowings === 1
+              ? " account you follow"
+              : " accounts you follow"}
+          </p>
+        )}
+      </div>
     </article>
   );
 }
