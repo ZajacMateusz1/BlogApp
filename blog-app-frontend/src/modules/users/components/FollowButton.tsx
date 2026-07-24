@@ -23,7 +23,7 @@ export default function FollowButton({
   invalidateQueryKey,
 }: FollowButtonProps) {
   const queryClient = useQueryClient();
-  const { token } = useAuth();
+  const { token, userId } = useAuth();
   const { addToast } = useToast();
   const options = {
     headers: {
@@ -42,6 +42,13 @@ export default function FollowButton({
     onSuccess: () => {
       addToast("Success", "success");
       queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
+      queryClient.invalidateQueries({ queryKey: [["users", userId]] });
+      queryClient.invalidateQueries({
+        queryKey: ["followsList", followingId, "followers"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["followsList", userId, "following"],
+      });
     },
     onError: (error) => {
       addToast(error.message, "error");

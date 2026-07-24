@@ -24,9 +24,17 @@ export type FollowResponseType = {
   following: string;
 };
 
-export type FriendSuggestionType = {
-  mutualFollowings: number;
+export type FollowListItemType = {
   username: string;
   id: string;
   avatar: string;
+};
+
+export type FriendSuggestionType = FollowListItemType & {
+  mutualFollowings: number;
+};
+
+export type getFollowListResponseType = {
+  users: FollowListItemType[];
+  nextCursor: string | undefined;
 };

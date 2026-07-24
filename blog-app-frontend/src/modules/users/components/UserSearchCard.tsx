@@ -1,12 +1,20 @@
 import { Link } from "react-router-dom";
-import type { BaseUserResponseType } from "../types/users-types";
+import type {
+  BaseUserResponseType,
+  FollowListItemType,
+} from "../types/users-types";
 interface UserSearchCardProps {
-  userData: BaseUserResponseType;
+  userData: BaseUserResponseType | FollowListItemType;
+  onClick?: () => void;
 }
-export default function UserSearchCard({ userData }: UserSearchCardProps) {
+export default function UserSearchCard({
+  userData,
+  onClick,
+}: UserSearchCardProps) {
   return (
     <Link
       to={`/users/${userData.id}`}
+      onClick={onClick}
       className="flex gap-2 p-2 border-b border-border-light md:gap-4 overflow-hidden hover:bg-bg-primary"
     >
       <div className="shrink-0 flex justify-center items-center w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18">

@@ -12,9 +12,13 @@ import PROFILECOVER from "../../../assets/profile-cover.png";
 
 interface UserProfileProps {
   profileId: string | undefined;
+  handleOpenModal: (type: "followers" | "following") => void;
 }
 
-export default function UserProfile({ profileId }: UserProfileProps) {
+export default function UserProfile({
+  profileId,
+  handleOpenModal,
+}: UserProfileProps) {
   const { token, userId } = useAuth();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["users", profileId],
@@ -42,9 +46,35 @@ export default function UserProfile({ profileId }: UserProfileProps) {
       <h2 className="font-bold pt-16 text-lg md:text-xl lg:text-2xl">
         {data?.username}
       </h2>
-      <p className="text-center mb-2 px-4 md:px-8 text-sm md:text-base lg:text-lg">
-        {data?.description}
-      </p>
+      <div className="flex gap-2 md:gap-4 lg:gap-6">
+        <button
+          onClick={() => handleOpenModal("followers")}
+          className="text-center cursor-pointer hover:bg-bg-primary p-1 rounded-lg"
+        >
+          <p className="font-semibold md:text-lg lg:text-xl">
+            {data?.followersCount}
+          </p>
+          <p className="text-sm text-gray-500 md:text-base lg:text-lg">
+            Followers
+          </p>
+        </button>
+        <button
+          onClick={() => handleOpenModal("following")}
+          className="text-center cursor-pointer hover:bg-bg-primary p-1 rounded-lg"
+        >
+          <p className="font-semibold md:text-lg lg:text-xl">
+            {data?.followingsCount}
+          </p>
+          <p className="text-sm text-gray-500 md:text-base lg:text-lg">
+            Following
+          </p>
+        </button>
+      </div>
+      {data?.description && (
+        <p className="text-center mb-2 px-4 md:px-8 text-sm md:text-base lg:text-lg">
+          {data.description}
+        </p>
+      )}
       <ProfileButton
         userId={userId}
         profileId={profileId}
