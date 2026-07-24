@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import HttpError from "../../errors/HttpError.js";
 import {
   getUsersRepository,
@@ -15,6 +15,8 @@ import {
   getFollowings,
   getFriendsSuggestionsRepository,
   getPopularUsersSuggestions,
+  getFollowersRepository,
+  getFollowingRepository,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -214,4 +216,38 @@ export const getFriendsSuggestionsService = async (userId: string) => {
     });
   }
   return response;
+};
+
+// follow list
+
+export const getFollowersService = async (
+  userId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const followers = await getFollowersRepository(userId, cursor, limit);
+  return followers.map(({ follower }) => {
+    const { _id, avatarPath, username } = follower;
+
+    return {
+      id: _id,
+      avatar: getpublicUrl(avatarPath),
+      username,
+    };
+  });
+};
+export const getFollowingService = async (
+  userId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const followings = await getFollowingRepository(userId, cursor, limit);
+  return followings.map(({ following }) => {
+    const { _id, avatarPath, username } = following;
+    return {
+      id: _id,
+      avatar: getpublicUrl(avatarPath),
+      username,
+    };
+  });
 };

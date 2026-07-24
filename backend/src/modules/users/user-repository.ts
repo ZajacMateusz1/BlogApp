@@ -7,7 +7,11 @@ import type { ClientSession } from "mongoose";
 import type { EditUserSchemaType } from "./user-schema.js";
 
 import type { PopulatedPostType } from "../posts/posts-types";
-import type { SuggestionType } from "./user-types.js";
+import type {
+  SuggestionType,
+  PopulatedFollowerType,
+  PopulatedFollowingType,
+} from "./user-types.js";
 
 export const getUsersRepository = () => {
   return User.find({}, "-password -__v").lean();
@@ -189,4 +193,33 @@ export const getPopularUsersSuggestions = (
     .sort({ followersCount: -1 })
     .limit(limit)
     .lean();
+};
+
+// follow list
+
+export const getFollowersRepository = (
+  userId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const filters = cursor
+    ? { following: userId, $lt: { cursor } }
+    : { following: userId };
+  return Follow.find(filters)
+    .limit(limit)
+    .populate("follower", "username avatarPath")
+    .lean<PopulatedFollowerType[]>();
+};
+export const getFollowingRepository = (
+  userId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const filters = cursor
+    ? { follower: userId, $lt: { cursor } }
+    : { follower: userId };
+  return Follow.find(filters)
+    .limit(limit)
+    .populate("following", "username avatarPath")
+    .lean<PopulatedFollowingType[]>();
 };

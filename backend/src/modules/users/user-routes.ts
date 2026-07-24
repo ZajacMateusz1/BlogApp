@@ -11,6 +11,8 @@ import {
   unfollowUser,
   searchUser,
   getFriendsSuggestions,
+  getFollowers,
+  getFollowing,
 } from "./user-controller.js";
 import { EditUserSchema } from "./user-schema.js";
 
@@ -29,5 +31,7 @@ router.patch(
 );
 router.post("/:followingId/follow", followUser);
 router.delete("/:followingId/follow", unfollowUser);
+router.get("/:userId/followers", getFollowers);
+router.get("/:userId/following", getFollowing);
 
 export default router;

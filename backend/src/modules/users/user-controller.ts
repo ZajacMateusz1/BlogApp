@@ -10,6 +10,8 @@ import {
   unfollowUserService,
   searchUserService,
   getFriendsSuggestionsService,
+  getFollowersService,
+  getFollowingService,
 } from "./user-service.js";
 
 import type { TokenPayload } from "../../types/token/jwt-payload-type.js";
@@ -150,6 +152,53 @@ export const getFriendsSuggestions = async (
     const getFriendsSuggestionsResponse =
       await getFriendsSuggestionsService(userId);
     res.json(getFriendsSuggestionsResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// follow list
+
+export const getFollowers = async (
+  req: Request<{ userId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.params;
+    const limit = Math.min(10, Number(req.query.limit) || 10);
+    const cursor =
+      typeof req.query.cursor === "string" && req.query.cursor !== ""
+        ? req.query.cursor
+        : undefined;
+    const getFollowersResponse = await getFollowersService(
+      userId,
+      cursor,
+      limit,
+    );
+    res.json(getFollowersResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getFollowing = async (
+  req: Request<{ userId: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.params;
+    const limit = Math.min(10, Number(req.query.limit) || 10);
+    const cursor =
+      typeof req.query.cursor === "string" && req.query.cursor !== ""
+        ? req.query.cursor
+        : undefined;
+    const getFollowingResponse = await getFollowingService(
+      userId,
+      cursor,
+      limit,
+    );
+    res.json(getFollowingResponse);
   } catch (error) {
     next(error);
   }
