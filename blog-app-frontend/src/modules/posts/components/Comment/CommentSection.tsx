@@ -28,7 +28,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
   } = useInfiniteQuery({
     queryFn: ({ pageParam, signal }) =>
       sendRequest<getCommentsResponseType>(
-        `/api/posts/${postId}/comments?limit=1${pageParam ? `&cursor=${pageParam}` : ""}`,
+        `/api/posts/${postId}/comments?limit=10${pageParam ? `&cursor=${pageParam}` : ""}`,
         {
           signal,
           headers: {
