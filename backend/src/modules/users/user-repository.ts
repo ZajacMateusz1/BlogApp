@@ -203,9 +203,10 @@ export const getFollowersRepository = (
   limit: number,
 ) => {
   const filters = cursor
-    ? { following: userId, $lt: { cursor } }
+    ? { following: userId, follower: { $lt: cursor } }
     : { following: userId };
   return Follow.find(filters)
+    .sort({ follower: -1 })
     .limit(limit)
     .populate("follower", "username avatarPath")
     .lean<PopulatedFollowerType[]>();
@@ -216,9 +217,10 @@ export const getFollowingRepository = (
   limit: number,
 ) => {
   const filters = cursor
-    ? { follower: userId, $lt: { cursor } }
+    ? { follower: userId, following: { $lt: cursor } }
     : { follower: userId };
   return Follow.find(filters)
+    .sort({ following: -1 })
     .limit(limit)
     .populate("following", "username avatarPath")
     .lean<PopulatedFollowingType[]>();

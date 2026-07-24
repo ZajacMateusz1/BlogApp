@@ -226,15 +226,19 @@ export const getFollowersService = async (
   limit: number,
 ) => {
   const followers = await getFollowersRepository(userId, cursor, limit);
-  return followers.map(({ follower }) => {
-    const { _id, avatarPath, username } = follower;
+  const nextCursor = followers.at(-1)?.follower._id;
+  return {
+    nextCursor,
+    users: followers.map(({ follower }) => {
+      const { _id, avatarPath, username } = follower;
 
-    return {
-      id: _id,
-      avatar: getpublicUrl(avatarPath),
-      username,
-    };
-  });
+      return {
+        id: _id,
+        avatar: getpublicUrl(avatarPath),
+        username,
+      };
+    }),
+  };
 };
 export const getFollowingService = async (
   userId: string,
@@ -242,12 +246,16 @@ export const getFollowingService = async (
   limit: number,
 ) => {
   const followings = await getFollowingRepository(userId, cursor, limit);
-  return followings.map(({ following }) => {
-    const { _id, avatarPath, username } = following;
-    return {
-      id: _id,
-      avatar: getpublicUrl(avatarPath),
-      username,
-    };
-  });
+  const nextCursor = followings.at(-1)?.following._id;
+  return {
+    nextCursor,
+    users: followings.map(({ following }) => {
+      const { _id, avatarPath, username } = following;
+      return {
+        id: _id,
+        avatar: getpublicUrl(avatarPath),
+        username,
+      };
+    }),
+  };
 };
