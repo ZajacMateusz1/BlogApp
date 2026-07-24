@@ -9,11 +9,16 @@ import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../shared/components/ErrorBlock";
 
 export default function EditUserProfilePage() {
-  const { userId } = useAuth();
+  const { userId, token } = useAuth();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["users", userId],
     queryFn: ({ signal }) =>
-      sendRequest<UserResponseType>(`/api/users/${userId}`, { signal }),
+      sendRequest<UserResponseType>(`/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        signal,
+      }),
     staleTime: 10000,
   });
   if (isLoading) return <LoadingSpinner />;
