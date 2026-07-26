@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "../../../auth/hooks/useAuth";
-
 import { sendRequest } from "../../../../utils/http/http";
 import type { FriendSuggestionType } from "../../../users/types/users-types";
 
@@ -9,8 +7,11 @@ import ErrorBlock from "../../../shared/components/ErrorBlock";
 
 import UserCard from "../../../users/components/UserCard";
 
-export default function SuggestedFriends() {
-  const { token } = useAuth();
+interface SuggestedFriendsProps {
+  token: string | null;
+}
+
+export default function SuggestedFriends({ token }: SuggestedFriendsProps) {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["suggestions"],
     queryFn: ({ signal }) =>

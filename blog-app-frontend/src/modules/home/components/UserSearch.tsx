@@ -1,6 +1,5 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "../../auth/hooks/useAuth";
 
 import { sendRequest } from "../../../utils/http/http";
 
@@ -11,8 +10,11 @@ import LoadingSpinner from "../../shared/components/LoadingSpinner";
 
 import type { BaseUserResponseType } from "../../users/types/users-types";
 
-export default function UserSearch() {
-  const { token } = useAuth();
+interface UserSearchProps {
+  token: string | null;
+}
+
+export default function UserSearch({ token }: UserSearchProps) {
   const [query, setQuery] = useState<string>("");
   const handleQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);

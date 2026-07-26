@@ -15,9 +15,12 @@ export default function PostCard({ postData }: PostCardInterfaceProps) {
             src={postData.creator.avatar}
             alt="User avatar"
           ></img>
-          <p className="font-semibold lg:text-lg">
+          <Link
+            to={`/users/${postData.creator.id}`}
+            className="font-semibold lg:text-lg text-link hover:text-link-hover"
+          >
             {postData.creator.username}
-          </p>
+          </Link>
         </div>
         <p className="text-xs lg:text-sm">
           {new Date(postData.createdAt).toLocaleString(undefined, {
