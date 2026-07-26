@@ -18,10 +18,11 @@ export const getFeedService = async (
   );
   const posts = followingFeed.map(
     ({ _id, creator, imagePath, ...postData }) => {
-      const { avatarPath, ...userData } = creator;
+      const { _id: creatorId, avatarPath, ...userData } = creator;
       return {
         id: _id,
         creator: {
+          id: creatorId,
           ...userData,
           avatar: getpublicUrl(avatarPath),
         },
@@ -33,10 +34,11 @@ export const getFeedService = async (
   if (followingFeed.length < limit) {
     const globalFeed = await getGlobalFeedRepository(cursor, limit, followings);
     globalFeed.forEach(({ _id, creator, imagePath, ...postData }) => {
-      const { avatarPath, ...userData } = creator;
+      const { _id: creatorId, avatarPath, ...userData } = creator;
       posts.push({
         id: _id,
         creator: {
+          id: creatorId,
           ...userData,
           avatar: getpublicUrl(avatarPath),
         },
