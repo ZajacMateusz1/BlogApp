@@ -4,8 +4,12 @@ import PostFooter from "./PostFooter/PostFooter";
 
 interface PostCardInterfaceProps {
   postData: PostResponseType;
+  likeQueryKeyId: string | undefined;
 }
-export default function PostCard({ postData }: PostCardInterfaceProps) {
+export default function PostCard({
+  postData,
+  likeQueryKeyId,
+}: PostCardInterfaceProps) {
   return (
     <article className="bg-light rounded-xl p-3 md:p-4">
       <header className="mb-2 md:mb-4">
@@ -49,7 +53,7 @@ export default function PostCard({ postData }: PostCardInterfaceProps) {
       </Link>
       <PostFooter
         postId={postData.id}
-        creatorId={postData.creator.id}
+        likeQueryKeyId={likeQueryKeyId}
         likesCount={postData.likesCount}
         isLiked={postData.isLiked}
         commentsCount={postData.commentsCount}

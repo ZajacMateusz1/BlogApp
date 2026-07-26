@@ -21,7 +21,7 @@ export default function Feed({ token }: FeedProps) {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["feed"],
+    queryKey: ["posts", "feed"],
     queryFn: ({ signal, pageParam }) =>
       sendRequest<HomeFeedResponseType>(
         `/api/feed?limit=10${pageParam ? `&cursor=${pageParam}` : ""}`,
@@ -57,7 +57,7 @@ export default function Feed({ token }: FeedProps) {
         {data?.pages.map(({ posts }) =>
           posts.map((post) => (
             <li key={post.id}>
-              <PostCard postData={post} />
+              <PostCard likeQueryKeyId="feed" postData={post} />
             </li>
           )),
         )}

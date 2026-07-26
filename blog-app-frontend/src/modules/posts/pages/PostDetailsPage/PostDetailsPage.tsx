@@ -74,6 +74,7 @@ export default function PostDetailsPage() {
       </p>
       <PostFooter
         postId={data?.id}
+        likeQueryKeyId={data.id}
         isLiked={data?.isLiked}
         likesCount={data?.likesCount}
         commentsCount={data?.commentsCount}

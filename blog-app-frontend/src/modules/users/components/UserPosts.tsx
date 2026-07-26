@@ -59,7 +59,9 @@ export default function UserPosts({ userId }: UserPostsProps) {
         Posts
       </h2>
       {data?.pages.map((page) =>
-        page.posts.map((post) => <PostCard key={post.id} postData={post} />),
+        page.posts.map((post) => (
+          <PostCard likeQueryKeyId={userId} key={post.id} postData={post} />
+        )),
       )}
       <div ref={loaderRef} className="loader"></div>
     </section>

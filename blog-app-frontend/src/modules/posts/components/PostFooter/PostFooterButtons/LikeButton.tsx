@@ -11,17 +11,17 @@ interface LikeButtonProps {
   isLiked: boolean | undefined;
   likesCount: number | undefined;
   token: string | null;
+  queryKeyId: string | undefined;
 }
 export default function LikeButton({
   postId,
-  creatorId,
   isLiked,
   likesCount,
   token,
+  queryKeyId,
 }: LikeButtonProps) {
   const queryClient = useQueryClient();
   const requestMethod = isLiked ? "DELETE" : "POST";
-  const queryKeyId = creatorId ?? postId;
   const { mutate, isPending } = useMutation({
     mutationFn: () =>
       sendRequest(`/api/posts/${postId}/like`, {
