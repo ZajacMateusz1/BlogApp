@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import Post from "../../models/post-model";
+import Post from "../../models/post-model.js";
 
 import type { PopulatedPostType } from "../posts/posts-types";
 
