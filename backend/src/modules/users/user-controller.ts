@@ -92,7 +92,7 @@ export const getUserPosts = async (
 ) => {
   try {
     const { userId } = req.params;
-    const limit = Math.min(Number(req.query.limit) || 10, 10);
+    const limit = Math.max(1, Math.min(10, Number(req.query.limit) || 10));
     const cursor =
       typeof req.query.cursor === "string" && req.query.cursor !== ""
         ? req.query.cursor
@@ -166,7 +166,7 @@ export const getFollowers = async (
 ) => {
   try {
     const { userId } = req.params;
-    const limit = Math.min(10, Number(req.query.limit) || 10);
+    const limit = Math.max(1, Math.min(10, Number(req.query.limit) || 10));
     const cursor =
       typeof req.query.cursor === "string" && req.query.cursor !== ""
         ? req.query.cursor
@@ -188,7 +188,7 @@ export const getFollowing = async (
 ) => {
   try {
     const { userId } = req.params;
-    const limit = Math.min(10, Number(req.query.limit) || 10);
+    const limit = Math.max(1, Math.min(10, Number(req.query.limit) || 10));
     const cursor =
       typeof req.query.cursor === "string" && req.query.cursor !== ""
         ? req.query.cursor
