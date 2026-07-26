@@ -4,6 +4,7 @@ import {
   getFollwingFeedRepository,
   getGlobalFeedRepository,
 } from "./feed-repository.js";
+import { getUserPostsIsLiked } from "../users/user-repository.js";
 
 export const getFeedService = async (
   userId: string,
@@ -47,9 +48,18 @@ export const getFeedService = async (
       });
     });
   }
+  const likes = await getUserPostsIsLiked(
+    userId,
+    posts.map((post) => post.id),
+  );
+  const likesSet = new Set();
+  likes.forEach(({ post }) => likesSet.add(post.toString()));
   const nextCursor = posts.at(-1)?.id;
   return {
-    posts,
+    posts: posts.map((postData) => ({
+      ...postData,
+      isLiked: likesSet.has(postData.id.toString()),
+    })),
     nextCursor,
   };
 };
