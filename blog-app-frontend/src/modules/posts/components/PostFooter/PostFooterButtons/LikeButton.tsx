@@ -7,7 +7,7 @@ import type { PostResponseType } from "../../../types/posts-types";
 
 interface LikeButtonProps {
   postId: string | undefined;
-  creatorId?: string;
+  creatorId: string | undefined;
   isLiked: boolean | undefined;
   likesCount: number | undefined;
   token: string | null;
@@ -17,6 +17,7 @@ export default function LikeButton({
   postId,
   isLiked,
   likesCount,
+  creatorId,
   token,
   queryKeyId,
 }: LikeButtonProps) {
@@ -52,8 +53,11 @@ export default function LikeButton({
     onError: (_error, _data, context) => {
       queryClient.setQueryData(["posts", queryKeyId], context?.previousPost);
     },
-    onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ["posts", queryKeyId] }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts", "feed"] });
+      queryClient.invalidateQueries({ queryKey: ["posts", postId] });
+      queryClient.invalidateQueries({ queryKey: ["posts", creatorId] });
+    },
   });
 
   return (

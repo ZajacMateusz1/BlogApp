@@ -9,6 +9,7 @@ interface PostFooterProps {
   isLiked: boolean | undefined;
   likesCount: number | undefined;
   commentsCount: number | undefined;
+  creatorId: string | undefined;
 }
 export default function PostFooter({
   postId,
@@ -16,6 +17,7 @@ export default function PostFooter({
   isLiked,
   likesCount,
   commentsCount,
+  creatorId,
 }: PostFooterProps) {
   const { token } = useAuth();
   return (
@@ -23,6 +25,7 @@ export default function PostFooter({
       <LikeButton
         isLiked={isLiked}
         postId={postId}
+        creatorId={creatorId}
         queryKeyId={likeQueryKeyId}
         likesCount={likesCount}
         token={token}

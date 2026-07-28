@@ -55,6 +55,7 @@ export default function PostCard({
         postId={postData.id}
         likeQueryKeyId={likeQueryKeyId}
         likesCount={postData.likesCount}
+        creatorId={postData.creator.id}
         isLiked={postData.isLiked}
         commentsCount={postData.commentsCount}
       />
