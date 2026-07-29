@@ -4,7 +4,7 @@
 
 Backend is hosted on Render free, so the first request may take up to ~50 seconds due to cold start.
 
-## [Live demo](blog-app-coral-one.vercel.app)
+## [Live demo](https://blog-app-coral-one.vercel.app)
 
 A full-stack social media application built with **React**, **TypeScript**, **Express** and **MongoDB**.
 
@@ -198,7 +198,7 @@ API communication is handled with **React Query**, providing:
 | Method | Endpoint                      | Description                                            |
 | ------ | ----------------------------- | ------------------------------------------------------ |
 | GET    | `/api/posts/:postId`          | Get a single post by its ID.                           |
-| POST   | `/api/posts/create`           | Create a new post with optional image upload.          |
+| POST   | `/api/posts/create`           | Create a new post with image upload.                   |
 | PATCH  | `/api/posts/:postId`          | Update an existing post.                               |
 | DELETE | `/api/posts/:postId`          | Delete a post.                                         |
 | POST   | `/api/posts/:postId/like`     | Like a post.                                           |
