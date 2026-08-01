@@ -311,4 +311,3 @@ npm run dev
 - Real-time notifications using WebSockets
 - Real-time chat using WebSockets
 - Additional unit tests
-- Rate limiting
