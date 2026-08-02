@@ -1,9 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import env from "../config/env.js";
 
+import { verifyToken } from "../utils/verify-token.js";
 import HttpError from "../errors/HttpError.js";
-import type { TokenPayload } from "../types/token/jwt-payload-type";
 
 const checkAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -11,7 +9,7 @@ const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     if (!token) {
       throw new Error();
     }
-    const decodedToken = jwt.verify(token, env.JWT_SECRET) as TokenPayload;
+    const decodedToken = verifyToken(token);
     req.userData = { userId: decodedToken.userId, email: decodedToken.email };
     next();
   } catch {

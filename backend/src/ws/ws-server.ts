@@ -1,13 +1,11 @@
 import type { IncomingMessage, Server } from "http";
 import { WebSocket, WebSocketServer } from "ws";
-import jwt from "jsonwebtoken";
-import env from "../config/env.js";
-import type { TokenPayload } from "../types/token/jwt-payload-type";
+import { verifyToken } from "../utils/verify-token";
 
 import type { WsMessageType } from "./ws-types";
 
 export const startWebSocketServer = (server: Server) => {
-  const connections: Map<string, WebSocket> = new Map();
+  const connections: Map<string, Set<WebSocket>> = new Map();
   const wss = new WebSocketServer({
     server,
     path: "/ws",
@@ -21,15 +19,22 @@ export const startWebSocketServer = (server: Server) => {
       return;
     }
     try {
-      const decodedToken = jwt.verify(token, env.JWT_SECRET);
-      const { userId } = decodedToken as TokenPayload;
+      const { userId } = verifyToken(token);
       console.log("Connected");
-      if (!connections.has(userId)) connections.set(userId, socket);
+      let sockets = connections.get(userId);
+      if (!sockets) {
+        sockets = new Set<WebSocket>();
+        connections.set(userId, sockets);
+      }
+      sockets.add(socket);
       socket.on("error", (error: Error) => {
         console.error(error);
       });
       socket.on("close", () => {
-        connections.delete(userId);
+        const sockets = connections.get(userId);
+        if (!sockets) return;
+        sockets.delete(socket);
+        if (sockets.size === 0) connections.delete(userId);
         console.log("Disconnected");
       });
       socket.on("message", (data) => {
