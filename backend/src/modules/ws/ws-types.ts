@@ -1,4 +1,4 @@
 export type WsMessageType<T> = {
-  type: "string";
+  type: string;
   payload: T;
 };

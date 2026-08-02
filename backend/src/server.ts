@@ -2,7 +2,7 @@ import { createServer } from "http";
 import mongoose from "mongoose";
 import app from "./app.js";
 import env from "./config/env.js";
-import { startWebSocketServer } from "./ws/ws-server.js";
+import { startWebSocketServer } from "./modules/ws/ws.js";
 
 const start = async () => {
   try {

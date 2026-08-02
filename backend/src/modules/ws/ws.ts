@@ -1,11 +1,11 @@
 import type { IncomingMessage, Server } from "http";
 import { WebSocket, WebSocketServer } from "ws";
-import { verifyToken } from "../utils/verify-token";
+import { verifyToken } from "../../utils/verify-token";
 
 import type { WsMessageType } from "./ws-types";
 
+const connections: Map<string, Set<WebSocket>> = new Map();
 export const startWebSocketServer = (server: Server) => {
-  const connections: Map<string, Set<WebSocket>> = new Map();
   const wss = new WebSocketServer({
     server,
     path: "/ws",
@@ -46,3 +46,25 @@ export const startWebSocketServer = (server: Server) => {
     }
   });
 };
+
+export function sendMessage<T>(userId: string, message: WsMessageType<T>) {
+  const sockets = connections.get(userId);
+  const serializedMessage = JSON.stringify(message);
+  if (!sockets) return;
+  for (const s of sockets) {
+    if (s.readyState === WebSocket.OPEN) {
+      s.send(serializedMessage);
+    }
+  }
+}
+
+export function broadcastMessage<T>(message: WsMessageType<T>) {
+  const serializedMessage = JSON.stringify(message);
+  for (const sockets of connections.values()) {
+    for (const s of sockets) {
+      if (s.readyState === WebSocket.OPEN) {
+        s.send(serializedMessage);
+      }
+    }
+  }
+}
