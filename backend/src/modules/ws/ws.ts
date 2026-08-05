@@ -20,7 +20,6 @@ export const startWebSocketServer = (server: Server) => {
     }
     try {
       const { userId } = verifyToken(token);
-      console.log("Connected");
       let sockets = connections.get(userId);
       if (!sockets) {
         sockets = new Set<WebSocket>();
@@ -47,8 +46,8 @@ export const startWebSocketServer = (server: Server) => {
   });
 };
 
-export function sendMessage<T>(userId: string, message: WsMessageType<T>) {
-  const sockets = connections.get(userId);
+export function sendMessage<T>(targetId: string, message: WsMessageType<T>) {
+  const sockets = connections.get(targetId);
   const serializedMessage = JSON.stringify(message);
   if (!sockets) return;
   for (const s of sockets) {

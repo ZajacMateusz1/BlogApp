@@ -117,8 +117,12 @@ export const followUser = async (
 ) => {
   try {
     const { followingId } = req.params;
-    const { userId }: TokenPayload = req.userData!;
-    const followUserResponse = await followUserService(userId, followingId);
+    const { userId, username }: TokenPayload = req.userData!;
+    const followUserResponse = await followUserService(
+      userId,
+      followingId,
+      username,
+    );
     res.status(201).json(followUserResponse);
   } catch (error) {
     next(error);

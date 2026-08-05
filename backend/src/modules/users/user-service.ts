@@ -27,6 +27,8 @@ import {
   DEFAULT_AVATAR_PATH,
 } from "../../utils/supabaseHelpers.js";
 
+import { sendNotificationService } from "../notifications/notlification-service.js";
+
 export const getUsersService = async () => {
   const users = await getUsersRepository();
   return users.map(({ _id, avatarPath, ...user }) => ({
@@ -137,12 +139,13 @@ export const getUserPostsService = async (
 export const followUserService = async (
   followerId: string,
   followingId: string,
+  followerUsername: string,
 ) => {
   if (followerId === followingId)
     throw new HttpError("You cannot follow yourself.", 400);
   const session = await mongoose.startSession();
   try {
-    return await session.withTransaction(async () => {
+    const followUserResponse = await session.withTransaction(async () => {
       const { _id, __v, ...createdFollow } = (
         await followUserRepository(followerId, followingId, session)
       ).toObject();
@@ -155,6 +158,14 @@ export const followUserService = async (
         id: _id,
       };
     });
+    await sendNotificationService({
+      recipient: followingId,
+      actor: { id: followerId, username: followerUsername },
+      post: undefined,
+      type: "follow",
+      isRead: false,
+    });
+    return followUserResponse;
   } finally {
     await session.endSession();
   }

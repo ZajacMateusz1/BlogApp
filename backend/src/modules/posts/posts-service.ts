@@ -8,6 +8,7 @@ import type { EditPostSchemaType } from "./posts-schema";
 import {
   addPostRepository,
   addPostToUser,
+  getPostCreator,
   removePostRepository,
   removePostFromUser,
   editPostRepository,
@@ -26,6 +27,8 @@ import {
 } from "./posts-repository.js";
 
 import HttpError from "../../errors/HttpError.js";
+
+import { sendNotificationService } from "../notifications/notlification-service.js";
 
 export const getPostService = async (postId: string, userId: string) => {
   const post = await getPostRepository(postId);
@@ -141,10 +144,17 @@ export const editPostService = async (
 
 // Likes
 
-export const addLikeService = async (postId: string, userId: string) => {
+export const addLikeService = async (
+  postId: string,
+  userId: string,
+  username: string,
+) => {
   const session = await mongoose.startSession();
   try {
-    return await session.withTransaction(async () => {
+    const post = await getPostCreator(postId);
+    if (!post) throw new HttpError("Post not found", 404);
+    const recipient = post.creator.toString();
+    const likeResponse = await session.withTransaction(async () => {
       const { _id, __v, ...createdLike } = (
         await addLikeRepository(postId, userId, session)
       ).toObject();
@@ -154,6 +164,16 @@ export const addLikeService = async (postId: string, userId: string) => {
         id: _id,
       };
     });
+    if (recipient !== userId) {
+      await sendNotificationService({
+        recipient,
+        actor: { id: userId, username },
+        type: "like",
+        post: postId,
+        isRead: false,
+      });
+    }
+    return likeResponse;
   } finally {
     await session.endSession();
   }
@@ -179,10 +199,14 @@ export const addCommentService = async (
   postId: string,
   userId: string,
   content: string,
+  username: string,
 ) => {
   const session = await mongoose.startSession();
   try {
-    return await session.withTransaction(async () => {
+    const post = await getPostCreator(postId);
+    if (!post) throw new HttpError("Post not found", 404);
+    const recipient = post.creator.toString();
+    const commentResponse = await session.withTransaction(async () => {
       const { _id, __v, ...createdComment } = (
         await addCommentRepository(postId, userId, content, session)
       ).toObject();
@@ -192,6 +216,16 @@ export const addCommentService = async (
         id: _id,
       };
     });
+    if (recipient !== userId) {
+      await sendNotificationService({
+        recipient,
+        actor: { id: userId, username },
+        type: "comment",
+        post: postId,
+        isRead: false,
+      });
+    }
+    return commentResponse;
   } finally {
     await session.endSession();
   }

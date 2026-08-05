@@ -12,6 +12,10 @@ export const getPostRepository = (postId: string) => {
     .lean<PopulatedPostType>();
 };
 
+export const getPostCreator = async (postId: string) => {
+  return await Post.findById(postId).select("creator -_id");
+};
+
 export const addPostRepository = async (
   title: string,
   imagePath: string | null,

@@ -104,15 +104,15 @@ export const addLike = async (
 ) => {
   try {
     const { postId } = req.params;
-    const { userId }: TokenPayload = req.userData!;
-    const addLikeResponse = await addLikeService(postId, userId);
+    const { userId, username }: TokenPayload = req.userData!;
+    const addLikeResponse = await addLikeService(postId, userId, username);
     res.status(201).json(addLikeResponse);
   } catch (error) {
     next(error);
   }
 };
 
-export const reomveLike = async (
+export const removeLike = async (
   req: Request<{ postId: string }>,
   res: Response,
   next: NextFunction,
@@ -136,9 +136,14 @@ export const addComment = async (
 ) => {
   try {
     const { postId } = req.params;
-    const { userId }: TokenPayload = req.userData!;
+    const { userId, username }: TokenPayload = req.userData!;
     const { content }: CommentSchemaType = req.body;
-    const addCommentResponse = await addCommentService(postId, userId, content);
+    const addCommentResponse = await addCommentService(
+      postId,
+      userId,
+      content,
+      username,
+    );
     res.status(201).json(addCommentResponse);
   } catch (error) {
     next(error);

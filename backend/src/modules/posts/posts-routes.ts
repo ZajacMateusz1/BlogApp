@@ -9,7 +9,7 @@ import {
   editPost,
   getPost,
   addLike,
-  reomveLike,
+  removeLike,
   getComments,
   addComment,
 } from "./posts-controller.js";
@@ -34,7 +34,7 @@ router.patch(
 // likes
 
 router.post("/:postId/like", addLike);
-router.delete("/:postId/like", reomveLike);
+router.delete("/:postId/like", removeLike);
 
 // coments
 
