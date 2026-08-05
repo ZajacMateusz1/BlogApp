@@ -1,6 +1,6 @@
 import type { IncomingMessage, Server } from "http";
 import { WebSocket, WebSocketServer } from "ws";
-import { verifyToken } from "../../utils/verify-token";
+import { verifyToken } from "../../utils/verify-token.js";
 
 import type { WsMessageType } from "./ws-types";
 
