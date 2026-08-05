@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import router from "./router/router";
 import AuthContextProvider from "./modules/auth/store/AuthContextProvider/AuthContextProvider";
 import ToastContextProvider from "./modules/shared/store/toast/ToastContextProvider/ToastContextProvider";
+import WsContextProvider from "./modules/ws/store/WsContextProvider";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ToastContextProvider>
           <AuthContextProvider>
-            <RouterProvider router={router} />
+            <WsContextProvider>
+              <RouterProvider router={router} />
+            </WsContextProvider>
           </AuthContextProvider>
         </ToastContextProvider>
       </QueryClientProvider>
