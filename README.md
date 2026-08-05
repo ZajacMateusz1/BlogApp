@@ -8,7 +8,7 @@ Backend is hosted on Render free, so the first request may take up to ~50 second
 
 A full-stack social media application built with **React**, **TypeScript**, **Express** and **MongoDB**.
 
-Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, and personalized feeds.
+Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, and real-time notifications.
 
 ## Project Evolution
 
@@ -60,7 +60,11 @@ This project originally started as a simple blog application, which is why some 
 
 ## Notifications
 
-- Custom toast notification system
+- Real-time notifications using **WebSockets**
+- Notifications for:
+  - Likes
+  - Comments
+  - New followers
 
 ## File Uploads
 
@@ -93,6 +97,10 @@ Built with:
 - Vitest
 - React Testing Library
 
+## Current Status
+
+The application is fully functional, but the frontend test suite is currently failing due to ongoing changes and will be fixed soon.
+
 # Tech Stack
 
 ## Frontend
@@ -106,6 +114,7 @@ Built with:
 - [**Zod**](https://zod.dev/)
 - [**Tailwind CSS**](https://tailwindcss.com/)
 - [**Lucide React**](https://lucide.dev/)
+- [**WebSocket API**](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
 - [**Vitest**](https://vitest.dev/)
 - [**React Testing Library**](https://testing-library.com/docs/react-testing-library/intro)
 
@@ -116,6 +125,7 @@ Built with:
 - [**TypeScript**](https://www.typescriptlang.org/)
 - [**MongoDB**](https://www.mongodb.com/)
 - [**Mongoose**](https://mongoosejs.com/)
+- [**WebSocket (ws)**](https://www.npmjs.com/package/ws)
 - [**Zod**](https://zod.dev/)
 - [**Multer**](https://github.com/expressjs/multer)
 - [**Supabase Storage**](https://supabase.com/storage)
@@ -134,8 +144,10 @@ BlogApp
 │   │   ├── modules
 │   │   │   ├── auth
 │   │   │   ├── feed
+│   │   │   ├── notifications
 │   │   │   ├── posts
-│   │   │   └── users
+│   │   │   ├── users
+│   │   │   └── ws
 │   │   ├── types
 │   │   └── utils
 │   └── tests
@@ -147,7 +159,8 @@ BlogApp
     │   │   ├── home
     │   │   ├── posts
     │   │   ├── shared
-    │   │   └── users
+    │   │   ├── users
+    │   │   └── ws
     │   ├── router
     │   └── utils
     └── tests
@@ -157,7 +170,7 @@ Each module contains its own components, business logic, validation, types.
 
 # HTTP Requests
 
-API communication is handled with **React Query**, providing:
+API communication is handled through a small `fetch` wrapper combined with **React Query**, providing:
 
 - Query caching
 - Infinite queries
@@ -226,6 +239,16 @@ Authorization: Bearer <token>
 
 The frontend stores the access token and automatically logs the user out when it expires.
 
+# Real-time Communication
+
+The frontend establishes a WebSocket connection after authentication.
+
+The backend uses WebSockets to deliver real-time notifications when a user:
+
+- receives a like on a post,
+- receives a comment on a post,
+- gains a new follower.
+
 # Pagination
 
 Cursor-based pagination is used for:
@@ -270,44 +293,82 @@ Example:
 VITE_API_URL=
 ```
 
+Base URL of the REST API.
+
+```env
+VITE_WS_URL=
+```
+
+WebSocket server URL used for real-time notifications.
+
 ## Backend
 
 ```env
 PORT=
+```
 
+Port on which the backend server will run.
+
+```env
 DATABASE_URL=
+```
 
+MongoDB connection string.
+
+```env
 JWT_SECRET=
+```
 
+Secret used to sign and verify JWT access tokens.
+
+```env
 SUPABASE_URL=
+```
 
+Supabase project URL.
+
+```env
 SUPABASE_SECRET_KEY=
 ```
+
+Supabase service role key used for file uploads.
 
 # Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/ZajacMateusz1/SocialMediaApp
+git clone https://github.com/ZajacMateusz1/SocialMediaApp.git && cd SocialMediaApp
 ```
 
-Install dependencies for both frontend and backend:
+Install backend dependencies:
 
 ```bash
-npm install
+cd backend && npm install
 ```
 
-Configure environment variables.
-
-Start the development servers for frontend and backend:
+In a new terminal install frontend dependencies:
 
 ```bash
-npm run dev
+cd blog-app-frontend && npm install
+```
+
+Configure the required environment variables for both the frontend and backend.
+
+Start the backend development server:
+
+```bash
+cd backend && npm run dev
+```
+
+Start the frontend development server:
+
+```bash
+cd blog-app-frontend && npm run dev
 ```
 
 # Future Improvements
 
-- Real-time notifications using WebSockets
+- Notification history API
 - Real-time chat using WebSockets
 - Additional unit tests
