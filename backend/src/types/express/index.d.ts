@@ -1,7 +1,7 @@
 import "express";
 interface UserDataInterface {
   userId: string;
-  email: string;
+  username: string;
 }
 
 declare global {

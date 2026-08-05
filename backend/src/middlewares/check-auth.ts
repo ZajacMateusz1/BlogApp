@@ -10,7 +10,10 @@ const checkAuth = (req: Request, res: Response, next: NextFunction) => {
       throw new Error();
     }
     const decodedToken = verifyToken(token);
-    req.userData = { userId: decodedToken.userId, email: decodedToken.email };
+    req.userData = {
+      userId: decodedToken.userId,
+      username: decodedToken.username,
+    };
     next();
   } catch {
     next(new HttpError("Authentication failed!", 401));
