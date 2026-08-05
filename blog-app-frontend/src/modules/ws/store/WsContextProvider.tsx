@@ -2,8 +2,12 @@ import { type ReactNode, useEffect, useRef } from "react";
 import WsContext from "./ws-context";
 
 import useAuth from "../../auth/hooks/useAuth";
+import useToast from "../../shared/hooks/useToast";
+
+import mapNotification from "../utils/map-notification";
 
 import type { WsContextType } from "./ws-context";
+import type { NotificationType } from "../types/ws-types";
 
 interface WsContextProviderProps {
   children: ReactNode;
@@ -11,6 +15,7 @@ interface WsContextProviderProps {
 
 const WsContextProvider = ({ children }: WsContextProviderProps) => {
   const { token } = useAuth();
+  const { addToast } = useToast();
   const wsRef = useRef<WebSocket | null>(null);
   useEffect(() => {
     const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}?token=${token}`);
@@ -22,7 +27,13 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
       const message = JSON.parse(event.data);
       switch (message.type) {
         case "notification":
-          console.log("notification:", message.payload);
+          {
+            const { text, link } = mapNotification(
+              message.payload as NotificationType,
+            );
+
+            addToast(text, "info", link);
+          }
           break;
         default:
           console.log("Unknown message type:", message.type);
@@ -34,7 +45,7 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
       console.log("Closed");
     };
     return () => ws.close();
-  }, [token]);
+  }, [token, addToast]);
   const WsCTX: WsContextType = {
     sendMessage: () => {},
   };

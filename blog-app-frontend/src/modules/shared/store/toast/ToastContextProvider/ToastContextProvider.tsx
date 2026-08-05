@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import ToastContext, {
   type ToastContextType,
   type ToastType,
@@ -14,20 +14,24 @@ export default function ToastContextProvider({
   children,
 }: ToastContextProviderProps) {
   const [toasts, setToasts] = useState<ToastType[]>([]);
-  const addToast = (message: string, type: ToastVariants) => {
-    const newToast: ToastType = {
-      id: crypto.randomUUID(),
-      message,
-      type,
-    };
-    setToasts((prev) => [...prev, newToast]);
-    setTimeout(() => {
-      removeToast(newToast.id);
-    }, 3000);
-  };
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
+  const addToast = useCallback(
+    (message: string, type: ToastVariants, link?: string) => {
+      const newToast: ToastType = {
+        id: crypto.randomUUID(),
+        message,
+        type,
+        link,
+      };
+      setToasts((prev) => [...prev, newToast]);
+      setTimeout(() => {
+        removeToast(newToast.id);
+      }, 3000);
+    },
+    [setToasts],
+  );
   const toastCtx: ToastContextType = {
     addToast,
   };
@@ -37,7 +41,7 @@ export default function ToastContextProvider({
         {children}
         <div className="fixed left-3 top-3 z-20">
           {toasts.map((toast) => (
-            <ToastElement key={toast.id} type={toast.type}>
+            <ToastElement key={toast.id} type={toast.type} link={toast.link}>
               {toast.message}
             </ToastElement>
           ))}

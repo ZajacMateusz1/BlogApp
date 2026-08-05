@@ -5,10 +5,11 @@ export type ToastType = {
   id: string;
   message: string;
   type: ToastVariants;
+  link?: string;
 };
 
 export interface ToastContextType {
-  addToast: (message: string, type: ToastVariants) => void;
+  addToast: (message: string, type: ToastVariants, link?: string) => void;
 }
 const ToastContext = createContext<ToastContextType | null>(null);
 
