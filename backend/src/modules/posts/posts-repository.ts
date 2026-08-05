@@ -32,17 +32,6 @@ export const addPostRepository = async (
   await createdPost.save({ session });
   return createdPost;
 };
-export const addPostToUser = (
-  postId: Types.ObjectId,
-  userId: string,
-  session: ClientSession,
-) => {
-  return User.findByIdAndUpdate(
-    userId,
-    { $push: { posts: postId } },
-    { session },
-  );
-};
 
 export const removePostRepository = (
   postId: string,
@@ -57,17 +46,6 @@ export const removePostRepository = (
     { session },
   );
   return removedPost;
-};
-export const removePostFromUser = (
-  postId: string,
-  userId: string,
-  session: ClientSession,
-) => {
-  return User.findByIdAndUpdate(
-    userId,
-    { $pull: { posts: postId } },
-    { session },
-  );
 };
 
 export const findPostById = (postId: string) => {

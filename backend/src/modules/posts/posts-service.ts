@@ -7,10 +7,8 @@ import {
 import type { EditPostSchemaType } from "./posts-schema";
 import {
   addPostRepository,
-  addPostToUser,
   getPostCreator,
   removePostRepository,
-  removePostFromUser,
   editPostRepository,
   getPostRepository,
   findPostById,
@@ -63,8 +61,6 @@ export const addPostService = async (
         userId,
         session,
       );
-      const updatedUser = await addPostToUser(createdPost._id, userId, session);
-      if (!updatedUser) throw new HttpError("User not found", 404);
       const { _id, __v, ...postObject } = createdPost.toObject();
       return { id: _id, ...postObject };
     });
@@ -85,7 +81,6 @@ export const removePostService = async (postId: string, userId: string) => {
       await session.withTransaction(async () => {
         const removedPost = await removePostRepository(postId, userId, session);
         if (!removedPost) throw new HttpError("Post not found", 404);
-        await removePostFromUser(postId, userId, session);
         await Promise.all([
           removeAllPostLikes(postId, session),
           removeAllPostComments(postId, session),
@@ -184,8 +179,8 @@ export const removeLikeService = async (postId: string, userId: string) => {
   try {
     return await session.withTransaction(async () => {
       const removedLike = await removeLikeRepository(postId, userId, session);
-      await decrementPostLikes(postId, session);
       if (removedLike === null) throw new HttpError("Like not found", 404);
+      await decrementPostLikes(postId, session);
       return removedLike;
     });
   } finally {
