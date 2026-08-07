@@ -64,6 +64,7 @@ export default function LoginPage() {
           {...register("email")}
           errorMessage={errors.email?.message}
           type="email"
+          autoComplete="email"
         >
           Email
         </InputElement>
@@ -71,6 +72,7 @@ export default function LoginPage() {
           {...register("password")}
           errorMessage={errors.password?.message}
           type="password"
+          autoComplete="current-password"
         >
           Password
         </InputElement>

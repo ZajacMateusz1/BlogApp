@@ -70,6 +70,7 @@ export default function RegisterPage() {
           {...register("email")}
           errorMessage={errors.email?.message}
           type="email"
+          autoComplete="email"
         >
           Email
         </InputElement>
@@ -77,6 +78,7 @@ export default function RegisterPage() {
           {...register("username")}
           errorMessage={errors.username?.message}
           type="text"
+          autoComplete="username"
         >
           Username
         </InputElement>
@@ -84,6 +86,7 @@ export default function RegisterPage() {
           {...register("password")}
           errorMessage={errors.password?.message}
           type="password"
+          autoComplete="new-password"
         >
           Password
         </InputElement>
@@ -91,6 +94,7 @@ export default function RegisterPage() {
           {...register("repeatPassword")}
           errorMessage={errors.repeatPassword?.message}
           type="password"
+          autoComplete="new-password"
         >
           Repeat Password
         </InputElement>
