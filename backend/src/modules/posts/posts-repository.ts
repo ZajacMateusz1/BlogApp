@@ -82,18 +82,14 @@ export const addLikeRepository = async (
   return createdLike;
 };
 
-export const incrementPostLikes = (postId: string, session: ClientSession) => {
-  return Post.updateOne(
+export const updatePostLikesNumber = (
+  postId: string,
+  session: ClientSession,
+  value: -1 | 1,
+) => {
+  return Like.updateOne(
     { _id: postId },
-    { $inc: { likesCount: 1 } },
-    { session },
-  );
-};
-
-export const decrementPostLikes = (postId: string, session: ClientSession) => {
-  return Post.updateOne(
-    { _id: postId },
-    { $inc: { likesCount: -1 } },
+    { $inc: { likesCount: value } },
     { session },
   );
 };

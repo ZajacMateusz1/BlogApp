@@ -14,8 +14,7 @@ import {
   findPostById,
   addLikeRepository,
   removeLikeRepository,
-  incrementPostLikes,
-  decrementPostLikes,
+  updatePostLikesNumber,
   getIsLiked,
   removeAllPostLikes,
   addCommentRepository,
@@ -153,7 +152,7 @@ export const addLikeService = async (
       const { _id, __v, ...createdLike } = (
         await addLikeRepository(postId, userId, session)
       ).toObject();
-      await incrementPostLikes(postId, session);
+      await updatePostLikesNumber(postId, session, 1);
       return {
         ...createdLike,
         id: _id,
@@ -180,7 +179,7 @@ export const removeLikeService = async (postId: string, userId: string) => {
     return await session.withTransaction(async () => {
       const removedLike = await removeLikeRepository(postId, userId, session);
       if (removedLike === null) throw new HttpError("Like not found", 404);
-      await decrementPostLikes(postId, session);
+      await updatePostLikesNumber(postId, session, -1);
       return removedLike;
     });
   } finally {
