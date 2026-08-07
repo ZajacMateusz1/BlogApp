@@ -87,7 +87,7 @@ export const updatePostLikesNumber = (
   session: ClientSession,
   value: -1 | 1,
 ) => {
-  return Like.updateOne(
+  return Post.updateOne(
     { _id: postId },
     { $inc: { likesCount: value } },
     { session },
