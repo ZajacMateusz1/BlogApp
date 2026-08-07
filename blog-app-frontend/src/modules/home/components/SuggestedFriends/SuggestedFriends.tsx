@@ -27,7 +27,7 @@ export default function SuggestedFriends({ token }: SuggestedFriendsProps) {
   if (!data?.length) return null;
   return (
     <section className="p-3 md:p-4">
-      <h2 className="text-lg md:text-xl lg:text-2xl mb-1 md:mb-2 lg:mb-3">
+      <h2 className="text-center font-bold text-xl md:text-2xl lg:text-3xl mb-2 md:mb-3 lg:mb-4">
         People you may know
       </h2>
       <div className="flex gap-3 overflow-x-auto">

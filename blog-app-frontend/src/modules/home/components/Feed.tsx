@@ -51,9 +51,11 @@ export default function Feed({ token }: FeedProps) {
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   return (
-    <section>
-      <h2>Latest Posts</h2>
-      <ul>
+    <section className="p-3 md:p-4">
+      <h2 className="text-center font-bold text-xl md:text-2xl lg:text-3xl mb-2 md:mb-2 lg:mb-3">
+        Latest Posts
+      </h2>
+      <ul className="flex flex-col gap-4 md:gap-6 lg:gap-8">
         {data?.pages.map(({ posts }) =>
           posts.map((post) => (
             <li key={post.id}>

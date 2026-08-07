@@ -16,6 +16,8 @@ import EditPostPage from "../modules/posts/pages/EditPostPage/EditPostPage";
 import UserDetailsPage from "../modules/users/pages/UserDetailsPage";
 import EditUserProfilePage from "../modules/users/pages/EditUserProfilePage";
 
+import NotificationsPage from "../modules/notifications/pages/NotificationsPage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -71,6 +73,10 @@ const router = createBrowserRouter([
                     element: <UserDetailsPage />,
                   },
                 ],
+              },
+              {
+                path: "notifications",
+                element: <NotificationsPage />,
               },
             ],
           },
