@@ -5,6 +5,42 @@ import type {
   SendNotificationDataType,
 } from "./notlification-types.js";
 
+import { getNotificationsRepository } from "./notlification-repository.js";
+
+import { getPublicUrl } from "../../utils/supabaseHelpers.js";
+
+export const getNotificationsService = async (
+  recipient: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const notifications = await getNotificationsRepository(
+    recipient,
+    cursor,
+    limit,
+  );
+  const nextCursor = notifications?.at(-1)?._id;
+  return {
+    notifications: notifications.map(
+      ({ _id, actor, recipient, ...notification }) => {
+        const { _id: actorId, username, avatarPath } = actor;
+        return {
+          id: _id,
+          actor: {
+            id: actorId,
+            username: username,
+            avatarPath: getPublicUrl(avatarPath),
+          },
+          ...notification,
+        };
+      },
+    ),
+    nextCursor,
+  };
+};
+
+// Send Notification
+
 export const sendNotificationService = async (
   messageData: NotificationDataType,
 ) => {

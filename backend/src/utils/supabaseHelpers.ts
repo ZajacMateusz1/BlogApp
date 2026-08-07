@@ -25,7 +25,7 @@ export const uploadToSupabase = async (
   return data.path;
 };
 
-export const getpublicUrl = (path: string) => {
+export const getPublicUrl = (path: string) => {
   return supabase.storage.from("images").getPublicUrl(path).data.publicUrl;
 };
 

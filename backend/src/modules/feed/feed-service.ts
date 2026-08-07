@@ -1,5 +1,5 @@
 import { getFollowings } from "../users/user-repository.js";
-import { getpublicUrl } from "../../utils/supabaseHelpers.js";
+import { getPublicUrl } from "../../utils/supabaseHelpers.js";
 import {
   getFollwingFeedRepository,
   getGlobalFeedRepository,
@@ -25,9 +25,9 @@ export const getFeedService = async (
         creator: {
           id: creatorId,
           ...userData,
-          avatar: getpublicUrl(avatarPath),
+          avatar: getPublicUrl(avatarPath),
         },
-        image: getpublicUrl(imagePath),
+        image: getPublicUrl(imagePath),
         ...postData,
       };
     },
@@ -41,9 +41,9 @@ export const getFeedService = async (
         creator: {
           id: creatorId,
           ...userData,
-          avatar: getpublicUrl(avatarPath),
+          avatar: getPublicUrl(avatarPath),
         },
-        image: getpublicUrl(imagePath),
+        image: getPublicUrl(imagePath),
         ...postData,
       });
     });

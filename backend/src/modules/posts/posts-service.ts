@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import {
   uploadToSupabase,
   removeFromSupabase,
-  getpublicUrl,
+  getPublicUrl,
 } from "../../utils/supabaseHelpers.js";
 import type { EditPostSchemaType } from "./posts-schema";
 import {
@@ -33,8 +33,8 @@ export const getPostService = async (postId: string, userId: string) => {
   if (post === null) throw new HttpError("Post not found", 404);
   const isLiked = await getIsLiked(postId, userId);
   const { _id, creator, imagePath, ...postObject } = post;
-  const imageUrl = getpublicUrl(imagePath);
-  const avatarUrl = getpublicUrl(creator.avatarPath);
+  const imageUrl = getPublicUrl(imagePath);
+  const avatarUrl = getPublicUrl(creator.avatarPath);
   return {
     id: _id,
     image: imageUrl,
@@ -239,7 +239,7 @@ export const getCommentsService = async (
       author: {
         id: author._id,
         username: author.username,
-        avatar: getpublicUrl(author.avatarPath),
+        avatar: getPublicUrl(author.avatarPath),
       },
       ...comment,
     })),

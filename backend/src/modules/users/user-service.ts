@@ -23,7 +23,7 @@ import type { EditUserSchemaType } from "./user-schema.js";
 import {
   uploadToSupabase,
   removeFromSupabase,
-  getpublicUrl,
+  getPublicUrl,
   DEFAULT_AVATAR_PATH,
 } from "../../utils/supabaseHelpers.js";
 
@@ -33,7 +33,7 @@ export const getUsersService = async () => {
   const users = await getUsersRepository();
   return users.map(({ _id, avatarPath, ...user }) => ({
     id: _id,
-    avatar: getpublicUrl(avatarPath),
+    avatar: getPublicUrl(avatarPath),
     ...user,
   }));
 };
@@ -47,7 +47,7 @@ export const getUserService = async (
   const { _id, avatarPath, ...userObject } = user;
   return {
     id: _id,
-    avatar: getpublicUrl(avatarPath),
+    avatar: getPublicUrl(avatarPath),
     isFollowing,
     ...userObject,
   };
@@ -78,7 +78,7 @@ export const editUserService = async (
     const { _id, avatarPath, ...userObject } = editedUser;
     return {
       id: _id,
-      avatar: getpublicUrl(avatarPath),
+      avatar: getPublicUrl(avatarPath),
       ...userObject,
     };
   } catch (error) {
@@ -97,7 +97,7 @@ export const searchUserService = async (searchQuery: string) => {
   const usersList = await searchUserRepository(searchQuery);
   return usersList.map(({ _id, avatarPath, ...userInfo }) => ({
     id: _id,
-    avatar: getpublicUrl(avatarPath),
+    avatar: getPublicUrl(avatarPath),
     ...userInfo,
   }));
 };
@@ -123,10 +123,10 @@ export const getUserPostsService = async (
         creator: {
           id: creator._id,
           username: creator.username,
-          avatar: getpublicUrl(creator.avatarPath),
+          avatar: getPublicUrl(creator.avatarPath),
         },
         isLiked: isLikedSet.has(id),
-        image: getpublicUrl(imagePath),
+        image: getPublicUrl(imagePath),
         ...postData,
       };
     }),
@@ -204,7 +204,7 @@ export const getFriendsSuggestionsService = async (userId: string) => {
     const { _id, avatarPath, ...suggestionData } = suggestion;
     return {
       id: _id,
-      avatar: getpublicUrl(avatarPath),
+      avatar: getPublicUrl(avatarPath),
       ...suggestionData,
       mutualFollowings,
     };
@@ -220,7 +220,7 @@ export const getFriendsSuggestionsService = async (userId: string) => {
     popularUsers.forEach(({ _id, avatarPath, ...suggestionData }) => {
       response.push({
         id: _id,
-        avatar: getpublicUrl(avatarPath),
+        avatar: getPublicUrl(avatarPath),
         ...suggestionData,
         mutualFollowings: 0,
       });
@@ -245,7 +245,7 @@ export const getFollowersService = async (
 
       return {
         id: _id,
-        avatar: getpublicUrl(avatarPath),
+        avatar: getPublicUrl(avatarPath),
         username,
       };
     }),
@@ -264,7 +264,7 @@ export const getFollowingService = async (
       const { _id, avatarPath, username } = following;
       return {
         id: _id,
-        avatar: getpublicUrl(avatarPath),
+        avatar: getPublicUrl(avatarPath),
         username,
       };
     }),

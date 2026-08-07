@@ -18,3 +18,13 @@ export type SendNotificationDataType = BaseNotificationType & {
 export type NotificationDataType = SendNotificationDataType & {
   recipient: string;
 };
+
+export type PopulatedNotificationType = BaseNotificationType & {
+  _id: string;
+  recipient: string;
+  actor: {
+    _id: string;
+    username: string;
+    avatarPath: string;
+  };
+};

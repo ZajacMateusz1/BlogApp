@@ -97,10 +97,6 @@ Built with:
 - Vitest
 - React Testing Library
 
-## Current Status
-
-The application is fully functional, but the frontend test suite is currently failing due to ongoing changes and will be fixed soon.
-
 # Tech Stack
 
 ## Frontend
@@ -130,6 +126,7 @@ The application is fully functional, but the frontend test suite is currently fa
 - [**Multer**](https://github.com/expressjs/multer)
 - [**Supabase Storage**](https://supabase.com/storage)
 - [**bcrypt**](https://github.com/kelektiv/node.bcrypt.js)
+- [**express-rate-limit**](https://www.npmjs.com/package/express-rate-limit)
 
 # Project Structure
 
