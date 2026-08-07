@@ -5,7 +5,10 @@ import type {
   SendNotificationDataType,
 } from "./notlification-types.js";
 
-import { getNotificationsRepository } from "./notlification-repository.js";
+import {
+  getNotificationsRepository,
+  markAsReadRepository,
+} from "./notlification-repository.js";
 
 import { getPublicUrl } from "../../utils/supabaseHelpers.js";
 
@@ -37,6 +40,10 @@ export const getNotificationsService = async (
     ),
     nextCursor,
   };
+};
+
+export const markAsReadService = async (recipient: string) => {
+  await markAsReadRepository(recipient);
 };
 
 // Send Notification

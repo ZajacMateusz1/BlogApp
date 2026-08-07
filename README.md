@@ -61,6 +61,10 @@ This project originally started as a simple blog application, which is why some 
 ## Notifications
 
 - Real-time notifications using **WebSockets**
+- Notification history
+- Notifications stored in **MongoDB**
+- Mark notifications as read
+- Cursor-based pagination
 - Notifications for:
   - Likes
   - Comments
@@ -224,6 +228,15 @@ API communication is handled through a small `fetch` wrapper combined with **Rea
 | ------ | ----------- | ---------------------------------------------------------------------------- |
 | GET    | `/api/feed` | Get the authenticated user's personalized feed with cursor-based pagination. |
 
+---
+
+## Notifications
+
+| Method | Endpoint                  | Description                                                               |
+| ------ | ------------------------- | ------------------------------------------------------------------------- |
+| GET    | `/api/notifications`      | Get the authenticated user's notifications using cursor-based pagination. |
+| PATCH  | `/api/notifications/read` | Mark all unread notifications as read.                                    |
+
 # Authentication
 
 The backend uses JWT authentication.
@@ -246,6 +259,8 @@ The backend uses WebSockets to deliver real-time notifications when a user:
 - receives a comment on a post,
 - gains a new follower.
 
+Notifications are also stored in MongoDB, allowing users to retrieve their notification history after reconnecting or refreshing the application.
+
 # Pagination
 
 Cursor-based pagination is used for:
@@ -255,6 +270,7 @@ Cursor-based pagination is used for:
 - Followers
 - Following
 - Comments
+- Notifications
 
 # Validation
 
@@ -366,6 +382,6 @@ cd blog-app-frontend && npm run dev
 
 # Future Improvements
 
-- Notification history API
+- Frontend notification center
 - Real-time chat using WebSockets
 - Additional unit tests

@@ -19,6 +19,13 @@ export const getNotificationsRepository = async (
   return notifications;
 };
 
+export const markAsReadRepository = (recipient: string) => {
+  return Notification.updateMany(
+    { recipient: recipient, isRead: false },
+    { $set: { isRead: true } },
+  );
+};
+
 // send notification
 
 export const addNotification = async (

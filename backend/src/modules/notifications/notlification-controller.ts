@@ -1,5 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
-import { getNotificationsService } from "./notlification-service.js";
+import {
+  getNotificationsService,
+  markAsReadService,
+} from "./notlification-service.js";
 
 export const getNotifications = async (
   req: Request,
@@ -19,6 +22,20 @@ export const getNotifications = async (
       limit,
     );
     res.json(getNotificationsResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const markAsRead = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.userData!;
+    await markAsReadService(userId);
+    res.status(204).send();
   } catch (error) {
     next(error);
   }
