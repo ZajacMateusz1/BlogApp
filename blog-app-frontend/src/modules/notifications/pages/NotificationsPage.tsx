@@ -79,10 +79,13 @@ export default function NotificationsPage() {
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   if (data?.pages[0].notifications.length === 0)
-    return <p className="text-center">No notifications</p>;
+    return <section className="max-w-3xl mx-auto">No notifications</section>;
   return (
-    <section className="flex flex-col gap-4">
-      <ul>
+    <section className="max-w-3xl mx-auto flex flex-col gap-4 md:gap-6 lg:gap-8">
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center">
+        Your Notifications
+      </h1>
+      <ul className="flex flex-col gap-1 md:gap-2 lg:gap-3">
         {data?.pages.map((page) =>
           page.notifications.map((notification) => (
             <NotificationItem

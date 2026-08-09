@@ -1,5 +1,10 @@
-import type { NotificationType } from "../../notifications/types/notifications-types";
-const mapNotification = (notification: NotificationType) => {
+import type {
+  NotificationType,
+  WSNotificationType,
+} from "../../notifications/types/notifications-types";
+const mapNotification = (
+  notification: NotificationType | WSNotificationType,
+) => {
   switch (notification.type) {
     case "like":
       return {

@@ -1,12 +1,24 @@
-export type NotificationType = {
+type BaseNotificationType = {
   id: string;
+  type: "like" | "comment" | "follow";
+  post: string | undefined;
+  isRead: boolean;
+  createdAt: string;
+};
+
+export type WSNotificationType = BaseNotificationType & {
   actor: {
     id: string;
     username: string;
   };
-  type: "like" | "comment" | "follow";
-  post: string | undefined;
-  isRead: boolean;
+};
+
+export type NotificationType = WSNotificationType & {
+  actor: {
+    id: string;
+    username: string;
+    avatar: string;
+  };
 };
 
 export type NotificationResponseType = {

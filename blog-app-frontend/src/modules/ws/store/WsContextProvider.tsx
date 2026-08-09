@@ -8,7 +8,7 @@ import useToast from "../../shared/hooks/useToast";
 import mapNotification from "../../notifications/utils/map-notification";
 
 import type { WsContextType } from "./ws-context";
-import type { NotificationType } from "../../notifications/types/notifications-types";
+import type { WSNotificationType } from "../../notifications/types/notifications-types";
 
 interface WsContextProviderProps {
   children: ReactNode;
@@ -30,7 +30,7 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
         case "notification":
           {
             const { text, link } = mapNotification(
-              message.payload as NotificationType,
+              message.payload as WSNotificationType,
             );
             queryClient.invalidateQueries({ queryKey: ["notifications"] });
             addToast(text, "info", link);

@@ -32,7 +32,7 @@ export const getNotificationsService = async (
           actor: {
             id: actorId,
             username: username,
-            avatarPath: getPublicUrl(avatarPath),
+            avatar: getPublicUrl(avatarPath),
           },
           ...notification,
         };
