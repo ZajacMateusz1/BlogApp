@@ -1,5 +1,5 @@
 import type { NotificationType } from "../types/notifications-types";
-import mapNotification from "../../ws/utils/map-notification";
+import mapNotification from "../utils/map-notification";
 import { Link } from "react-router-dom";
 interface NotificationItemProps {
   notification: NotificationType;
