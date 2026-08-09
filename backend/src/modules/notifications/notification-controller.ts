@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import {
   getNotificationsService,
   markAsReadService,
-} from "./notlification-service.js";
+} from "./notification-service.js";
 
 export const getNotifications = async (
   req: Request,

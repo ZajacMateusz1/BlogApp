@@ -1,6 +1,6 @@
 import Notification from "../../models/notification-model.js";
-import type { CreateNotificationDataType } from "./notlification-types.js";
-import type { PopulatedNotificationType } from "./notlification-types.js";
+import type { CreateNotificationDataType } from "./notification-types.js";
+import type { PopulatedNotificationType } from "./notification-types.js";
 
 export const getNotificationsRepository = async (
   recipient: string,

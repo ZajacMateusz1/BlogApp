@@ -1,7 +1,7 @@
 import { Router } from "express";
 import checkAuth from "../../middlewares/check-auth.js";
 
-import { getNotifications, markAsRead } from "./notlification-controller.js";
+import { getNotifications, markAsRead } from "./notification-controller.js";
 
 const router = Router();
 

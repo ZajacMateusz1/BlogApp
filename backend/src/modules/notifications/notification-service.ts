@@ -1,14 +1,14 @@
-import { addNotification } from "./notlification-repository.js";
+import { addNotification } from "./notification-repository.js";
 import { sendMessage } from "../ws/ws.js";
 import type {
   NotificationDataType,
   SendNotificationDataType,
-} from "./notlification-types.js";
+} from "./notification-types.js";
 
 import {
   getNotificationsRepository,
   markAsReadRepository,
-} from "./notlification-repository.js";
+} from "./notification-repository.js";
 
 import { getPublicUrl } from "../../utils/supabaseHelpers.js";
 

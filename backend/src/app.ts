@@ -4,7 +4,7 @@ import authRoutes from "./modules/auth/auth-routes.js";
 import usersRoutes from "./modules/users/user-routes.js";
 import postsRouter from "./modules/posts/posts-routes.js";
 import feedRouter from "./modules/feed/feed-routes.js";
-import notificationRouter from "./modules/notifications/notlification-routes.js";
+import notificationRouter from "./modules/notifications/notification-routes.js";
 import HttpError from "./errors/HttpError.js";
 import errorHandler from "./middlewares/error-handler.js";
 import { rateLimit } from "express-rate-limit";

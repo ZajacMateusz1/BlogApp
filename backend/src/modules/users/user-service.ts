@@ -27,7 +27,7 @@ import {
   DEFAULT_AVATAR_PATH,
 } from "../../utils/supabaseHelpers.js";
 
-import { sendNotificationService } from "../notifications/notlification-service.js";
+import { sendNotificationService } from "../notifications/notification-service.js";
 
 export const getUsersService = async () => {
   const users = await getUsersRepository();

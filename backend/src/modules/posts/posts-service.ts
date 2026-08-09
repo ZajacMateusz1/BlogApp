@@ -25,7 +25,7 @@ import {
 
 import HttpError from "../../errors/HttpError.js";
 
-import { sendNotificationService } from "../notifications/notlification-service.js";
+import { sendNotificationService } from "../notifications/notification-service.js";
 
 export const getPostService = async (postId: string, userId: string) => {
   const post = await getPostRepository(postId);
