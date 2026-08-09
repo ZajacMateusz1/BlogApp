@@ -63,6 +63,7 @@ This project originally started as a simple blog application, which is why some 
 - Real-time notifications using **WebSockets**
 - Notification history
 - Notifications stored in **MongoDB**
+- Notifications page
 - Mark notifications as read
 - Cursor-based pagination
 - Notifications for:
@@ -158,6 +159,7 @@ BlogApp
     │   ├── modules
     │   │   ├── auth
     │   │   ├── home
+    │   │   ├── notifications
     │   │   ├── posts
     │   │   ├── shared
     │   │   ├── users
@@ -382,6 +384,7 @@ cd blog-app-frontend && npm run dev
 
 # Future Improvements
 
-- Frontend notification center
+- WebSocket ping/pong mechanism for connection health checks
+- Automatic WebSocket reconnection after connection loss
 - Real-time chat using WebSockets
 - Additional unit tests
