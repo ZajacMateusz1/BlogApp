@@ -49,6 +49,7 @@ export default function Navigation() {
           <li>
             <NavLink
               to="/notifications"
+              onClick={handleCloseMenu}
               className={({ isActive }) =>
                 `border-b-2 ${isActive ? "text-link-active border-link-active" : "border-transparent"} text-2xl sm:text-3xl font-bold md:text-lg lg:text-xl hover:text-link-hover transition-colors`
               }

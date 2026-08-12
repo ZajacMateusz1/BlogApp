@@ -59,16 +59,27 @@ export default function FollowListModal({
       isLoading={isLoading}
       error={error?.message}
     >
-      <ul>
-        {data?.pages.map(({ users }) =>
-          users.map((user) => (
-            <li key={user.id}>
-              <UserSearchCard userData={user} onClick={handleCloseModal} />
-            </li>
-          )),
-        )}
-      </ul>
-      <div ref={loaderRef}></div>
+      {data?.pages[0].users.length === 0 && (
+        <p className="text-sm text-gray-500 md:text-base lg:text-lg">
+          {modalType === "followers"
+            ? "No followers yet."
+            : "Not following anyone yet."}
+        </p>
+      )}
+      {data?.pages[0].users.length !== 0 && (
+        <>
+          <ul>
+            {data?.pages.map(({ users }) =>
+              users.map((user) => (
+                <li key={user.id}>
+                  <UserSearchCard userData={user} onClick={handleCloseModal} />
+                </li>
+              )),
+            )}
+          </ul>
+          <div ref={loaderRef}></div>
+        </>
+      )}
     </ModalWrapper>
   );
 }
