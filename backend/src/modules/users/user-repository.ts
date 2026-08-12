@@ -19,6 +19,9 @@ export const getUsersRepository = () => {
 export const getUserRepository = (userId: string) => {
   return User.findById(userId, "-__v -password -email").lean();
 };
+export const getUserExists = async (userId: string) => {
+  return Boolean(await User.exists({ _id: userId }));
+};
 export const getIsFollowing = async (
   followerId: string,
   followingId: string,

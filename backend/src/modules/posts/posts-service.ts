@@ -80,10 +80,8 @@ export const removePostService = async (postId: string, userId: string) => {
       await session.withTransaction(async () => {
         const removedPost = await removePostRepository(postId, userId, session);
         if (!removedPost) throw new HttpError("Post not found", 404);
-        await Promise.all([
-          removeAllPostLikes(postId, session),
-          removeAllPostComments(postId, session),
-        ]);
+        await removeAllPostLikes(postId, session);
+        await removeAllPostComments(postId, session);
         return removedPost.toObject();
       });
     if (imagePath) {

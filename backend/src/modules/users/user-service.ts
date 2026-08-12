@@ -17,6 +17,7 @@ import {
   getPopularUsersSuggestions,
   getFollowersRepository,
   getFollowingRepository,
+  getUserExists,
 } from "./user-repository.js";
 import type { EditUserSchemaType } from "./user-schema.js";
 
@@ -141,6 +142,8 @@ export const followUserService = async (
   followingId: string,
   followerUsername: string,
 ) => {
+  const followingExists = await getUserExists(followingId);
+  if (!followingExists) throw new HttpError("User not found", 404);
   if (followerId === followingId)
     throw new HttpError("You cannot follow yourself.", 400);
   const session = await mongoose.startSession();
@@ -149,10 +152,8 @@ export const followUserService = async (
       const { _id, __v, ...createdFollow } = (
         await followUserRepository(followerId, followingId, session)
       ).toObject();
-      await Promise.all([
-        updateFollowersNumber(followingId, session, 1),
-        updateFollowingsNumber(followerId, session, 1),
-      ]);
+      await updateFollowersNumber(followingId, session, 1);
+      await updateFollowingsNumber(followerId, session, 1);
       return {
         ...createdFollow,
         id: _id,
@@ -183,10 +184,9 @@ export const unfollowUserService = async (
         followingId,
         session,
       );
-      await Promise.all([
-        updateFollowersNumber(followingId, session, -1),
-        updateFollowingsNumber(followerId, session, -1),
-      ]);
+      if (!deletedFollow) throw new HttpError("Follow not found", 404);
+      await updateFollowersNumber(followingId, session, -1);
+      await updateFollowingsNumber(followerId, session, -1);
       return deletedFollow;
     });
   } finally {
