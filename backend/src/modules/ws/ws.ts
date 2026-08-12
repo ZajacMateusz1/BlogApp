@@ -5,6 +5,8 @@ import { verifyToken } from "../../utils/verify-token.js";
 import type { WsMessageType } from "./ws-types";
 import type { Duplex } from "stream";
 
+const HEARTBEAT_INTERVAL = 30000; // 30 seconds
+
 const connections: Map<string, Set<WebSocket>> = new Map();
 export const startWebSocketServer = (server: Server) => {
   const wss = new WebSocketServer({
@@ -40,9 +42,25 @@ export const startWebSocketServer = (server: Server) => {
     },
   );
 
+  // ping/pong
+
+  const interval = setInterval(() => {
+    for (const sockets of connections.values()) {
+      for (const s of sockets) {
+        if (s.isAlive === false) {
+          s.terminate();
+          continue;
+        }
+        s.isAlive = false;
+        s.ping();
+      }
+    }
+  }, HEARTBEAT_INTERVAL);
+
   wss.on(
     "connection",
     (socket: WebSocket, request: IncomingMessage, userId: string) => {
+      socket.isAlive = true;
       let sockets = connections.get(userId);
       if (!sockets) {
         sockets = new Set<WebSocket>();
@@ -56,6 +74,10 @@ export const startWebSocketServer = (server: Server) => {
         console.log(data);
       });
 
+      socket.on("pong", () => {
+        socket.isAlive = true;
+      });
+
       socket.on("close", () => {
         const sockets = connections.get(userId);
         if (!sockets) return;
@@ -66,7 +88,9 @@ export const startWebSocketServer = (server: Server) => {
     },
   );
 
-  wss.on("close", () => {});
+  wss.on("close", () => {
+    clearInterval(interval);
+  });
 };
 
 // messages

@@ -10,7 +10,7 @@ A full-stack social media application built with **React**, **TypeScript**, **Ex
 
 Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, and real-time notifications.
 
-## Project Evolution
+# Project Evolution
 
 This project originally started as a simple blog application, which is why some parts of the repository and naming conventions still reference "BlogApp".
 
@@ -61,6 +61,7 @@ This project originally started as a simple blog application, which is why some 
 ## Notifications
 
 - Real-time notifications using **WebSockets**
+- WebSocket connection health checks using a ping/pong mechanism
 - Notification history
 - Notifications stored in **MongoDB**
 - Notifications page
@@ -169,7 +170,7 @@ BlogApp
     └── tests
 ```
 
-Each module contains its own components, business logic, validation, types.
+Each module contains its own components, business logic, validation and types.
 
 # HTTP Requests
 
@@ -262,6 +263,8 @@ The backend uses WebSockets to deliver real-time notifications when a user:
 - gains a new follower.
 
 Notifications are also stored in MongoDB, allowing users to retrieve their notification history after reconnecting or refreshing the application.
+
+The WebSocket server uses a ping/pong heartbeat mechanism to monitor connection health. Every 30 seconds, the server sends a ping to connected clients and terminates connections that do not respond with a pong.
 
 # Pagination
 
@@ -384,7 +387,6 @@ cd blog-app-frontend && npm run dev
 
 # Future Improvements
 
-- WebSocket ping/pong mechanism for connection health checks
 - Automatic WebSocket reconnection after connection loss
 - Real-time chat using WebSockets
 - Additional unit tests
