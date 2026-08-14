@@ -36,6 +36,9 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
             addToast(text, "info", link);
           }
           break;
+        case "error":
+          console.log("Error message received:", message.payload.error);
+          break;
         default:
           console.log("Unknown message type:", message.type);
           console.log("Message payload:", message.payload);
