@@ -1,6 +1,8 @@
 import type { IncomingMessage, Server } from "http";
 import { WebSocket, WebSocketServer } from "ws";
 import { verifyToken } from "../../utils/verify-token.js";
+import { messageSchema } from "../messages/messages-schema.js";
+import { addMessagesService } from "../messages/messages-service.js";
 
 import type { WsMessageType } from "./ws-types";
 import type { Duplex } from "stream";
@@ -70,8 +72,32 @@ export const startWebSocketServer = (server: Server) => {
       socket.on("error", (error: Error) => {
         console.error(error);
       });
-      socket.on("message", (data) => {
-        console.log(data);
+      socket.on("message", async (data) => {
+        try {
+          const message = JSON.parse(data.toString());
+          switch (message.type) {
+            case "chat_message": {
+              const result = messageSchema.parse(message);
+              await addMessagesService({ ...result.payload, sender: userId });
+              sendMessage(result.payload.recipient, {
+                type: "chat_message",
+                payload: { content: result.payload.content, sender: userId },
+              });
+            }
+            default: {
+              console.log("Unknown message type:", message.type);
+              console.log("Message payload:", message.payload);
+            }
+          }
+        } catch (error) {
+          socket.send(
+            JSON.stringify({
+              type: "error",
+              payload: { error: "Invalid message" },
+            }),
+          );
+          console.error(error);
+        }
       });
 
       socket.on("pong", () => {
@@ -96,23 +122,31 @@ export const startWebSocketServer = (server: Server) => {
 // messages
 
 export function sendMessage<T>(targetId: string, message: WsMessageType<T>) {
-  const sockets = connections.get(targetId);
-  const serializedMessage = JSON.stringify(message);
-  if (!sockets) return;
-  for (const s of sockets) {
-    if (s.readyState === WebSocket.OPEN) {
-      s.send(serializedMessage);
-    }
-  }
-}
-
-export function broadcastMessage<T>(message: WsMessageType<T>) {
-  const serializedMessage = JSON.stringify(message);
-  for (const sockets of connections.values()) {
+  try {
+    const serializedMessage = JSON.stringify(message);
+    const sockets = connections.get(targetId);
+    if (!sockets) return;
     for (const s of sockets) {
       if (s.readyState === WebSocket.OPEN) {
         s.send(serializedMessage);
       }
     }
+  } catch (error) {
+    console.error("Failed to send message:", error);
+  }
+}
+
+export function broadcastMessage<T>(message: WsMessageType<T>) {
+  try {
+    const serializedMessage = JSON.stringify(message);
+    for (const sockets of connections.values()) {
+      for (const s of sockets) {
+        if (s.readyState === WebSocket.OPEN) {
+          s.send(serializedMessage);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Failed to broadcast message:", error);
   }
 }
