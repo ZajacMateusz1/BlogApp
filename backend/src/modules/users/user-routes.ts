@@ -3,7 +3,6 @@ import checkAuth from "../../middlewares/check-auth.js";
 import fileUpload from "../../middlewares/file-upload.js";
 import validate from "../../middlewares/validate.js";
 import {
-  getUsers,
   getUser,
   editUser,
   getUserPosts,
@@ -17,9 +16,8 @@ import {
 import { EditUserSchema } from "./user-schema.js";
 
 const router = express.Router();
-router.get("/", getUsers);
-router.get("/:userId/posts", getUserPosts);
 router.use(checkAuth);
+router.get("/:userId/posts", getUserPosts);
 router.get("/search", searchUser);
 router.get("/suggestions", getFriendsSuggestions);
 router.get("/:userId", getUser);

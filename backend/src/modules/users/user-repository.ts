@@ -13,9 +13,6 @@ import type {
   PopulatedFollowingType,
 } from "./user-types.js";
 
-export const getUsersRepository = () => {
-  return User.find({}, "-password -__v").lean();
-};
 export const getUserRepository = (userId: string) => {
   return User.findById(userId, "-__v -password -email").lean();
 };

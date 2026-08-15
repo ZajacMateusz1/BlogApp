@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import HttpError from "../../errors/HttpError.js";
 import {
-  getUsersRepository,
   getUserRepository,
   editUserRepository,
   getUserPostsRepository,
@@ -30,14 +29,6 @@ import {
 
 import { sendNotificationService } from "../notifications/notification-service.js";
 
-export const getUsersService = async () => {
-  const users = await getUsersRepository();
-  return users.map(({ _id, avatarPath, ...user }) => ({
-    id: _id,
-    avatar: getPublicUrl(avatarPath),
-    ...user,
-  }));
-};
 export const getUserService = async (
   profileUserId: string,
   loggedUserId: string,
@@ -109,11 +100,12 @@ export const getUserPostsService = async (
   userId: string,
   limit: number,
   cursor: string | undefined,
+  loggedUserId: string,
 ) => {
   const posts = await getUserPostsRepository(userId, limit, cursor);
   const postsIds = posts.map(({ _id }) => _id);
   const nextCursor = posts.at(-1)?._id;
-  const isLiked = await getUserPostsIsLiked(userId, postsIds);
+  const isLiked = await getUserPostsIsLiked(loggedUserId, postsIds);
   const isLikedSet = new Set();
   isLiked.forEach(({ post }) => isLikedSet.add(post.toString()));
   return {

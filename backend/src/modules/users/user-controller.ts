@@ -2,7 +2,6 @@ import type { Request, Response, NextFunction } from "express";
 import type { EditUserSchemaType } from "./user-schema.js";
 import HttpError from "../../errors/HttpError.js";
 import {
-  getUsersService,
   getUserService,
   editUserService,
   getUserPostsService,
@@ -16,18 +15,6 @@ import {
 
 import type { TokenPayload } from "../../types/token/jwt-payload-type.js";
 
-export const getUsers = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const getUsersResponse = await getUsersService();
-    res.json(getUsersResponse);
-  } catch (error) {
-    next(error);
-  }
-};
 export const getUser = async (
   req: Request<{ userId: string }>,
   res: Response,
@@ -92,6 +79,7 @@ export const getUserPosts = async (
 ) => {
   try {
     const { userId } = req.params;
+    const { userId: loggedUserId } = req.userData!;
     const limit = Math.max(1, Math.min(10, Number(req.query.limit) || 10));
     const cursor =
       typeof req.query.cursor === "string" && req.query.cursor !== ""
@@ -101,6 +89,7 @@ export const getUserPosts = async (
       userId,
       limit,
       cursor,
+      loggedUserId,
     );
     res.json(getUserPostsResponse);
   } catch (error) {

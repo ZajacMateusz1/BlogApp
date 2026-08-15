@@ -8,11 +8,13 @@ import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../shared/components/ErrorBlock";
 import PostsNotFound from "./PostsNotFound";
 import PostCard from "../../posts/components/PostCard";
+import useAuth from "../../auth/hooks/useAuth";
 
 interface UserPostsProps {
   userId: string | undefined;
 }
 export default function UserPosts({ userId }: UserPostsProps) {
+  const { token } = useAuth();
   const loaderRef = useRef(null);
   const {
     data,
@@ -27,7 +29,7 @@ export default function UserPosts({ userId }: UserPostsProps) {
     queryFn: ({ pageParam, signal }) =>
       sendRequest<getUserPostsResponseType>(
         `/api/users/${userId}/posts?limit=10${pageParam ? `&cursor=${pageParam}` : ""}`,
-        { signal },
+        { signal, headers: { Authorization: `Bearer ${token}` } },
       ),
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
