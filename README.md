@@ -61,6 +61,7 @@ This project originally started as a simple blog application, which is why some 
 ## Notifications
 
 - Real-time notifications using **WebSockets**
+- Automatic WebSocket reconnection after connection loss
 - WebSocket connection health checks using a ping/pong mechanism
 - Notification history
 - Notifications stored in **MongoDB**
@@ -147,6 +148,7 @@ BlogApp
 │   │   ├── modules
 │   │   │   ├── auth
 │   │   │   ├── feed
+│   │   │   ├── messages
 │   │   │   ├── notifications
 │   │   │   ├── posts
 │   │   │   ├── users
@@ -160,6 +162,7 @@ BlogApp
     │   ├── modules
     │   │   ├── auth
     │   │   ├── home
+    │   │   ├── messages
     │   │   ├── notifications
     │   │   ├── posts
     │   │   ├── shared
@@ -261,6 +264,8 @@ The backend uses WebSockets to deliver real-time notifications when a user:
 - receives a like on a post,
 - receives a comment on a post,
 - gains a new follower.
+
+If the WebSocket connection is closed unexpectedly, the frontend automatically attempts to reconnect after a delay. Reconnection attempts continue until the WebSocket provider is unmounted.
 
 Notifications are also stored in MongoDB, allowing users to retrieve their notification history after reconnecting or refreshing the application.
 
@@ -387,6 +392,5 @@ cd blog-app-frontend && npm run dev
 
 # Future Improvements
 
-- Automatic WebSocket reconnection after connection loss
 - Real-time chat using WebSockets
 - Additional unit tests
