@@ -23,6 +23,7 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null;
+    let shouldReconnect = true;
     const initWebSocket = () => {
       const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}?token=${token}`);
       ws.onopen = () => {
@@ -59,7 +60,9 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
       ws.onclose = () => {
         console.log("WebSocket connection closed");
         timer = setTimeout(() => {
-          initWebSocket();
+          if (shouldReconnect) {
+            initWebSocket();
+          }
         }, WS_TIMEOUT);
       };
       return ws;
@@ -67,6 +70,7 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
 
     const ws = initWebSocket();
     return () => {
+      shouldReconnect = false;
       ws.close();
       if (timer) {
         clearTimeout(timer);
