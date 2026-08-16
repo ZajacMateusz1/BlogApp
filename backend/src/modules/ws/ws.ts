@@ -109,7 +109,6 @@ export const startWebSocketServer = (server: Server) => {
         if (!sockets) return;
         sockets.delete(socket);
         if (sockets.size === 0) connections.delete(userId);
-        console.log("Disconnected");
       });
     },
   );

@@ -19,37 +19,60 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
   const { addToast } = useToast();
   const queryClient = useQueryClient();
 
+  const WS_TIMEOUT = 5000; // 5 seconds
+
   useEffect(() => {
-    const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}?token=${token}`);
-    ws.onopen = () => {
-      console.log("OK");
-    };
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      switch (message.type) {
-        case "notification":
-          {
-            const { text, link } = mapNotification(
-              message.payload as WSNotificationType,
-            );
-            queryClient.invalidateQueries({ queryKey: ["notifications"] });
-            addToast(text, "info", link);
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const initWebSocket = () => {
+      const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}?token=${token}`);
+      ws.onopen = () => {
+        console.log("WebSocket connection established");
+      };
+      ws.onmessage = (event) => {
+        try {
+          const message = JSON.parse(event.data);
+          switch (message.type) {
+            case "notification":
+              {
+                const { text, link } = mapNotification(
+                  message.payload as WSNotificationType,
+                );
+                queryClient.invalidateQueries({ queryKey: ["notifications"] });
+                addToast(text, "info", link);
+              }
+              break;
+            case "error":
+              console.log("Error message received:", message.payload.error);
+              break;
+            default:
+              console.log("Unknown message type:", message.type);
+              console.log("Message payload:", message.payload);
+              break;
           }
-          break;
-        case "error":
-          console.log("Error message received:", message.payload.error);
-          break;
-        default:
-          console.log("Unknown message type:", message.type);
-          console.log("Message payload:", message.payload);
-          break;
+        } catch (error) {
+          console.error("Error parsing WebSocket message:", error);
+        }
+      };
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+      ws.onclose = () => {
+        console.log("WebSocket connection closed");
+        timer = setTimeout(() => {
+          initWebSocket();
+        }, WS_TIMEOUT);
+      };
+      return ws;
+    };
+
+    const ws = initWebSocket();
+    return () => {
+      ws.close();
+      if (timer) {
+        clearTimeout(timer);
       }
     };
-    ws.onclose = () => {
-      console.log("Closed");
-    };
-    return () => ws.close();
-  }, [token, addToast, queryClient]);
+  }, [token, queryClient, addToast]);
   const WsCTX: WsContextType = {
     sendMessage: () => {},
   };
