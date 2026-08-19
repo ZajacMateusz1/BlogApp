@@ -6,6 +6,7 @@ const MIME_TYPES = ["image/png", "image/jpg", "image/jpeg"];
 const fileUpload = multer({
   limits: {
     files: 1,
+    fileSize: 10 * 1024 * 1024,
   },
   storage: multer.memoryStorage(),
   fileFilter: (req, file, callback) => {
