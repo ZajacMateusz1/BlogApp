@@ -83,6 +83,7 @@ export const startWebSocketServer = (server: Server) => {
                 type: "chat_message",
                 payload: { content: result.payload.content, sender: userId },
               });
+              break;
             }
             default: {
               console.log("Unknown message type:", message.type);
