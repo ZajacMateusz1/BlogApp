@@ -8,8 +8,8 @@ const conversationSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Message",
     },
-    IsReadUser1: { type: Boolean, default: false },
-    IsReadUser2: { type: Boolean, default: false },
+    isReadUser1: { type: Boolean, default: false },
+    isReadUser2: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
