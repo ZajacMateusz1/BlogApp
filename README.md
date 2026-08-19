@@ -8,7 +8,7 @@ Backend is hosted on Render free, so the first request may take up to ~50 second
 
 A full-stack social media application built with **React**, **TypeScript**, **Express** and **MongoDB**.
 
-Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, and real-time notifications.
+Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, real-time notifications, and backend support for real-time messaging.
 
 # Project Evolution
 
@@ -53,10 +53,22 @@ This project originally started as a simple blog application, which is why some 
 - Infinite scroll
 - Cursor-based pagination
 
+## Messaging
+
+- Backend support for real-time messaging using **WebSockets**
+- Conversations between users
+- Persistent messages stored in **MongoDB**
+- Automatic conversation creation
+- Tracking the last message in a conversation
+- Marking conversations as read
+- Server-side validation of message payloads using **Zod**
+- Frontend messaging UI is not implemented yet
+
 ## Validation
 
 - Client-side validation using **React Hook Form** and **Zod**
 - Server-side request validation using **Zod**
+- WebSocket message payload validation using **Zod**
 
 ## Notifications
 
@@ -88,6 +100,7 @@ This project originally started as a simple blog application, which is why some 
 
 - MongoDB with Mongoose
 - Transactions for improved data consistency
+- Conversation and message persistence
 
 ## Testing
 
@@ -139,6 +152,7 @@ Built with:
 
 ```text
 BlogApp
+
 ├── backend
 │   ├── src
 │   │   ├── config
@@ -243,6 +257,16 @@ API communication is handled through a small `fetch` wrapper combined with **Rea
 | GET    | `/api/notifications`      | Get the authenticated user's notifications using cursor-based pagination. |
 | PATCH  | `/api/notifications/read` | Mark all unread notifications as read.                                    |
 
+---
+
+## Messages
+
+| Method | Endpoint                             | Description                                             |
+| ------ | ------------------------------------ | ------------------------------------------------------- |
+| PATCH  | `/api/messages/:conversationId/read` | Mark a conversation as read for the authenticated user. |
+
+Messages are sent through the WebSocket connection using a validated `chat_message` payload.
+
 # Authentication
 
 The backend uses JWT authentication.
@@ -264,6 +288,15 @@ The backend uses WebSockets to deliver real-time notifications when a user:
 - receives a like on a post,
 - receives a comment on a post,
 - gains a new follower.
+
+WebSockets are also used for real-time messaging between users. Incoming chat messages are validated using **Zod**, persisted in MongoDB, and associated with conversations.
+
+When a message is sent, the backend:
+
+- finds an existing conversation between the sender and recipient or creates one,
+- stores the message in MongoDB,
+- updates the conversation's last message,
+- tracks read state separately for each participant.
 
 If the WebSocket connection is closed unexpectedly, the frontend automatically attempts to reconnect after a delay. Reconnection attempts continue until the WebSocket provider is unmounted.
 
@@ -288,6 +321,7 @@ Validation is implemented on both the client and server using **Zod**.
 
 - Client-side validation before sending requests
 - Server-side validation through dedicated middleware
+- WebSocket message payload validation
 
 # Error Handling
 
@@ -322,7 +356,7 @@ Base URL of the REST API.
 VITE_WS_URL=
 ```
 
-WebSocket server URL used for real-time notifications.
+WebSocket server URL used for real-time elements.
 
 ## Backend
 
@@ -392,5 +426,5 @@ cd blog-app-frontend && npm run dev
 
 # Future Improvements
 
-- Real-time chat using WebSockets
+- Implement frontend messaging UI
 - Additional unit tests
