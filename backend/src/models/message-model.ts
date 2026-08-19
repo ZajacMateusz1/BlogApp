@@ -5,6 +5,7 @@ const messageSchema = new Schema(
     sender: { type: Types.ObjectId, required: true, ref: "User" },
     recipient: { type: Types.ObjectId, required: true, ref: "User" },
     content: { type: String, required: true },
+    conversation: { type: Types.ObjectId, required: true, ref: "Conversation" },
   },
   { timestamps: true },
 );
