@@ -10,6 +10,7 @@ import {
   markAsReadRepository,
   markAsUnread,
   searchConversationRepository,
+  searchUsersForConversationRepository,
 } from "./messages-repository.js";
 import {
   getUserExists,
@@ -163,5 +164,25 @@ export const searchConversationService = async (
         ? result.user2.toString()
         : result.user1.toString(),
     ),
+  }));
+};
+
+export const searchUsersForConversationService = async (
+  userId: string,
+  searchQuery: string,
+) => {
+  const usersWithConversation = await searchUserRepository(userId);
+  const usersWithConversationIds = usersWithConversation.map(
+    (user) => user._id,
+  );
+  const users = await searchUsersForConversationRepository(
+    userId,
+    usersWithConversationIds,
+    searchQuery,
+  );
+  return users.map((user) => ({
+    id: user._id,
+    name: user.username,
+    avatar: getPublicUrl(user.avatarPath),
   }));
 };

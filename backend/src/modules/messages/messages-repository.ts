@@ -1,6 +1,7 @@
-import type { Types, ClientSession } from "mongoose";
+import { Types, type ClientSession } from "mongoose";
 import Conversation from "../../models/conversation-model.js";
 import Message from "../../models/message-model.js";
+import User from "../../models/user-model.js";
 import type { MessageDataType } from "./messages-types.js";
 
 export const addConversationRepository = (userId1: string, userId2: string) => {
@@ -131,6 +132,26 @@ export const searchConversationRepository = (
     ],
   })
     .limit(5)
+    .select("user1 user2")
+    .lean();
+};
+
+export const searchUsersForConversationRepository = (
+  userId: string,
+  usersWithConversationIds: Types.ObjectId[],
+  searchQuery: string,
+) => {
+  const escapedSearchQuery = RegExp.escape(searchQuery);
+  return User.find({
+    _id: { $nin: [...usersWithConversationIds, new Types.ObjectId(userId)] },
+    username: { $regex: escapedSearchQuery, $options: "i" },
+  });
+};
+
+export const findUserConversations = (userId: string) => {
+  return Conversation.find({
+    $or: [{ user1: userId }, { user2: userId }],
+  })
     .select("user1 user2")
     .lean();
 };

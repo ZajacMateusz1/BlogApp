@@ -6,6 +6,7 @@ import {
   getConversations,
   getMessages,
   searchConversation,
+  searchUsersForConversation,
 } from "./messages-controller.js";
 
 const router = Router();
@@ -16,5 +17,6 @@ router.patch("/:conversationId/read", markAsRead);
 router.get("/conversations", getConversations);
 router.get("/:conversationId/messages", getMessages);
 router.get("/search", searchConversation);
+router.get("/search/users", searchUsersForConversation);
 
 export default router;

@@ -5,6 +5,7 @@ import {
   getConversationsService,
   getMessagesService,
   searchConversationService,
+  searchUsersForConversationService,
 } from "./messages-service.js";
 
 export const addConversation = async (
@@ -102,6 +103,23 @@ export const searchConversation = async (
       searchQuery,
     );
     res.json(searchConversationResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const searchUsersForConversation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const searchQuery =
+      typeof req.query.search === "string" ? req.query.search : "";
+    const { userId } = req.userData!;
+    const searchUsersForConversationResponse =
+      await searchUsersForConversationService(userId, searchQuery);
+    res.json(searchUsersForConversationResponse);
   } catch (error) {
     next(error);
   }
