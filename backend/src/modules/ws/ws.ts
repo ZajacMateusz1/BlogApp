@@ -94,7 +94,7 @@ export const startWebSocketServer = (server: Server) => {
           socket.send(
             JSON.stringify({
               type: "error",
-              payload: { error: "Invalid message" },
+              payload: { error: "Invalid message or conversation don't exist" },
             }),
           );
           console.error(error);

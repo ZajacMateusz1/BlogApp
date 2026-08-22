@@ -4,7 +4,10 @@ import {
   addMessagesRepository,
   findConversationByUsers,
   updateLastMessage,
+  getConversationsRepository,
+  getMessagesRepository,
 } from "./messages-repository.js";
+import { getUserExists } from "../users/user-repository.js";
 import type { MessageDataType } from "./messages-types.js";
 import HttpError from "../../errors/HttpError.js";
 import {
@@ -12,29 +15,76 @@ import {
   markAsReadRepository,
 } from "./messages-repository.js";
 
+export const addConversationService = async (
+  user1Id: string,
+  user2Id: string,
+) => {
+  const user2Exists = await getUserExists(user2Id);
+  if (!user2Exists) {
+    throw new HttpError(
+      "Cannot create conversation with non-existent user",
+      404,
+    );
+  }
+  const createdConversation = await addConversationRepository(user1Id, user2Id);
+  return {
+    id: createdConversation._id,
+    user1: createdConversation.user1,
+    user2: createdConversation.user2,
+  };
+};
+
+export const getConversationsService = async (
+  userId: string,
+  limit: number,
+  cursor: string,
+) => {};
+export const getMessagesService = async (
+  conversationId: string,
+  userId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const messages = await getMessagesRepository(
+    conversationId,
+    userId,
+    cursor,
+    limit,
+  );
+  const messegesResponse = messages.map((message) => ({
+    id: message._id,
+    sender: message.sender,
+    recipient: message.recipient,
+    content: message.content,
+    createdAt: message.createdAt,
+  }));
+  const nextCursor = messegesResponse?.at(-1);
+  return { messages: messegesResponse, nextCursor };
+};
+
 export const addMessagesService = async (messageData: MessageDataType) => {
   const session = await mongoose.startSession();
-  const message = await session.withTransaction(async () => {
-    let conversation = await findConversationByUsers(
-      messageData.sender,
-      messageData.recipient,
-      session,
-    );
-    if (!conversation) {
-      conversation = await addConversationRepository(
+  try {
+    const message = await session.withTransaction(async () => {
+      const conversation = await findConversationByUsers(
         messageData.sender,
         messageData.recipient,
         session,
       );
-    }
-    const message = await addMessagesRepository(
-      messageData,
-      conversation._id,
-      session,
-    );
-    await updateLastMessage(conversation._id, message._id, session);
-  });
-  return message;
+      if (!conversation) {
+        throw new HttpError("Conversation not found", 404);
+      }
+      const message = await addMessagesRepository(
+        messageData,
+        conversation._id,
+        session,
+      );
+      await updateLastMessage(conversation._id, message._id, session);
+    });
+    return message;
+  } finally {
+    await session.endSession();
+  }
 };
 
 export const markAsReadService = async (

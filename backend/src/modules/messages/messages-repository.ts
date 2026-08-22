@@ -3,6 +3,38 @@ import Conversation from "../../models/conversation-model.js";
 import Message from "../../models/message-model.js";
 import type { MessageDataType } from "./messages-types.js";
 
+export const addConversationRepository = (userId1: string, userId2: string) => {
+  const [user1, user2] = [userId1, userId2].sort() as [string, string];
+  const conversation = new Conversation({ user1, user2 });
+  conversation.save();
+  return conversation;
+};
+
+export const getConversationsRepository = (
+  userId: string,
+  limit: number,
+  cursor: string,
+) => {};
+
+export const getMessagesRepository = (
+  conversationId: string,
+  userId: string,
+  cursor: string | undefined,
+  limit: number,
+) => {
+  const filters = cursor
+    ? {
+        conversation: conversationId,
+        $lt: { _id: cursor },
+        $or: [{ sender: userId }, { recipient: userId }],
+      }
+    : {
+        conversation: conversationId,
+        $or: [{ sender: userId }, { recipient: userId }],
+      };
+  return Message.find(filters).sort({ _id: -1 }).limit(limit).lean();
+};
+
 export const addMessagesRepository = async (
   messageData: MessageDataType,
   conversation: Types.ObjectId,
@@ -45,17 +77,6 @@ export const findConversationByUsers = (
   })
     .session(session || null)
     .lean();
-};
-
-export const addConversationRepository = (
-  userId1: string,
-  userId2: string,
-  session: ClientSession,
-) => {
-  const [user1, user2] = [userId1, userId2].sort() as [string, string];
-  const conversation = new Conversation({ user1, user2 });
-  conversation.save({ session });
-  return conversation;
 };
 
 export const updateLastMessage = (
