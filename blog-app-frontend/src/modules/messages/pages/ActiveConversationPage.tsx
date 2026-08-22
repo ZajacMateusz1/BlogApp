@@ -1,15 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
-import useAuth from "../../../auth/hooks/useAuth";
-import { sendRequest } from "../../../../utils/http/http";
-import type { getMessagesResponseType } from "../../types/messages-types";
+import useAuth from "../../auth/hooks/useAuth";
+import { sendRequest } from "../../../utils/http/http";
+import type { getMessagesResponseType } from "../types/messages-types";
 
-interface ActiveConversationProps {
-  conversationId: string;
-}
-export default function ActiveConversation({
-  conversationId,
-}: ActiveConversationProps) {
+export default function ActiveConversation() {
+  const { conversationId } = useParams();
   const { token } = useAuth();
   const {
     data,

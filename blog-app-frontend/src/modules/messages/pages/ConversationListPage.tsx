@@ -1,21 +1,15 @@
 import { useRef, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { sendRequest } from "../../../../utils/http/http";
-import type { getConversationsResponseType } from "../../types/messages-types";
-import useAuth from "../../../auth/hooks/useAuth";
-import ConversationItem from "./ConversationItem";
+import { sendRequest } from "../../../utils/http/http";
+import type { getConversationsResponseType } from "../types/messages-types";
+import useAuth from "../../auth/hooks/useAuth";
+import ConversationItem from "../components/ConversationItem";
 
-import LoadingSpinner from "../../../shared/components/LoadingSpinner";
-import ErrorBlock from "../../../shared/components/ErrorBlock";
+import LoadingSpinner from "../../shared/components/LoadingSpinner";
+import ErrorBlock from "../../shared/components/ErrorBlock";
 
-interface ConversationListProps {
-  handleConversationSelect: (conversationId: string) => void;
-}
-
-export default function ConversationList({
-  handleConversationSelect,
-}: ConversationListProps) {
+export default function ConversationList() {
   const loaderRef = useRef(null);
   const { token } = useAuth();
   const {
@@ -65,11 +59,7 @@ export default function ConversationList({
     <section className="flex flex-col gap-2">
       {data?.pages.map((page) =>
         page.conversations.map((conversation) => (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            handleConversationSelect={handleConversationSelect}
-          />
+          <ConversationItem key={conversation.id} conversation={conversation} />
         )),
       )}
       <div ref={loaderRef}></div>

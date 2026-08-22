@@ -18,7 +18,8 @@ import EditUserProfilePage from "../modules/users/pages/EditUserProfilePage";
 
 import NotificationsPage from "../modules/notifications/pages/NotificationsPage";
 
-import MessagesPage from "../modules/messages/pages/MessagesPage";
+import ConversationListPage from "../modules/messages/pages/ConversationListPage";
+import ActiveConversationPage from "../modules/messages/pages/ActiveConversationPage";
 
 const router = createBrowserRouter([
   {
@@ -81,8 +82,17 @@ const router = createBrowserRouter([
                 element: <NotificationsPage />,
               },
               {
-                path: "messages",
-                element: <MessagesPage />,
+                path: "conversations",
+                children: [
+                  {
+                    index: true,
+                    element: <ConversationListPage />,
+                  },
+                  {
+                    path: ":conversationId",
+                    element: <ActiveConversationPage />,
+                  },
+                ],
               },
             ],
           },
