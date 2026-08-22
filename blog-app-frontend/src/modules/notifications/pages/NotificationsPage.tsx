@@ -8,7 +8,10 @@ import useAuth from "../../auth/hooks/useAuth";
 import useToast from "../../shared/hooks/useToast";
 
 import { sendRequest } from "../../../utils/http/http";
-import type { NotificationResponseType } from "../types/notifications-types";
+import type {
+  NotificationResponseType,
+  NotificationCacheType,
+} from "../types/notifications-types";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../shared/components/ErrorBlock";
 
@@ -25,7 +28,22 @@ export default function NotificationsPage() {
         method: "PATCH",
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      queryClient.setQueryData<NotificationCacheType>(
+        ["notifications"],
+        (oldData) => {
+          if (!oldData) return;
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page) => ({
+              ...page,
+              notifications: page.notifications.map((notification) => ({
+                ...notification,
+                isRead: true,
+              })),
+            })),
+          };
+        },
+      );
     },
     onError: (error) => {
       addToast(error.message, "error");

@@ -25,3 +25,8 @@ export type NotificationResponseType = {
   notifications: NotificationType[];
   nextCursor: string | undefined;
 };
+
+export type NotificationCacheType = {
+  pageParams: (string | undefined)[];
+  pages: NotificationResponseType[];
+};

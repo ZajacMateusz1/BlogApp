@@ -8,7 +8,10 @@ import useToast from "../../shared/hooks/useToast";
 import mapNotification from "../../notifications/utils/map-notification";
 
 import type { WsContextType } from "./ws-context";
-import type { WSNotificationType } from "../../notifications/types/notifications-types";
+import type {
+  WSNotificationType,
+  NotificationCacheType,
+} from "../../notifications/types/notifications-types";
 
 interface WsContextProviderProps {
   children: ReactNode;
@@ -38,10 +41,32 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
                 const { text, link } = mapNotification(
                   message.payload as WSNotificationType,
                 );
-                queryClient.invalidateQueries({ queryKey: ["notifications"] });
+                queryClient.setQueryData<NotificationCacheType>(
+                  ["notifications"],
+                  (oldData) => {
+                    if (!oldData) return;
+                    return {
+                      ...oldData,
+                      pages: oldData.pages.map((page, index) => {
+                        return index === 0
+                          ? {
+                              ...page,
+                              notifications: [
+                                message.payload,
+                                ...page.notifications,
+                              ],
+                            }
+                          : page;
+                      }),
+                    };
+                  },
+                );
                 addToast(text, "info", link);
               }
               break;
+            case "chat_message": {
+              break;
+            }
             case "error":
               console.log("Error message received:", message.payload.error);
               break;
