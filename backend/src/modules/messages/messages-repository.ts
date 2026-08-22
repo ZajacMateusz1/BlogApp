@@ -68,6 +68,19 @@ export const markAsReadRepository = (
       });
 };
 
+export const markAsUnread = (
+  conversationId: Types.ObjectId,
+  isUser1: boolean,
+) => {
+  return isUser1
+    ? Conversation.findByIdAndUpdate(conversationId, {
+        $set: { isReadUser1: false },
+      })
+    : Conversation.findByIdAndUpdate(conversationId, {
+        $set: { isReadUser2: false },
+      });
+};
+
 export const findConversation = (conversationId: string, userId: string) => {
   return Conversation.findOne({
     _id: conversationId,

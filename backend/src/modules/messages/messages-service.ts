@@ -8,6 +8,7 @@ import {
   getMessagesRepository,
   findConversation,
   markAsReadRepository,
+  markAsUnread,
 } from "./messages-repository.js";
 import { getUserExists, getUsersByIds } from "../users/user-repository.js";
 import { getPublicUrl } from "../../utils/supabaseHelpers.js";
@@ -107,7 +108,12 @@ export const addMessagesService = async (messageData: MessageDataType) => {
         session,
       );
       await updateLastMessage(conversation._id, message._id, session);
+      await markAsUnread(
+        conversation._id,
+        messageData.recipient === conversation.user1.toString(),
+      );
     });
+
     return message;
   } finally {
     await session.endSession();
