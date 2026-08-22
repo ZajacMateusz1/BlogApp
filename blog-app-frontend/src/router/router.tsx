@@ -18,6 +18,8 @@ import EditUserProfilePage from "../modules/users/pages/EditUserProfilePage";
 
 import NotificationsPage from "../modules/notifications/pages/NotificationsPage";
 
+import MessagesPage from "../modules/messages/pages/MessagesPage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -77,6 +79,10 @@ const router = createBrowserRouter([
               {
                 path: "notifications",
                 element: <NotificationsPage />,
+              },
+              {
+                path: "messages",
+                element: <MessagesPage />,
               },
             ],
           },
