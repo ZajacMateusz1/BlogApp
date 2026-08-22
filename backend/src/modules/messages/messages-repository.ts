@@ -115,3 +115,22 @@ export const updateLastMessage = (
     session,
   );
 };
+
+export const searchConversationRepository = (
+  userId: string,
+  usersIds: string[],
+) => {
+  return Conversation.find({
+    $and: [
+      {
+        $or: [{ user1: userId }, { user2: userId }],
+      },
+      {
+        $or: [{ user1: { $in: usersIds } }, { user2: { $in: usersIds } }],
+      },
+    ],
+  })
+    .limit(5)
+    .select("user1 user2")
+    .lean();
+};

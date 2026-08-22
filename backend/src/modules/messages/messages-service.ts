@@ -9,8 +9,13 @@ import {
   findConversation,
   markAsReadRepository,
   markAsUnread,
+  searchConversationRepository,
 } from "./messages-repository.js";
-import { getUserExists, getUsersByIds } from "../users/user-repository.js";
+import {
+  getUserExists,
+  getUsersByIds,
+  searchUserRepository,
+} from "../users/user-repository.js";
 import { getPublicUrl } from "../../utils/supabaseHelpers.js";
 import type { MessageDataType } from "./messages-types.js";
 import HttpError from "../../errors/HttpError.js";
@@ -19,6 +24,9 @@ export const addConversationService = async (
   user1Id: string,
   user2Id: string,
 ) => {
+  if (user1Id === user2Id) {
+    throw new HttpError("Cannot create conversation with yourself", 400);
+  }
   const user2Exists = await getUserExists(user2Id);
   if (!user2Exists) {
     throw new HttpError(
@@ -56,7 +64,7 @@ export const getConversationsService = async (
   );
   const conversationsResponse = conversations.map((conversation) => ({
     id: conversation._id,
-    otherUser: otherUsersMap.get(
+    userData: otherUsersMap.get(
       conversation.user1.toString() === userId
         ? conversation.user2.toString()
         : conversation.user1.toString(),
@@ -130,4 +138,30 @@ export const markAsReadService = async (
   }
   const isUser1 = conversation.user1.toString() === userId;
   await markAsReadRepository(conversationId, isUser1);
+};
+
+export const searchConversationService = async (
+  userId: string,
+  searchQuery: string,
+) => {
+  const users = await searchUserRepository(searchQuery);
+  const usersMap = new Map();
+  const userIds: string[] = [];
+  users.forEach((user) => {
+    userIds.push(user._id.toString());
+    usersMap.set(user._id.toString(), {
+      id: user._id,
+      name: user.username,
+      avatar: getPublicUrl(user.avatarPath),
+    });
+  });
+  const results = await searchConversationRepository(userId, userIds);
+  return results.map((result) => ({
+    id: result._id,
+    userData: usersMap.get(
+      result.user1.toString() === userId
+        ? result.user2.toString()
+        : result.user1.toString(),
+    ),
+  }));
 };
