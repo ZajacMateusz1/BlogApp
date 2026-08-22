@@ -9,7 +9,13 @@ import ConversationItem from "./ConversationItem";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../../shared/components/ErrorBlock";
 
-export default function ConversationList() {
+interface ConversationListProps {
+  handleConversationSelect: (conversationId: string) => void;
+}
+
+export default function ConversationList({
+  handleConversationSelect,
+}: ConversationListProps) {
   const loaderRef = useRef(null);
   const { token } = useAuth();
   const {
@@ -24,7 +30,7 @@ export default function ConversationList() {
     queryKey: ["conversations"],
     queryFn: ({ pageParam, signal }) =>
       sendRequest<getConversationsResponseType>(
-        `/api/messages/conversations?limit=10&cursor=${pageParam}`,
+        `/api/messages/conversations?limit=10${pageParam ? `&cursor=${pageParam}` : ""}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +65,11 @@ export default function ConversationList() {
     <section className="flex flex-col gap-2">
       {data?.pages.map((page) =>
         page.conversations.map((conversation) => (
-          <ConversationItem key={conversation.id} conversation={conversation} />
+          <ConversationItem
+            key={conversation.id}
+            conversation={conversation}
+            handleConversationSelect={handleConversationSelect}
+          />
         )),
       )}
       <div ref={loaderRef}></div>
