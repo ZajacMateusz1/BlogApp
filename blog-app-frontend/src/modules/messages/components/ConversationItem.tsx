@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { ConversationDataType } from "../types/messages-types";
 
 interface ConversationItemProps {
@@ -7,5 +8,9 @@ interface ConversationItemProps {
 export default function ConversationItem({
   conversation,
 }: ConversationItemProps) {
-  return <div>{conversation.id}</div>;
+  return (
+    <Link to={`/conversations/${conversation.id}`}>
+      <div>{conversation.id}</div>
+    </Link>
+  );
 }

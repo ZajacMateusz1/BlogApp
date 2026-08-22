@@ -58,9 +58,14 @@ This project originally started as a simple blog application, which is why some 
 - Backend support for real-time messaging using **WebSockets**
 - Conversations between users
 - Persistent messages stored in **MongoDB**
-- Automatic conversation creation
+- Conversation creation through the REST API
 - Tracking the last message in a conversation
+- Per-user conversation read state
 - Marking conversations as read
+- Retrieving conversations with cursor-based pagination
+- Retrieving messages with cursor-based pagination
+- Searching existing conversations
+- Searching for users without an existing conversation
 - Server-side validation of message payloads using **Zod**
 - Frontend messaging UI is not implemented yet
 
@@ -261,9 +266,14 @@ API communication is handled through a small `fetch` wrapper combined with **Rea
 
 ## Messages
 
-| Method | Endpoint                             | Description                                             |
-| ------ | ------------------------------------ | ------------------------------------------------------- |
-| PATCH  | `/api/messages/:conversationId/read` | Mark a conversation as read for the authenticated user. |
+| Method | Endpoint                                 | Description                                                                |
+| ------ | ---------------------------------------- | -------------------------------------------------------------------------- |
+| POST   | `/api/messages/conversation`             | Create a conversation between the authenticated user and another user.     |
+| GET    | `/api/messages/conversations`            | Get the authenticated user's conversations using cursor-based pagination.  |
+| GET    | `/api/messages/:conversationId/messages` | Get messages from a conversation using cursor-based pagination.            |
+| PATCH  | `/api/messages/:conversationId/read`     | Mark a conversation as read for the authenticated user.                    |
+| GET    | `/api/messages/search`                   | Search the authenticated user's existing conversations.                    |
+| GET    | `/api/messages/search/users`             | Search for users without an existing conversation with authenticated user. |
 
 Messages are sent through the WebSocket connection using a validated `chat_message` payload.
 
@@ -291,14 +301,37 @@ The backend uses WebSockets to deliver real-time notifications when a user:
 
 WebSockets are also used for real-time messaging between users. Incoming chat messages are validated using **Zod**, persisted in MongoDB, and associated with conversations.
 
+A chat message uses the following payload structure:
+
+```json
+{
+  "type": "chat_message",
+  "payload": {
+    "recipient": "userId",
+    "content": "Message content"
+  }
+}
+```
+
+The message payload is validated on the server:
+
+- `recipient` must be a non-empty string with a maximum length of 50 characters.
+- `content` must be a non-empty string with a maximum length of 500 characters.
+
 When a message is sent, the backend:
 
-- finds an existing conversation between the sender and recipient or creates one,
+- finds the existing conversation between the sender and recipient,
 - stores the message in MongoDB,
 - updates the conversation's last message,
-- tracks read state separately for each participant.
+- marks the recipient's conversation as unread.
 
-If the WebSocket connection is closed unexpectedly, the frontend automatically attempts to reconnect after a delay. Reconnection attempts continue until the WebSocket provider is unmounted.
+Conversations are created separately through the REST API.
+
+The backend uses MongoDB transactions when creating a message and updating the related conversation.
+
+The conversation stores read state separately for each participant. A participant can mark their conversation as read through the REST API.
+
+If the WebSocket connection is closed unexpectedly, the frontend automatically attempts to reconnect after a 5-second delay. Reconnection attempts continue until the WebSocket provider is unmounted.
 
 Notifications are also stored in MongoDB, allowing users to retrieve their notification history after reconnecting or refreshing the application.
 
@@ -314,6 +347,8 @@ Cursor-based pagination is used for:
 - Following
 - Comments
 - Notifications
+- Conversations
+- Messages
 
 # Validation
 
