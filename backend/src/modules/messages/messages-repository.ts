@@ -13,8 +13,18 @@ export const addConversationRepository = (userId1: string, userId2: string) => {
 export const getConversationsRepository = (
   userId: string,
   limit: number,
-  cursor: string,
-) => {};
+  cursor: string | undefined,
+) => {
+  const filters = cursor
+    ? {
+        updatedAt: { $lt: cursor },
+        $or: [{ user1: userId }, { user2: userId }],
+      }
+    : {
+        $or: [{ user1: userId }, { user2: userId }],
+      };
+  return Conversation.find(filters).sort({ updatedAt: -1 }).limit(limit).lean();
+};
 
 export const getMessagesRepository = (
   conversationId: string,

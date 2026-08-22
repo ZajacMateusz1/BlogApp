@@ -6,14 +6,13 @@ import {
   updateLastMessage,
   getConversationsRepository,
   getMessagesRepository,
-} from "./messages-repository.js";
-import { getUserExists } from "../users/user-repository.js";
-import type { MessageDataType } from "./messages-types.js";
-import HttpError from "../../errors/HttpError.js";
-import {
   findConversation,
   markAsReadRepository,
 } from "./messages-repository.js";
+import { getUserExists, getUsersByIds } from "../users/user-repository.js";
+import { getPublicUrl } from "../../utils/supabaseHelpers.js";
+import type { MessageDataType } from "./messages-types.js";
+import HttpError from "../../errors/HttpError.js";
 
 export const addConversationService = async (
   user1Id: string,
@@ -37,8 +36,36 @@ export const addConversationService = async (
 export const getConversationsService = async (
   userId: string,
   limit: number,
-  cursor: string,
-) => {};
+  cursor: string | undefined,
+) => {
+  const conversations = await getConversationsRepository(userId, limit, cursor);
+  const otherUserIds = conversations.map((conversation) =>
+    conversation.user1.toString() === userId
+      ? conversation.user2
+      : conversation.user1,
+  );
+  const otherUsers = await getUsersByIds(otherUserIds);
+  const otherUsersMap = new Map();
+  otherUsers.forEach((user) =>
+    otherUsersMap.set(user._id.toString(), {
+      id: user._id,
+      username: user.username,
+      avatar: getPublicUrl(user.avatarPath),
+    }),
+  );
+  const conversationsResponse = conversations.map((conversation) => ({
+    id: conversation._id,
+    otherUser: otherUsersMap.get(
+      conversation.user1.toString() === userId
+        ? conversation.user2.toString()
+        : conversation.user1.toString(),
+    ),
+    lastMessage: conversation.lastMessage,
+    updatedAt: conversation.updatedAt,
+  }));
+  const nextCursor = conversationsResponse?.at(-1)?.updatedAt;
+  return { conversations: conversationsResponse, nextCursor };
+};
 export const getMessagesService = async (
   conversationId: string,
   userId: string,

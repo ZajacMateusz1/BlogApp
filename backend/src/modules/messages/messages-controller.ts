@@ -31,6 +31,17 @@ export const getConversations = async (
 ) => {
   try {
     const { userId } = req.userData!;
+    const cursor =
+      typeof req.query.cursor !== "string" || req.query.cursor === ""
+        ? undefined
+        : req.query.cursor;
+    const limit = Math.max(1, Math.min(Number(req.query.limit) || 10), 10);
+    const getConversationsResponse = await getConversationsService(
+      userId,
+      limit,
+      cursor,
+    );
+    res.json(getConversationsResponse);
   } catch (error) {
     next(error);
   }

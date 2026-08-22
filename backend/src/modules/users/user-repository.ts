@@ -225,3 +225,9 @@ export const getFollowingRepository = (
     .populate("following", "username avatarPath")
     .lean<PopulatedFollowingType[]>();
 };
+
+export const getUsersByIds = (userIds: Types.ObjectId[]) => {
+  return User.find({ _id: { $in: userIds } })
+    .select("username avatarPath")
+    .lean();
+};
