@@ -157,14 +157,17 @@ export const searchConversationService = async (
     });
   });
   const results = await searchConversationRepository(userId, userIds);
-  return results.map((result) => ({
-    id: result._id,
-    userData: usersMap.get(
-      result.user1.toString() === userId
-        ? result.user2.toString()
-        : result.user1.toString(),
-    ),
-  }));
+  return results.map((result) => {
+    const isUser1 = result.user1.toString() === userId;
+    return {
+      id: result._id,
+      lastMessage: result.lastMessage,
+      isRead: isUser1 ? result.isReadUser1 : result.isReadUser2,
+      userData: usersMap.get(
+        isUser1 ? result.user2.toString() : result.user1.toString(),
+      ),
+    };
+  });
 };
 
 export const searchUsersForConversationService = async (

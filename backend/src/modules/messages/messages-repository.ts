@@ -2,7 +2,10 @@ import { Types, type ClientSession } from "mongoose";
 import Conversation from "../../models/conversation-model.js";
 import Message from "../../models/message-model.js";
 import User from "../../models/user-model.js";
-import type { MessageDataType } from "./messages-types.js";
+import type {
+  MessageDataType,
+  PopulatedConversationType,
+} from "./messages-types.js";
 
 export const addConversationRepository = (userId1: string, userId2: string) => {
   const [user1, user2] = [userId1, userId2].sort() as [string, string];
@@ -132,8 +135,9 @@ export const searchConversationRepository = (
     ],
   })
     .limit(5)
-    .select("user1 user2")
-    .lean();
+    .populate("lastMessage", "content sender createdAt")
+    .select("user1 user2 lastMessage isReadUser1 isReadUser2")
+    .lean<PopulatedConversationType[]>();
 };
 
 export const searchUsersForConversationRepository = (
