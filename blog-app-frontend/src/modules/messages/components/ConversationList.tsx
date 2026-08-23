@@ -58,7 +58,10 @@ export default function ConversationList() {
   if (data?.pages[0].conversations.length === 0)
     return <div>No conversations found</div>;
   return (
-    <section className="flex flex-col gap-2">
+    <section className="flex flex-col gap-2 bg-light rounded-xl p-2 md:p-4">
+      <h1 className="text-xl font-bold text-primary capitalize text-center md:text-2xl lg:text-3xl mb-2 md:mb-4 lg:mb-6">
+        Your latest conversations
+      </h1>
       {data?.pages.map((page) =>
         page.conversations.map((conversation) => (
           <ConversationItem key={conversation.id} conversation={conversation} />
