@@ -27,7 +27,12 @@ export const getConversationsRepository = (
     : {
         $or: [{ user1: userId }, { user2: userId }],
       };
-  return Conversation.find(filters).sort({ updatedAt: -1 }).limit(limit).lean();
+  return Conversation.find(filters)
+    .sort({ updatedAt: -1 })
+    .populate("lastMessage", "content createdAt")
+    .select("-__v")
+    .limit(limit)
+    .lean<PopulatedConversationType[]>();
 };
 
 export const getMessagesRepository = (
@@ -135,8 +140,8 @@ export const searchConversationRepository = (
     ],
   })
     .limit(5)
-    .populate("lastMessage", "content sender createdAt")
-    .select("user1 user2 lastMessage isReadUser1 isReadUser2")
+    .populate("lastMessage", "content createdAt")
+    .select("-__v")
     .lean<PopulatedConversationType[]>();
 };
 

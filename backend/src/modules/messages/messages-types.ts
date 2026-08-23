@@ -7,14 +7,15 @@ export type MessageDataType = MessagePayloadType & {
 
 export type PopulatedConversationType = {
   _id: Types.ObjectId;
-  user1: string;
-  user2: string;
+  user1: Types.ObjectId;
+  user2: Types.ObjectId;
   lastMessage: {
     _id: Types.ObjectId;
     content: string;
     sender: string;
-    createdAt: Date;
+    createdAt: string;
   };
   isReadUser1: boolean;
   isReadUser2: boolean;
+  updatedAt: string;
 };

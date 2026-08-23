@@ -63,16 +63,25 @@ export const getConversationsService = async (
       avatar: getPublicUrl(user.avatarPath),
     }),
   );
-  const conversationsResponse = conversations.map((conversation) => ({
-    id: conversation._id,
-    userData: otherUsersMap.get(
-      conversation.user1.toString() === userId
-        ? conversation.user2.toString()
-        : conversation.user1.toString(),
-    ),
-    lastMessage: conversation.lastMessage,
-    updatedAt: conversation.updatedAt,
-  }));
+  const conversationsResponse = conversations.map((conversation) => {
+    const isUser1 = conversation.user1.toString() === userId;
+    const lastMessage = conversation.lastMessage;
+    return {
+      id: conversation._id,
+      lastMessage: lastMessage
+        ? {
+            id: lastMessage._id,
+            content: lastMessage.content,
+            createdAt: lastMessage.createdAt,
+          }
+        : null,
+      isRead: isUser1 ? conversation.isReadUser1 : conversation.isReadUser2,
+      userData: otherUsersMap.get(
+        isUser1 ? conversation.user2.toString() : conversation.user1.toString(),
+      ),
+      updatedAt: conversation.updatedAt,
+    };
+  });
   const nextCursor = conversationsResponse?.at(-1)?.updatedAt;
   return { conversations: conversationsResponse, nextCursor };
 };
@@ -159,13 +168,21 @@ export const searchConversationService = async (
   const results = await searchConversationRepository(userId, userIds);
   return results.map((result) => {
     const isUser1 = result.user1.toString() === userId;
+    const lastMessage = result.lastMessage;
     return {
       id: result._id,
-      lastMessage: result.lastMessage,
+      lastMessage: lastMessage
+        ? {
+            id: lastMessage._id,
+            content: lastMessage.content,
+            createdAt: lastMessage.createdAt,
+          }
+        : null,
       isRead: isUser1 ? result.isReadUser1 : result.isReadUser2,
       userData: usersMap.get(
         isUser1 ? result.user2.toString() : result.user1.toString(),
       ),
+      updatedAt: result.updatedAt,
     };
   });
 };
