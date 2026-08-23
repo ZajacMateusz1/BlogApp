@@ -89,7 +89,7 @@ const router = createBrowserRouter([
                     element: <ConversationListPage />,
                   },
                   {
-                    path: ":conversationId",
+                    path: ":conversationId/:recipientId",
                     element: <ActiveConversationPage />,
                   },
                 ],

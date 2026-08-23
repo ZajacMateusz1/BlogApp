@@ -10,7 +10,7 @@ export default function ConversationItem({
 }: ConversationItemProps) {
   return (
     <Link
-      to={`/conversations/${conversation.id}`}
+      to={`/conversations/${conversation.id}/${conversation.userData.id}`}
       className={`flex gap-2 p-2 border-b border-border-light md:gap-4 overflow-hidden hover:bg-conversation-hover ${conversation.isRead ? "bg-light" : "bg-not-read"}`}
     >
       <div className="shrink-0 flex justify-center items-center w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18">

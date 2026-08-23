@@ -30,3 +30,8 @@ export type getConversationsResponseType = {
   conversations: ConversationResponseType[];
   nextCursor: string | undefined;
 };
+
+export type MessagePayloadType = {
+  recipient: string;
+  content: string;
+};
