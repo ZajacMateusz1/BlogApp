@@ -161,7 +161,7 @@ export const searchConversationService = async (
     userIds.push(user._id.toString());
     usersMap.set(user._id.toString(), {
       id: user._id,
-      name: user.username,
+      username: user.username,
       avatar: getPublicUrl(user.avatarPath),
     });
   });
@@ -202,7 +202,7 @@ export const searchUsersForConversationService = async (
   );
   return users.map((user) => ({
     id: user._id,
-    name: user.username,
+    username: user.username,
     avatar: getPublicUrl(user.avatarPath),
   }));
 };
