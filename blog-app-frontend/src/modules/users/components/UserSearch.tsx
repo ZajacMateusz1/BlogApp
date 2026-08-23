@@ -1,30 +1,46 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../auth/hooks/useAuth";
 
 import { sendRequest } from "../../../utils/http/http";
 
 import SearchBar from "../../shared/components/SearchBar";
-import UserSearchCard from "../../users/components/UserSearchCard";
+import UserSearchCard from "./UserSearchCard";
 import ErrorBlock from "../../shared/components/ErrorBlock";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 
-import type { BaseUserResponseType } from "../../users/types/users-types";
+import type { BaseUserResponseType } from "../types/users-types";
 
 interface UserSearchProps {
-  token: string | null;
+  link: string;
+  notFoundText: string;
+  queryKey: string;
+  headerText: string;
+  cardIsLink?: boolean;
+  disableButton?: boolean;
+  onClick?: (param?: string) => void;
 }
 
-export default function UserSearch({ token }: UserSearchProps) {
+export default function UserSearch({
+  link,
+  notFoundText,
+  queryKey,
+  headerText,
+  cardIsLink = true,
+  disableButton = false,
+  onClick,
+}: UserSearchProps) {
+  const { token } = useAuth();
   const [query, setQuery] = useState<string>("");
   const handleQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["user-search", query],
+    queryKey: [queryKey, query],
     queryFn: ({ signal }) =>
       sendRequest<BaseUserResponseType[]>(
-        `/api/users/search?search=${encodeURIComponent(query)}`,
+        `${link}?search=${encodeURIComponent(query)}`,
         {
           signal,
           headers: {
@@ -43,20 +59,26 @@ export default function UserSearch({ token }: UserSearchProps) {
     return () => clearTimeout(timeout);
   }, [query, refetch]);
   return (
-    <section className="bg-light relative p-3 md:p-4 rounded-xl">
+    <section className="bg-light relative p-3 md:p-4 rounded-xl w-full">
       <SearchBar id="search-user" value={query} onChange={handleQueryChange}>
-        Search user
+        {headerText}
       </SearchBar>
       <div className="absolut left-0 bottom-0 p-3 md:p-4">
         {isError && <ErrorBlock>{error.message}</ErrorBlock>}
         {isLoading && <LoadingSpinner fullScreen={false} />}
         {!isLoading && !isError && data?.length == 0 && query.length > 2 && (
-          <p>No users found.</p>
+          <p>{notFoundText}</p>
         )}
         {data &&
           data.length > 0 &&
           data.map((userData) => (
-            <UserSearchCard key={userData.id} userData={userData} />
+            <UserSearchCard
+              onClick={onClick}
+              key={userData.id}
+              userData={userData}
+              isLoading={disableButton}
+              isLink={cardIsLink}
+            />
           ))}
       </div>
     </section>

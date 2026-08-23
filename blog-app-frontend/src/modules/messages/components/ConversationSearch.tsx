@@ -49,7 +49,7 @@ export default function ConversationSearch() {
         {isError && <ErrorBlock>{error.message}</ErrorBlock>}
         {isLoading && <LoadingSpinner fullScreen={false} />}
         {!isLoading && !isError && data?.length == 0 && query.length > 2 && (
-          <p>No users found.</p>
+          <p>No conversations found.</p>
         )}
         {data &&
           query.length > 2 &&

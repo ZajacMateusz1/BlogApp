@@ -1,15 +1,23 @@
 import { useRef, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { MessageCirclePlus } from "lucide-react";
 
 import { sendRequest } from "../../../utils/http/http";
 import type { getConversationsResponseType } from "../types/messages-types";
 import useAuth from "../../auth/hooks/useAuth";
 import ConversationItem from "./ConversationItem";
 
+import Button from "../../shared/components/Button";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import ErrorBlock from "../../shared/components/ErrorBlock";
 
-export default function ConversationList() {
+interface ConversationListProps {
+  handleOpenModal: () => void;
+}
+
+export default function ConversationList({
+  handleOpenModal,
+}: ConversationListProps) {
   const loaderRef = useRef(null);
   const { token } = useAuth();
   const {
@@ -58,15 +66,26 @@ export default function ConversationList() {
   if (data?.pages[0].conversations.length === 0)
     return <div>No conversations found</div>;
   return (
-    <section className="flex flex-col gap-2 bg-light rounded-xl p-2 md:p-4">
-      <h1 className="text-xl font-bold text-primary capitalize text-center md:text-2xl lg:text-3xl mb-2 md:mb-4 lg:mb-6">
-        Your latest conversations
+    <section className="flex flex-col gap-2 md:gap-4 lg:gap-6 bg-light rounded-xl p-2 md:p-4">
+      <h1 className="text-xl font-bold text-primary capitalize text-center md:text-2xl lg:text-3xl">
+        Latest conversations
       </h1>
-      {data?.pages.map((page) =>
-        page.conversations.map((conversation) => (
-          <ConversationItem key={conversation.id} conversation={conversation} />
-        )),
-      )}
+      <Button
+        variant="outlined"
+        className="self-center"
+        onClick={handleOpenModal}
+      >
+        <MessageCirclePlus /> New Conversation
+      </Button>
+      <ul>
+        {data?.pages.map((page) =>
+          page.conversations.map((conversation) => (
+            <li key={conversation.id}>
+              <ConversationItem conversation={conversation} />
+            </li>
+          )),
+        )}
+      </ul>
       <div ref={loaderRef}></div>
     </section>
   );

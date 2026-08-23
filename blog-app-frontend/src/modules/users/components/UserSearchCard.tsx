@@ -5,18 +5,18 @@ import type {
 } from "../types/users-types";
 interface UserSearchCardProps {
   userData: BaseUserResponseType | FollowListItemType;
-  onClick?: () => void;
+  onClick?: (param?: string) => void;
+  isLink?: boolean;
+  isLoading?: boolean;
 }
 export default function UserSearchCard({
   userData,
   onClick,
+  isLink = true,
+  isLoading = false,
 }: UserSearchCardProps) {
-  return (
-    <Link
-      to={`/users/${userData.id}`}
-      onClick={onClick}
-      className="flex gap-2 p-2 border-b border-border-light md:gap-4 overflow-hidden hover:bg-bg-primary"
-    >
+  const content = (
+    <>
       <div className="shrink-0 flex justify-center items-center w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18">
         <img
           className="size-full rounded-full"
@@ -29,6 +29,27 @@ export default function UserSearchCard({
           {userData.username}
         </p>
       </div>
-    </Link>
+    </>
+  );
+  const parentStyles =
+    "flex gap-2 p-2 border-b border-border-light md:gap-4 overflow-hidden hover:bg-bg-primary";
+  if (isLink)
+    return (
+      <Link
+        to={`/users/${userData.id}`}
+        onClick={() => onClick?.()}
+        className={parentStyles}
+      >
+        {content}
+      </Link>
+    );
+  return (
+    <button
+      onClick={() => onClick?.(userData.id)}
+      disabled={isLoading}
+      className={`${parentStyles} block w-full cursor-pointer`}
+    >
+      {content}
+    </button>
   );
 }
