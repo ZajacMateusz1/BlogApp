@@ -105,7 +105,7 @@ export const getMessagesService = async (
     content: message.content,
     createdAt: message.createdAt,
   }));
-  const nextCursor = messegesResponse?.at(-1);
+  const nextCursor = messegesResponse.at(-1)?.id;
   return { messages: messegesResponse, nextCursor };
 };
 
