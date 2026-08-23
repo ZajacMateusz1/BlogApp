@@ -11,6 +11,7 @@ import {
   markAsUnread,
   searchConversationRepository,
   searchUsersForConversationRepository,
+  findUserConversations,
 } from "./messages-repository.js";
 import {
   getUserExists,
@@ -191,9 +192,9 @@ export const searchUsersForConversationService = async (
   userId: string,
   searchQuery: string,
 ) => {
-  const usersWithConversation = await searchUserRepository(userId);
+  const usersWithConversation = await findUserConversations(userId);
   const usersWithConversationIds = usersWithConversation.map(
-    (user) => user._id,
+    ({ user1, user2 }) => (user1.toString() === userId ? user2 : user1),
   );
   const users = await searchUsersForConversationRepository(
     userId,

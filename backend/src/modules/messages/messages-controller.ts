@@ -9,13 +9,13 @@ import {
 } from "./messages-service.js";
 
 export const addConversation = async (
-  req: Request,
+  req: Request<{ userId: string }>,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const { userId: loggedUserId } = req.userData!;
-    const { userId } = req.body;
+    const { userId } = req.params;
     const addConversationResponse = await addConversationService(
       loggedUserId,
       userId,

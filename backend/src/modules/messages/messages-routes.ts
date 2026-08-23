@@ -12,7 +12,7 @@ import {
 const router = Router();
 router.use(checkAuth);
 
-router.post("/conversation", addConversation);
+router.post("/conversation/:userId", addConversation);
 router.patch("/:conversationId/read", markAsRead);
 router.get("/conversations", getConversations);
 router.get("/:conversationId/messages", getMessages);
