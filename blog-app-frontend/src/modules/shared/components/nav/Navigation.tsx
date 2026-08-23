@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Menu, X, Bell } from "lucide-react";
+import { Menu, X, Bell, MessageCircle } from "lucide-react";
 import useAuth from "../../../auth/hooks/useAuth";
 
 import Button from "../Button";
@@ -46,6 +46,17 @@ export default function Navigation() {
               </NavLink>
             </li>
           ))}
+          <li>
+            <NavLink
+              to="/conversations"
+              onClick={handleCloseMenu}
+              className={({ isActive }) =>
+                `border-b-2 ${isActive ? "text-link-active border-link-active" : "border-transparent"} text-2xl sm:text-3xl font-bold md:text-lg lg:text-xl hover:text-link-hover transition-colors`
+              }
+            >
+              <MessageCircle />
+            </NavLink>
+          </li>
           <li>
             <NavLink
               to="/notifications"
