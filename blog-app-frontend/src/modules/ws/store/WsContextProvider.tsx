@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import WsContext from "./ws-context";
 
@@ -12,6 +12,7 @@ import type {
   WSNotificationType,
   NotificationCacheType,
 } from "../../notifications/types/notifications-types";
+import type { WsMessageType } from "../types/ws-types";
 
 interface WsContextProviderProps {
   children: ReactNode;
@@ -21,14 +22,23 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
   const { token } = useAuth();
   const { addToast } = useToast();
   const queryClient = useQueryClient();
+  const wsRef = useRef<WebSocket | null>(null);
+
+  const sendMessage = <T,>(message: WsMessageType<T>) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+      console.error("WebSocket is not open");
+      return;
+    }
+    wsRef.current.send(JSON.stringify(message));
+  };
 
   const WS_TIMEOUT = 5000; // 5 seconds
-
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null;
     let shouldReconnect = true;
     const initWebSocket = () => {
       const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}?token=${token}`);
+      wsRef.current = ws;
       ws.onopen = () => {
         console.log("WebSocket connection established");
       };
@@ -103,7 +113,7 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
     };
   }, [token, queryClient, addToast]);
   const WsCTX: WsContextType = {
-    sendMessage: () => {},
+    sendMessage: sendMessage,
   };
   return <WsContext value={WsCTX}>{children}</WsContext>;
 };
