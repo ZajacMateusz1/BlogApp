@@ -106,7 +106,7 @@ export const getMessagesService = async (
     createdAt: message.createdAt,
   }));
   const nextCursor = messegesResponse.at(-1)?.id;
-  return { messages: messegesResponse, nextCursor };
+  return { messages: messegesResponse.reverse(), nextCursor };
 };
 
 export const addMessagesService = async (messageData: MessageDataType) => {

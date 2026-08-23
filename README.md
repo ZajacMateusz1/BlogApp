@@ -57,17 +57,20 @@ This project originally started as a simple blog application, which is why some 
 
 - Backend support for real-time messaging using **WebSockets**
 - Conversations between users
+- Conversation list
+- Search existing conversations
+- Search for users without an existing conversation
+- Create conversations through the REST API
 - Persistent messages stored in **MongoDB**
-- Conversation creation through the REST API
 - Tracking the last message in a conversation
 - Per-user conversation read state
 - Marking conversations as read
 - Retrieving conversations with cursor-based pagination
 - Retrieving messages with cursor-based pagination
-- Searching existing conversations
-- Searching for users without an existing conversation
 - Server-side validation of message payloads using **Zod**
-- Frontend messaging UI is not implemented yet
+- Frontend UI for viewing and searching conversations
+- Frontend UI for creating new conversations
+- Frontend messaging UI for displaying messages is not implemented yet
 
 ## Validation
 
@@ -268,7 +271,7 @@ API communication is handled through a small `fetch` wrapper combined with **Rea
 
 | Method | Endpoint                                 | Description                                                                |
 | ------ | ---------------------------------------- | -------------------------------------------------------------------------- |
-| POST   | `/api/messages/conversation`             | Create a conversation between the authenticated user and another user.     |
+| POST   | `/api/messages/conversation/:userId`     | Create a conversation between the authenticated user and another user.     |
 | GET    | `/api/messages/conversations`            | Get the authenticated user's conversations using cursor-based pagination.  |
 | GET    | `/api/messages/:conversationId/messages` | Get messages from a conversation using cursor-based pagination.            |
 | PATCH  | `/api/messages/:conversationId/read`     | Mark a conversation as read for the authenticated user.                    |
@@ -461,5 +464,5 @@ cd blog-app-frontend && npm run dev
 
 # Future Improvements
 
-- Implement frontend messaging UI
+- Implement frontend messaging UI for displaying messages
 - Additional unit tests
