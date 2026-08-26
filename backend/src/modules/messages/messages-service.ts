@@ -98,15 +98,15 @@ export const getMessagesService = async (
     cursor,
     limit,
   );
-  const messegesResponse = messages.map((message) => ({
+  const messagesResponse = messages.map((message) => ({
     id: message._id,
     sender: message.sender,
     recipient: message.recipient,
     content: message.content,
     createdAt: message.createdAt,
   }));
-  const nextCursor = messegesResponse.at(-1)?.id;
-  return { messages: messegesResponse.reverse(), nextCursor };
+  const nextCursor = messagesResponse.at(-1)?.id;
+  return { messages: messagesResponse.reverse(), nextCursor };
 };
 
 export const addMessagesService = async (messageData: MessageDataType) => {
@@ -130,7 +130,9 @@ export const addMessagesService = async (messageData: MessageDataType) => {
       await markAsUnread(
         conversation._id,
         messageData.recipient === conversation.user1.toString(),
+        session,
       );
+      return message;
     });
 
     return message;

@@ -80,14 +80,15 @@ export const markAsReadRepository = (
 export const markAsUnread = (
   conversationId: Types.ObjectId,
   isUser1: boolean,
+  session: ClientSession,
 ) => {
   return isUser1
     ? Conversation.findByIdAndUpdate(conversationId, {
         $set: { isReadUser1: false },
-      })
+      }).session(session)
     : Conversation.findByIdAndUpdate(conversationId, {
         $set: { isReadUser2: false },
-      });
+      }).session(session);
 };
 
 export const findConversation = (conversationId: string, userId: string) => {
