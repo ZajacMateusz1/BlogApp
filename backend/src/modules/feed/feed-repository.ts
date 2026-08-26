@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import Post from "../../models/post-model.js";
 
-import type { PopulatedPostType } from "../posts/posts-types";
+import type { PopulatedPostType } from "../posts/posts-types.js";
 
 export const getFollwingFeedRepository = (
   cursor: string | undefined,

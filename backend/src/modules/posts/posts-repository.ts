@@ -3,8 +3,8 @@ import Post from "../../models/post-model.js";
 import Like from "../../models/like-model.js";
 import Comment from "../../models/comment-model.js";
 import { type ClientSession, Types } from "mongoose";
-import type { EditPostSchemaType } from "./posts-schema";
-import type { PopulatedPostType, PopulatedCommentType } from "./posts-types";
+import type { EditPostSchemaType } from "./posts-schema.js";
+import type { PopulatedPostType, PopulatedCommentType } from "./posts-types.js";
 
 export const getPostRepository = (postId: string) => {
   return Post.findById(postId, "-__v")

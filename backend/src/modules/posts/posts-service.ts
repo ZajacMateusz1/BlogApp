@@ -4,7 +4,7 @@ import {
   removeFromSupabase,
   getPublicUrl,
 } from "../../utils/supabaseHelpers.js";
-import type { EditPostSchemaType } from "./posts-schema";
+import type { EditPostSchemaType } from "./posts-schema.js";
 import {
   addPostRepository,
   getPostCreator,

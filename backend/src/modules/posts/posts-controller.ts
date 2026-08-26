@@ -3,7 +3,7 @@ import type {
   PostSchemaType,
   EditPostSchemaType,
   CommentSchemaType,
-} from "./posts-schema";
+} from "./posts-schema.js";
 import {
   addPostService,
   removePostService,
@@ -14,7 +14,7 @@ import {
   addCommentService,
   getCommentsService,
 } from "./posts-service.js";
-import type { TokenPayload } from "../../types/token/jwt-payload-type";
+import type { TokenPayload } from "../../types/token/jwt-payload-type.js";
 import HttpError from "../../errors/HttpError.js";
 
 export const getPost = async (

@@ -4,7 +4,7 @@ import { verifyToken } from "../../utils/verify-token.js";
 import { messageSchema } from "../messages/messages-schema.js";
 import { addMessagesService } from "../messages/messages-service.js";
 
-import type { WsMessageType } from "./ws-types";
+import type { WsMessageType } from "./ws-types.js";
 import type { Duplex } from "stream";
 
 const HEARTBEAT_INTERVAL = 30000; // 30 seconds

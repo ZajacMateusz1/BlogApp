@@ -6,7 +6,7 @@ import { Types } from "mongoose";
 import type { ClientSession } from "mongoose";
 import type { EditUserSchemaType } from "./user-schema.js";
 
-import type { PopulatedPostType } from "../posts/posts-types";
+import type { PopulatedPostType } from "../posts/posts-types.js";
 import type {
   SuggestionType,
   PopulatedFollowerType,
