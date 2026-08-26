@@ -8,7 +8,7 @@ Backend is hosted on Render free, so the first request may take up to ~50 second
 
 A full-stack social media application built with **React**, **TypeScript**, **Express** and **MongoDB**.
 
-Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, real-time notifications, and backend support for real-time messaging.
+Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, real-time notifications, backend support for real-time messaging, and automated backend error analysis.
 
 # Project Evolution
 
@@ -103,6 +103,9 @@ This project originally started as a simple blog application, which is why some 
 - Centralized error handling middleware
 - Custom `HttpError` class
 - Consistent API error responses
+- Integration with **BugAnalyzer** for automated backend error analysis
+- Error reports can be sent to BugAnalyzer for analysis using **Google Gemini**
+- BugAnalyzer stores analyzed errors and their results in **PostgreSQL**
 
 ## Database
 
@@ -155,6 +158,14 @@ Built with:
 - [**Supabase Storage**](https://supabase.com/storage)
 - [**bcrypt**](https://github.com/kelektiv/node.bcrypt.js)
 - [**express-rate-limit**](https://www.npmjs.com/package/express-rate-limit)
+
+## BugAnalyzer
+
+The backend can integrate with a separate [**BugAnalyzer**](https://github.com/ZajacMateusz1/BugAnalyzer) service for automated error analysis.
+
+BugAnalyzer receives backend error reports from the Social Media App, sends them to **Google Gemini** for analysis, validates the AI response using **Zod**, and stores the bug together with its analysis in **PostgreSQL**.
+
+The integration is used to report backend errors without affecting the HTTP error response returned to the client.
 
 # Project Structure
 
@@ -380,6 +391,12 @@ Example:
 }
 ```
 
+Unexpected backend errors can additionally be reported to **BugAnalyzer** for automated analysis.
+
+The error report contains the service name, request information and error details. BugAnalyzer analyzes the error using Google Gemini and stores the result in PostgreSQL.
+
+If BugAnalyzer is unavailable, it should not prevent the Social Media App from returning its normal HTTP error response.
+
 # Environment Variables
 
 ## Frontend
@@ -428,6 +445,18 @@ SUPABASE_SECRET_KEY=
 
 Supabase service role key used for file uploads.
 
+```env
+BUG_ANALYZER_API_URL=
+```
+
+Base URL of the BugAnalyzer API.
+
+```env
+BUG_ANALYZER_KEY=
+```
+
+Authentication key used when sending error reports to BugAnalyzer.
+
 # Installation
 
 Clone the repository:
@@ -461,6 +490,8 @@ Start the frontend development server:
 ```bash
 cd blog-app-frontend && npm run dev
 ```
+
+Start BugAnalyzer separately and configure `BUG_ANALYZER_API_URL` and `BUG_ANALYZER_KEY` if automated error analysis is enabled.
 
 # Future Improvements
 

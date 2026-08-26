@@ -26,6 +26,10 @@ app.set("trust proxy", 1);
 app.use(limiter);
 app.use(express.json());
 app.use(cors());
+app.use("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/posts", postsRouter);
