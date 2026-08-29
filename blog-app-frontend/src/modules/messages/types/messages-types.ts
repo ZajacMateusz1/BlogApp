@@ -2,6 +2,7 @@ export type MessageDataType = {
   id: string;
   sender: string;
   recipient: string;
+  conversation: string;
   content: string;
   createdAt: string;
 };
@@ -34,4 +35,9 @@ export type getConversationsResponseType = {
 export type MessagePayloadType = {
   recipient: string;
   content: string;
+};
+
+export type MessageCacheType = {
+  pageParams: (string | undefined)[];
+  pages: getMessagesResponseType[];
 };

@@ -12,6 +12,7 @@ import type {
   WSNotificationType,
   NotificationCacheType,
 } from "../../notifications/types/notifications-types";
+import type { MessageCacheType } from "../../messages/types/messages-types";
 import type { WsMessageType } from "../types/ws-types";
 
 interface WsContextProviderProps {
@@ -75,6 +76,24 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
               }
               break;
             case "chat_message": {
+              console.log("Received chat message:", message.payload);
+              queryClient.setQueryData<MessageCacheType>(
+                ["conversation", message.payload.conversation],
+                (oldData) => {
+                  if (!oldData) return;
+                  return {
+                    ...oldData,
+                    pages: oldData.pages.map((page, index) =>
+                      index === oldData.pages.length - 1
+                        ? {
+                            ...page,
+                            messages: [...page.messages, message.payload],
+                          }
+                        : page,
+                    ),
+                  };
+                },
+              );
               break;
             }
             case "error":
