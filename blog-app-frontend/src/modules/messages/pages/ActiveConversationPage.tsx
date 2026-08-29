@@ -31,9 +31,9 @@ export default function ActiveConversation() {
     isLoading,
     isError,
     error,
-    hasPreviousPage,
-    fetchPreviousPage,
-    isFetchingPreviousPage,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ["conversation", conversationId],
     queryFn: ({ pageParam, signal }) =>
@@ -54,17 +54,13 @@ export default function ActiveConversation() {
   useEffect(() => {
     if (!observerRef.current) return;
     const observer = new IntersectionObserver((entries) => {
-      if (
-        entries[0].isIntersecting &&
-        hasPreviousPage &&
-        !isFetchingPreviousPage
-      ) {
-        fetchPreviousPage();
+      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
       }
     });
     observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [hasPreviousPage, fetchPreviousPage, isFetchingPreviousPage]);
+  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -84,21 +80,10 @@ export default function ActiveConversation() {
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   return (
     <section className="max-w-3xl mx-auto flex flex-col gap-4 p-2 md:p-4 bg-light">
-      <div className="flex items-center gap-2 overflow-y-auto grow">
-        <div ref={observerRef}></div>
-        <ul className="flex flex-col gap-2 w-full">
-          {data?.pages.map((page) =>
-            page.messages.map((msg) => (
-              <MessageItem
-                messageData={msg}
-                key={msg.id}
-                isSender={msg.sender === userId}
-              />
-            )),
-          )}
-        </ul>
-      </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-2 border-border-light border-b-2 pb-2 md:pb-4"
+      >
         <TextAreaElement
           className="w-full"
           placeholder="Write your message..."
@@ -116,6 +101,21 @@ export default function ActiveConversation() {
           <span>Send</span>
         </Button>
       </form>
+      <div className="flex flex-col justify-center gap-2 overflow-y-auto grow">
+        <h2 className="text-lg font-semibold text-center">Latest Messages</h2>
+        <ul className="flex flex-col gap-2 w-full">
+          {data?.pages.map((page) =>
+            page.messages.map((msg) => (
+              <MessageItem
+                messageData={msg}
+                key={msg.id}
+                isSender={msg.sender === userId}
+              />
+            )),
+          )}
+        </ul>
+        <div ref={observerRef}></div>
+      </div>
     </section>
   );
 }
