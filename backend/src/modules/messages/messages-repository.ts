@@ -120,13 +120,9 @@ export const updateLastMessage = (
   messageId: Types.ObjectId,
   session: ClientSession,
 ) => {
-  return Conversation.findByIdAndUpdate(
-    conversationId,
-    {
-      $set: { lastMessage: messageId },
-    },
-    session,
-  );
+  return Conversation.findByIdAndUpdate(conversationId, {
+    $set: { lastMessage: messageId },
+  }).session(session);
 };
 
 export const searchConversationRepository = (
