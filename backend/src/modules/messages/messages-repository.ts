@@ -7,10 +7,13 @@ import type {
   PopulatedConversationType,
 } from "./messages-types.js";
 
-export const addConversationRepository = (userId1: string, userId2: string) => {
+export const addConversationRepository = async (
+  userId1: string,
+  userId2: string,
+) => {
   const [user1, user2] = [userId1, userId2].sort() as [string, string];
   const conversation = new Conversation({ user1, user2 });
-  conversation.save();
+  await conversation.save();
   return conversation;
 };
 
@@ -44,7 +47,7 @@ export const getMessagesRepository = (
   const filters = cursor
     ? {
         conversation: conversationId,
-        $lt: { _id: cursor },
+        _id: { $lt: cursor },
         $or: [{ sender: userId }, { recipient: userId }],
       }
     : {
