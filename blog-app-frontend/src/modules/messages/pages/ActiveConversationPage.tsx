@@ -84,9 +84,9 @@ export default function ActiveConversation() {
   if (isError) return <ErrorBlock>{error.message}</ErrorBlock>;
   return (
     <section className="max-w-3xl mx-auto flex flex-col gap-4 p-2 md:p-4 bg-light">
-      <div className="flex items-center gap-2 overflow-y-auto">
+      <div className="flex items-center gap-2 overflow-y-auto grow">
         <div ref={observerRef}></div>
-        <ul>
+        <ul className="flex flex-col gap-2 w-full">
           {data?.pages.map((page) =>
             page.messages.map((msg) => (
               <MessageItem
