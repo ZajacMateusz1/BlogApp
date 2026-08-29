@@ -78,10 +78,15 @@ export const startWebSocketServer = (server: Server) => {
           switch (message.type) {
             case "chat_message": {
               const result = messageSchema.parse(message);
-              await addMessagesService({ ...result.payload, sender: userId });
+              const createdMessage = await addMessagesService({
+                ...result.payload,
+                sender: userId,
+              });
               sendMessage(result.payload.recipient, {
                 type: "chat_message",
-                payload: { content: result.payload.content, sender: userId },
+                payload: {
+                  ...createdMessage,
+                },
               });
               break;
             }

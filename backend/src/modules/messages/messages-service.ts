@@ -100,6 +100,7 @@ export const getMessagesService = async (
   );
   const messagesResponse = messages.map((message) => ({
     id: message._id,
+    conversation: message.conversation,
     sender: message.sender,
     recipient: message.recipient,
     content: message.content,
@@ -135,7 +136,14 @@ export const addMessagesService = async (messageData: MessageDataType) => {
       return message;
     });
 
-    return message;
+    return {
+      id: message._id,
+      conversation: message.conversation,
+      sender: message.sender,
+      recipient: message.recipient,
+      content: message.content,
+      createdAt: message.createdAt,
+    };
   } finally {
     await session.endSession();
   }
