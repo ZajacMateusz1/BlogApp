@@ -8,7 +8,7 @@ Backend is hosted on Render free, so the first request may take up to ~50 second
 
 A full-stack social media application built with **React**, **TypeScript**, **Express** and **MongoDB**.
 
-Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, real-time notifications, backend support for real-time messaging, and automated backend error analysis.
+Features include authentication, user profiles, posts, image uploads, likes, comments, follow relationships, personalized feeds, real-time notifications, real-time messaging, and automated backend error analysis.
 
 # Project Evolution
 
@@ -55,7 +55,7 @@ This project originally started as a simple blog application, which is why some 
 
 ## Messaging
 
-- Backend support for real-time messaging using **WebSockets**
+- Real-time messaging using **WebSockets**
 - Conversations between users
 - Conversation list
 - Search existing conversations
@@ -70,7 +70,7 @@ This project originally started as a simple blog application, which is why some 
 - Server-side validation of message payloads using **Zod**
 - Frontend UI for viewing and searching conversations
 - Frontend UI for creating new conversations
-- Frontend messaging UI for displaying messages is not implemented yet
+- Frontend messaging UI for displaying and sending messages
 
 ## Validation
 
@@ -495,5 +495,4 @@ Start BugAnalyzer separately and configure `BUG_ANALYZER_API_URL` and `BUG_ANALY
 
 # Future Improvements
 
-- Implement frontend messaging UI for displaying messages
 - Additional unit tests
