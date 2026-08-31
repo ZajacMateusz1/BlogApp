@@ -1,11 +1,18 @@
 import { useState, type SubmitEvent, useRef, useEffect } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import useAuth from "../../auth/hooks/useAuth";
 import useWebSocket from "../../ws/hooks/useWebSocket";
 import { Send } from "lucide-react";
 
-import type { MessagePayloadType } from "../types/messages-types";
+import type {
+  ConversationCacheType,
+  MessagePayloadType,
+} from "../types/messages-types";
 import { sendRequest } from "../../../utils/http/http";
 import type { getMessagesResponseType } from "../types/messages-types";
 import Button from "../../shared/components/Button";
@@ -18,12 +25,42 @@ export default function ActiveConversation() {
   const { conversationId, recipientId } = useParams();
   const { token, userId } = useAuth();
   const { sendMessage } = useWebSocket();
+  const queryClient = useQueryClient();
   const [message, setMessage] = useState<string>("");
   const handleMessageChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMessage(event.target.value);
   };
+
+  const { mutate } = useMutation({
+    mutationFn: () =>
+      sendRequest<null>(`/api/messages/${conversationId}/read`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: "PATCH",
+      }),
+    onSuccess: () => {
+      queryClient.setQueryData<ConversationCacheType>(
+        ["conversations"],
+        (oldData) => {
+          if (!oldData) return;
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page) => ({
+              ...page,
+              conversations: page.conversations.map((conversation) => {
+                return conversation.id === conversationId
+                  ? { ...conversation, isRead: true }
+                  : conversation;
+              }),
+            })),
+          };
+        },
+      );
+    },
+  });
 
   const observerRef = useRef(null);
   const {
@@ -59,8 +96,11 @@ export default function ActiveConversation() {
       }
     });
     observer.observe(observerRef.current);
-    return () => observer.disconnect();
-  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
+    return () => {
+      observer.disconnect();
+      mutate();
+    };
+  }, [hasNextPage, fetchNextPage, isFetchingNextPage, mutate]);
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();

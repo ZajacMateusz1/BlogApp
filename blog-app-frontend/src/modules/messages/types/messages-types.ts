@@ -41,3 +41,8 @@ export type MessageCacheType = {
   pageParams: (string | undefined)[];
   pages: getMessagesResponseType[];
 };
+
+export type ConversationCacheType = {
+  pageParams: (string | undefined)[];
+  pages: getConversationsResponseType[];
+};
