@@ -141,7 +141,9 @@ export default function ActiveConversation() {
         </Button>
       </form>
       <div className="flex flex-col justify-center gap-2 overflow-y-auto grow">
-        <h2 className="text-lg font-semibold text-center">Latest Messages</h2>
+        <h2 className="text-lg font-semibold text-center md:text-xl lg:text-2xl">
+          Latest Messages
+        </h2>
         <ul className="flex flex-col gap-2 w-full">
           {data?.pages.map((page) =>
             page.messages.map((msg) => (
