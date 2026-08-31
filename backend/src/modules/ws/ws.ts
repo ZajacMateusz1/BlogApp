@@ -84,9 +84,11 @@ export const startWebSocketServer = (server: Server) => {
               });
               sendMessage(result.payload.recipient, {
                 type: "chat_message",
-                payload: {
-                  ...createdMessage,
-                },
+                payload: createdMessage,
+              });
+              sendMessage(userId, {
+                type: "chat_message",
+                payload: createdMessage,
               });
               break;
             }

@@ -76,7 +76,6 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
               }
               break;
             case "chat_message": {
-              console.log("Received chat message:", message.payload);
               queryClient.setQueryData<MessageCacheType>(
                 ["conversation", message.payload.conversation],
                 (oldData) => {
@@ -84,10 +83,10 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
                   return {
                     ...oldData,
                     pages: oldData.pages.map((page, index) =>
-                      index === oldData.pages.length - 1
+                      index === 0
                         ? {
                             ...page,
-                            messages: [...page.messages, message.payload],
+                            messages: [message.payload, ...page.messages],
                           }
                         : page,
                     ),
