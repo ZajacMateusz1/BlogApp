@@ -12,7 +12,10 @@ import type {
   WSNotificationType,
   NotificationCacheType,
 } from "../../notifications/types/notifications-types";
-import type { MessageCacheType } from "../../messages/types/messages-types";
+import type {
+  MessageCacheType,
+  ConversationCacheType,
+} from "../../messages/types/messages-types";
 import type { WsMessageType } from "../types/ws-types";
 
 interface WsContextProviderProps {
@@ -20,7 +23,7 @@ interface WsContextProviderProps {
 }
 
 const WsContextProvider = ({ children }: WsContextProviderProps) => {
-  const { token } = useAuth();
+  const { token, userId } = useAuth();
   const { addToast } = useToast();
   const queryClient = useQueryClient();
   const wsRef = useRef<WebSocket | null>(null);
@@ -93,6 +96,36 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
                   };
                 },
               );
+              if (userId === message.payload.recipent) {
+                queryClient.setQueryData<ConversationCacheType>(
+                  ["conversations"],
+                  (oldData) => {
+                    if (!oldData) return;
+                    return {
+                      ...oldData,
+                      pages: oldData.pages.map((page) => ({
+                        ...page,
+                        conversations: page.conversations.map(
+                          (conversation) => {
+                            return conversation.id ===
+                              message.payload.conversation
+                              ? {
+                                  ...conversation,
+                                  isRead: false,
+                                  lastMessage: {
+                                    id: message.payload.id,
+                                    content: message.payload.content,
+                                    createdAt: message.payload.createdAt,
+                                  },
+                                }
+                              : conversation;
+                          },
+                        ),
+                      })),
+                    };
+                  },
+                );
+              }
               break;
             }
             case "error":
@@ -129,7 +162,7 @@ const WsContextProvider = ({ children }: WsContextProviderProps) => {
         clearTimeout(timer);
       }
     };
-  }, [token, queryClient, addToast]);
+  }, [token, queryClient, addToast, userId]);
   const WsCTX: WsContextType = {
     sendMessage: sendMessage,
   };
