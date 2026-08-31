@@ -84,8 +84,7 @@ export default function ActiveConversation() {
         },
       ),
     initialPageParam: "",
-    getNextPageParam: () => undefined,
-    getPreviousPageParam: (firstPage) => firstPage.nextCursor,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
   useEffect(() => {
