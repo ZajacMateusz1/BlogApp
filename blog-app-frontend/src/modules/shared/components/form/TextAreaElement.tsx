@@ -16,23 +16,16 @@ export default function TextAreaElement({
 }: TextAreaElementProps) {
   return (
     <div className="flex w-full flex-col items-start gap-1">
-      <label
-        className="pl-2 font-semibold text-sm sm:text-base md:text-lg xl:text-xl"
-        htmlFor={name}
-      >
+      <label className="pl-2 font-semibold" htmlFor={name}>
         {children}
       </label>
       <textarea
-        className={`${className || ""} ${errorMessage ? "border-error" : ""} p-1.5 mb-0.5 min-h-24 rounded-lg w-full border text-xs sm:text-sm md:text-base xl:text-lg md:min-h-28 lg:min-h-32`}
+        className={`${className || ""} ${errorMessage ? "border-error" : ""} px-3 py-2.5 mb-0.5 min-h-24 rounded-lg w-full border text-xs md:min-h-28 lg:min-h-32`}
         id={name}
         name={name}
         {...props}
       ></textarea>
-      {errorMessage && (
-        <p className="text-error text-xs sm:text-sm md:text-base xl:text-lg">
-          {errorMessage}
-        </p>
-      )}
+      {errorMessage && <p className="text-error">{errorMessage}</p>}
     </div>
   );
 }

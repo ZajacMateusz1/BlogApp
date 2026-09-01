@@ -2,8 +2,9 @@ import { type ReactNode } from "react";
 import { Link, type LinkProps } from "react-router-dom";
 
 const variants = {
-  solid: "bg-primary text-white border-transparent",
-  outlined: "border-primary text-primary",
+  solid:
+    "bg-primary text-light border-primary hover:bg-link-hover hover:border-link-hover",
+  outlined: "border-primary text-primary hover:bg-primary hover:text-light",
 };
 
 interface LinkButtonProps extends LinkProps {
@@ -19,7 +20,8 @@ export default function LinkButton({
 }: LinkButtonProps) {
   return (
     <Link
-      className={`${className || ""} ${variants[variant]} flex justify-center gap-2 border p-1.5 text-base rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl`}
+      className={`${className || ""} ${variants[variant]} flex justify-center transition-colors rounded-lg gap-2 border p-1.5 text-base hover:cursor-pointer 
+      sm:text-lg lg:p-2 xl:text-xl`}
       {...props}
     >
       {children}
