@@ -39,7 +39,7 @@ export default function ImageUpload({
       />
       <label
         htmlFor={name}
-        className="bg-primary text-white text-base p-1 rounded-md hover:cursor-pointer sm:text-lg lg:p-2 xl:text-xl"
+        className="bg-primary text-white text-base p-1 rounded-md hover:cursor-pointer hover:bg-link-hover transition-colors sm:text-lg lg:p-2 xl:text-xl"
       >
         {children}
       </label>

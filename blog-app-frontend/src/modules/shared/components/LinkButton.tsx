@@ -21,7 +21,7 @@ export default function LinkButton({
   return (
     <Link
       className={`${className || ""} ${variants[variant]} flex justify-center transition-colors rounded-lg gap-2 border p-1.5 text-base hover:cursor-pointer 
-      sm:text-lg lg:p-2 xl:text-xl`}
+      lg:p-2 xl:text-xl`}
       {...props}
     >
       {children}
