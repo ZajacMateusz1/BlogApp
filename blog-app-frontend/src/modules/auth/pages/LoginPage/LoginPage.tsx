@@ -49,34 +49,32 @@ export default function LoginPage() {
     mutate(formData);
   };
   return (
-    <div>
-      <AuthForm
-        onSubmit={handleSubmit(submitHandler)}
-        isSubmitting={isSubmitting || isPending}
-        reset={reset}
-        formTitle="Log in to your account"
-        submitButtonText="Log in"
-        bottomLink="/register"
-        bottomLinkText="Don’t have an account? Register"
-        rootError={errors.root?.message || null}
+    <AuthForm
+      onSubmit={handleSubmit(submitHandler)}
+      isSubmitting={isSubmitting || isPending}
+      reset={reset}
+      formTitle="Log in to your account"
+      submitButtonText="Sign in"
+      bottomLink="/register"
+      bottomLinkText="Don’t have an account? Register"
+      rootError={errors.root?.message || null}
+    >
+      <InputElement
+        {...register("email")}
+        errorMessage={errors.email?.message}
+        type="email"
+        autoComplete="email"
       >
-        <InputElement
-          {...register("email")}
-          errorMessage={errors.email?.message}
-          type="email"
-          autoComplete="email"
-        >
-          Email
-        </InputElement>
-        <InputElement
-          {...register("password")}
-          errorMessage={errors.password?.message}
-          type="password"
-          autoComplete="current-password"
-        >
-          Password
-        </InputElement>
-      </AuthForm>
-    </div>
+        Email
+      </InputElement>
+      <InputElement
+        {...register("password")}
+        errorMessage={errors.password?.message}
+        type="password"
+        autoComplete="current-password"
+      >
+        Password
+      </InputElement>
+    </AuthForm>
   );
 }

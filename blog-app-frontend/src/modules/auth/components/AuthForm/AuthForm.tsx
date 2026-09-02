@@ -33,14 +33,16 @@ export default function AuthForm({
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : submitButtonText}
         </Button>
-        <Button type="button" onClick={() => reset()} disabled={isSubmitting}>
+        <Button
+          type="button"
+          variant="outlined"
+          onClick={() => reset()}
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Submitting..." : "Reset"}
         </Button>
       </div>
-      <Link
-        className="text-link xs:text-sm sm:text-base md:text-lg xl:text-xl"
-        to={bottomLink}
-      >
+      <Link className="text-link lg:text-lg" to={bottomLink}>
         {bottomLinkText}
       </Link>
     </FormWrapper>

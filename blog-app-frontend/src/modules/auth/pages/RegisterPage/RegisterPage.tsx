@@ -55,50 +55,48 @@ export default function RegisterPage() {
     mutate(formData);
   };
   return (
-    <div>
-      <AuthForm
-        onSubmit={handleSubmit(submitHandler)}
-        isSubmitting={isSubmitting || isPending}
-        reset={reset}
-        formTitle="Create your account"
-        submitButtonText="Register"
-        bottomLink="/login"
-        bottomLinkText="Already have an account? Log in"
-        rootError={errors.root?.message || null}
+    <AuthForm
+      onSubmit={handleSubmit(submitHandler)}
+      isSubmitting={isSubmitting || isPending}
+      reset={reset}
+      formTitle="Create your account"
+      submitButtonText="Register"
+      bottomLink="/login"
+      bottomLinkText="Already have an account? Log in"
+      rootError={errors.root?.message || null}
+    >
+      <InputElement
+        {...register("email")}
+        errorMessage={errors.email?.message}
+        type="email"
+        autoComplete="email"
       >
-        <InputElement
-          {...register("email")}
-          errorMessage={errors.email?.message}
-          type="email"
-          autoComplete="email"
-        >
-          Email
-        </InputElement>
-        <InputElement
-          {...register("username")}
-          errorMessage={errors.username?.message}
-          type="text"
-          autoComplete="username"
-        >
-          Username
-        </InputElement>
-        <InputElement
-          {...register("password")}
-          errorMessage={errors.password?.message}
-          type="password"
-          autoComplete="new-password"
-        >
-          Password
-        </InputElement>
-        <InputElement
-          {...register("repeatPassword")}
-          errorMessage={errors.repeatPassword?.message}
-          type="password"
-          autoComplete="new-password"
-        >
-          Repeat Password
-        </InputElement>
-      </AuthForm>
-    </div>
+        Email
+      </InputElement>
+      <InputElement
+        {...register("username")}
+        errorMessage={errors.username?.message}
+        type="text"
+        autoComplete="username"
+      >
+        Username
+      </InputElement>
+      <InputElement
+        {...register("password")}
+        errorMessage={errors.password?.message}
+        type="password"
+        autoComplete="new-password"
+      >
+        Password
+      </InputElement>
+      <InputElement
+        {...register("repeatPassword")}
+        errorMessage={errors.repeatPassword?.message}
+        type="password"
+        autoComplete="new-password"
+      >
+        Repeat Password
+      </InputElement>
+    </AuthForm>
   );
 }
