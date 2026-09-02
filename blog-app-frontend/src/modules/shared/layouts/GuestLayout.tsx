@@ -6,7 +6,7 @@ export default function GuestLayout() {
     return <Navigate to="/" replace />;
   }
   return (
-    <main className="mt-10 mx-2 md:mt-15 lg-mt:20">
+    <main className="flex mx-auto min-h-screen items-center justify-center px-2">
       <Outlet />
     </main>
   );

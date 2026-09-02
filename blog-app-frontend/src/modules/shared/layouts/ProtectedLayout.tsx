@@ -5,8 +5,8 @@ export default function ProtectedLayout() {
   const { token } = useAuth();
   if (!token) return <Navigate to="/login" replace />;
   return (
-    <main className="mx-auto min-h-screen">
+    <div className="mx-auto min-h-screen">
       <Outlet />
-    </main>
+    </div>
   );
 }
