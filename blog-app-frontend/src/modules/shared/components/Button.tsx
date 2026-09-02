@@ -19,8 +19,8 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`${className || ""} ${variants[variant]} flex gap-2 border transition-colors p-1.5 text-base rounded-lg 
-      disabled:cursor-not-allowed disabled:opacity-50 hover:cursor-pointer md:p-2 lg:text-lg lg:px-4`}
+      className={`${variants[variant]} flex gap-2 border transition-colors p-1.5 text-base rounded-lg 
+      disabled:cursor-not-allowed disabled:opacity-50 hover:cursor-pointer md:p-2 lg:text-lg lg:px-4 ${className || ""}`}
       {...props}
     >
       {children}
